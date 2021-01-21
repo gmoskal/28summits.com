@@ -4,25 +4,28 @@ import { media } from "../utils/colors"
 import styled from "styled-components"
 
 const Title = styled.h1`
-    font-weight: 700;
-    font-size: 6em;
+    font-weight: 900;
+    font-size: 8em;
     padding: 0;
     text-align: center;
     color: white;
     margin: 0;
+    line-height: 0.7em;
     margin-top: -200px;
     span {
         padding: 0;
+        font-weight: 700;
         margin: 0;
         font-size: 4rem;
 
         color: rgb(255, 64, 86);
     }
-    ${media("mobileM")} {
+    ${media("tablet")} {
         font-size: 3em;
+        line-height: 0.9em;
         margin: 0;
         span {
-            font-size: 2rem;
+            font-size: 1.6rem;
         }
     }
 `

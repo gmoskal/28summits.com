@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
 		color: ${({ theme }) => theme.primaryBlack};
 		min-height: 98vh;
 		text-rendering: optimizeLegibility;
-		font-family: 'Montserrat', sans-serif;
+		font-family: Montserrat, Helvetica, Times;
 		font-size: 16px;
 		
 		padding: 0;

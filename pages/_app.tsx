@@ -14,7 +14,7 @@ function ExtApp({ Component, pageProps }: AppProps) {
                 <meta name="description" content="" />
                 <meta name="og:title" content="28 summits" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <link href="https://fonts.googleapis.com/css?family=Lato:300|Montserrat:700,400" rel="stylesheet" />
+                <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400,900" rel="stylesheet" />
             </Head>
             <ThemeProvider theme={getTheme()}>
                 <GlobalStyle />
