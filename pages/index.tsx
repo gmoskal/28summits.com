@@ -1,31 +1,40 @@
 import * as React from "react"
+import { media } from "../utils/colors"
+
 import styled from "styled-components"
 
 const Title = styled.h1`
+    font-weight: 700;
+    font-size: 6em;
+    padding: 0;
+    text-align: center;
+    color: white;
     margin: 0;
     margin-top: -200px;
-    max-width: 700px;
-    font-weight: 900;
-`
-
-const Content = styled.div`
-    max-width: 700px;
-    text-align: center;
-
-    z-index: 1;
-    p {
+    span {
         padding: 0;
         margin: 0;
-        font-size: 1.5rem;
-        color: ${p => p.theme.withLightness("primaryBlack", 50)};
+        font-size: 4rem;
+
+        color: rgb(255, 64, 86);
+    }
+    ${media("mobileM")} {
+        font-size: 3em;
+        margin: 0;
+        span {
+            font-size: 2rem;
+        }
     }
 `
 
 const Home: React.FC = () => (
-    <Content>
-        <Title>28 summits</Title>
-        <p>comming soon</p>
-    </Content>
+    <>
+        <Title>
+            28 summits
+            <br />
+            <span>comming soon</span>
+        </Title>
+    </>
 )
 
 export default Home
