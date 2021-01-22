@@ -18,7 +18,18 @@ function ExtApp({ Component, pageProps }: AppProps) {
             </Head>
             <ThemeProvider theme={getTheme()}>
                 <GlobalStyle />
-                <main style={{ background: "black" }}>
+                <main
+                    style={{
+                        background: "black",
+                        padding: 0,
+                        margin: 0,
+                        minWidth: "100vw",
+                        minHeight: "100vh",
+                        boxSizing: "border-box",
+                        position: "absolute",
+                        top: 0,
+                        left: 0
+                    }}>
                     <Component {...pageProps} />
                 </main>
             </ThemeProvider>

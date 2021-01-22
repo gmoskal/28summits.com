@@ -10,8 +10,8 @@ const Title = styled.h1`
     text-align: center;
     color: white;
     margin: 0;
+    padding-top: 30vh;
     line-height: 0.7em;
-    margin-top: -200px;
     span {
         padding: 0;
         font-weight: 700;
