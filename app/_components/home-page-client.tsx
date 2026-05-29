@@ -187,7 +187,7 @@ function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
 
 function ComplianceNotice({ content }: ComplianceNoticeProps) {
     return (
-        <p className="max-w-[760px] text-center text-[12px] leading-[18px] font-semibold text-[var(--text-muted)] lg:text-left">
+        <p className="max-w-[760px] text-center text-[12px] leading-[18px] font-semibold text-[var(--text-muted)] xl:text-left">
             {content.summaryParts.map((part, index) => (
                 <span key={part}>
                     {index > 0 ? <span aria-hidden> · </span> : null}
@@ -228,11 +228,11 @@ export function HomePageClient() {
                         />
                     </header>
 
-                    <div className="grid flex-1 items-center gap-2 lg:grid-cols-[minmax(340px,0.9fr)_minmax(360px,0.86fr)] lg:gap-6">
-                        <article className="order-2 mx-auto flex w-full max-w-[618px] flex-col items-center gap-3 text-center lg:order-1 lg:mx-0 lg:items-start lg:gap-[38px] lg:text-left">
-                            <div className="flex flex-col items-center gap-3 lg:items-start lg:gap-[20px]">
+                    <div className="grid flex-1 items-center gap-5 xl:grid-cols-[minmax(340px,0.9fr)_minmax(360px,0.86fr)] xl:gap-6">
+                        <article className="order-2 mx-auto flex w-full max-w-[618px] flex-col items-center gap-3 text-center xl:order-1 xl:mx-0 xl:items-start xl:gap-[38px] xl:text-left">
+                            <div className="flex flex-col items-center gap-3 xl:items-start xl:gap-[20px]">
                                 <span
-                                    className="w-fit rounded-full px-4 py-2 text-[13px] leading-[18px] font-bold tracking-normal shadow-[0_12px_28px_var(--shadow-soft)] backdrop-blur lg:text-[14px]"
+                                    className="w-fit rounded-full px-4 py-2 text-[13px] leading-[18px] font-bold tracking-normal shadow-[0_12px_28px_var(--shadow-soft)] backdrop-blur xl:text-[14px]"
                                     style={{
                                         backgroundColor: "var(--chip-bg)",
                                         border: "1px solid var(--border-muted)",
@@ -242,13 +242,13 @@ export function HomePageClient() {
                                     {content.hero.eyebrow}
                                 </span>
                                 <h1
-                                    className="text-[76px] leading-[0.88] font-semibold tracking-normal text-[var(--text-primary)] lg:text-[clamp(76px,7vw,116px)]"
+                                    className="text-[76px] leading-[0.88] font-semibold tracking-normal text-[var(--text-primary)] xl:text-[clamp(76px,7vw,116px)]"
                                     style={{ fontFeatureSettings: "'liga' 0" }}
                                 >
                                     {content.hero.headline}
                                 </h1>
                                 <p
-                                    className="max-w-[350px] text-[15px] leading-[21px] font-semibold text-[var(--text-secondary)] lg:max-w-[588px] lg:text-[20px] lg:leading-[28px]"
+                                    className="max-w-[350px] text-[15px] leading-[21px] font-semibold text-[var(--text-secondary)] xl:max-w-[588px] xl:text-[20px] xl:leading-[28px]"
                                     style={{ fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
                                 >
                                     {content.hero.body}
@@ -256,27 +256,27 @@ export function HomePageClient() {
                                 <FeatureLabels labels={content.hero.featureLabels} />
                             </div>
 
-                            <div className="flex w-full flex-col items-center gap-3 lg:items-start">
+                            <div className="flex w-full flex-col items-center gap-3 xl:items-start">
                                 <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row">
                                     <HeroLink href={siteConfig.launchUpdatesUrl}>{content.hero.ctas.updates}</HeroLink>
                                 </div>
-                                <p className="text-[14px] leading-[20px] font-semibold text-[var(--text-muted)] lg:pl-[6px] lg:text-[15px] lg:leading-[21px]">
+                                <p className="text-[14px] leading-[20px] font-semibold text-[var(--text-muted)] xl:pl-[6px] xl:text-[15px] xl:leading-[21px]">
                                     {content.hero.caption}
                                 </p>
                             </div>
                         </article>
 
-                        <div className="relative order-1 flex items-center justify-center lg:order-2">
-                            <div className="hidden w-full lg:block">
+                        <div className="relative order-1 flex items-center justify-center xl:order-2">
+                            <div className="hidden w-full xl:block">
                                 <MascotPreview variant="desktop" />
                             </div>
-                            <div className="w-full lg:hidden">
+                            <div className="w-full xl:hidden">
                                 <MascotPreview variant="mobile" />
                             </div>
                         </div>
                     </div>
 
-                    <footer className="z-10 flex flex-col items-center gap-3 lg:items-start">
+                    <footer className="z-10 flex flex-col items-center gap-3 xl:items-start">
                         <LocalizedLegalNav labels={content.nav} />
                         <ComplianceNotice content={content.compliance} />
                     </footer>

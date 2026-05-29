@@ -77,39 +77,45 @@ export function MascotPreview({ variant }: MascotPreviewProps) {
     }
 
     const frameClassName = isDesktop
-        ? "relative flex h-[min(68dvh,680px)] min-h-[460px] w-full items-center justify-center overflow-visible px-8 py-7"
-        : "relative flex h-[286px] w-full items-center justify-center overflow-visible px-5 py-4"
+        ? "relative flex h-[min(66dvh,640px)] min-h-[500px] w-full items-center justify-center overflow-visible px-14 py-16"
+        : "relative flex h-[min(48dvh,430px)] min-h-[330px] w-full items-center justify-center overflow-visible px-8 py-12"
 
     const imageClassName = isDesktop
-        ? "relative aspect-[1023/1537] h-[min(60dvh,620px)] max-h-[620px] overflow-hidden rounded-[38px]"
-        : "relative aspect-[1023/1537] w-[min(54vw,204px)] overflow-hidden rounded-[26px]"
+        ? "relative aspect-[1023/1537] h-[min(56dvh,560px)] max-h-[560px] overflow-hidden rounded-[38px]"
+        : "relative aspect-[1023/1537] overflow-hidden rounded-[28px]"
+    const shellClassName = isDesktop ? "relative overflow-visible rounded-[38px]" : "relative overflow-visible rounded-[28px]"
     const imageStyle = {
         backgroundColor: "var(--mascot-bg)",
         border: "1px solid var(--border-muted)",
-        boxShadow: isDesktop ? "0 34px 86px var(--shadow-mascot)" : "0 22px 58px var(--shadow-mascot)",
+        width: isDesktop ? undefined : "clamp(190px, 28vw, 260px)",
+    }
+    const shellStyle = {
+        boxShadow: isDesktop ? "0 36px 92px var(--shadow-mascot)" : "0 24px 66px var(--shadow-mascot)",
     }
 
     return (
         <div ref={frameRef} className={frameClassName} onPointerMove={handlePointerMove}>
             <motion.div
                 style={{ transform, transformStyle: "preserve-3d" }}
-                className="relative flex items-center justify-center will-change-transform"
+                className="relative flex items-center justify-center p-8 will-change-transform"
             >
                 <div
                     aria-hidden
-                    className="absolute -inset-x-8 bottom-3 h-20 rounded-full blur-2xl"
+                    className="absolute inset-x-3 bottom-2 h-24 rounded-full blur-3xl"
                     style={{ backgroundColor: "var(--shadow-ground)" }}
                 />
-                <div className={imageClassName} style={imageStyle}>
-                    <Image
-                        src={mascotImage.src}
-                        alt={mascotImage.alt}
-                        width={mascotImage.width}
-                        height={mascotImage.height}
-                        priority
-                        sizes={isDesktop ? "480px" : "240px"}
-                        className="h-full w-full object-cover"
-                    />
+                <div className={shellClassName} style={shellStyle}>
+                    <div className={imageClassName} style={imageStyle}>
+                        <Image
+                            src={mascotImage.src}
+                            alt={mascotImage.alt}
+                            width={mascotImage.width}
+                            height={mascotImage.height}
+                            priority
+                            sizes={isDesktop ? "430px" : "260px"}
+                            className="h-full w-full object-cover"
+                        />
+                    </div>
                 </div>
             </motion.div>
         </div>

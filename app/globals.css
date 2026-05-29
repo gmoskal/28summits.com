@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-    --layout-max-width: 1180px;
+    --layout-max-width: 1120px;
     --page-bg: #f7f3ea;
     --surface-bg: #fffaf1;
     --panel-bg: rgba(255, 250, 241, 0.72);
