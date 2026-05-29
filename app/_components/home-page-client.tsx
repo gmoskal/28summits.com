@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react"
 import { SiteLocale, SiteThemeMode, homeContent, siteConfig, siteLocales, siteThemeModes } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
+import { DraggableSwitch, type DraggableSwitchOption } from "./draggable-switch"
 import { BrandMark } from "./site-shell"
 import { MascotPreview } from "./mascot-preview"
 import { SmoothLink } from "./smooth-navigation"
@@ -116,46 +117,31 @@ function ThemeIcon({ mode }: { mode: SiteThemeMode }) {
 }
 
 function SiteControls(p: SiteControlsProps) {
+    const localeOptions: [DraggableSwitchOption<SiteLocale>, DraggableSwitchOption<SiteLocale>] = [
+        { value: siteLocales[0], label: siteLocales[0].toUpperCase(), content: siteLocales[0].toUpperCase() },
+        { value: siteLocales[1], label: siteLocales[1].toUpperCase(), content: siteLocales[1].toUpperCase() },
+    ]
+    const themeOptions: [DraggableSwitchOption<SiteThemeMode>, DraggableSwitchOption<SiteThemeMode>] = [
+        { value: siteThemeModes[0], label: p.content.themeModes.light, content: <ThemeIcon mode={siteThemeModes[0]} /> },
+        { value: siteThemeModes[1], label: p.content.themeModes.dark, content: <ThemeIcon mode={siteThemeModes[1]} /> },
+    ]
+
     return (
         <div className="flex flex-wrap justify-center gap-2 lg:justify-end">
-            <div className="flex rounded-full p-1" style={{ backgroundColor: "var(--control-bg)" }}>
-                {siteLocales.map((locale) => (
-                    <button
-                        key={locale}
-                        type="button"
-                        aria-pressed={p.locale === locale}
-                        aria-label={`${p.content.languageLabel}: ${locale.toUpperCase()}`}
-                        className="h-8 min-w-10 rounded-full px-3 text-[13px] leading-4 font-bold"
-                        style={{
-                            backgroundColor: p.locale === locale ? "var(--control-active-bg)" : "transparent",
-                            color: p.locale === locale ? "var(--control-active-text)" : "var(--text-muted)",
-                        }}
-                        onClick={() => p.onLocaleChange(locale)}
-                    >
-                        {locale.toUpperCase()}
-                    </button>
-                ))}
-            </div>
-
-            <div className="flex rounded-full p-1" style={{ backgroundColor: "var(--control-bg)" }}>
-                {siteThemeModes.map((mode) => (
-                    <button
-                        key={mode}
-                        type="button"
-                        aria-pressed={p.themeMode === mode}
-                        aria-label={`${p.content.themeLabel}: ${p.content.themeModes[mode]}`}
-                        className="grid h-8 w-8 place-items-center rounded-full"
-                        style={{
-                            backgroundColor: p.themeMode === mode ? "var(--control-active-bg)" : "transparent",
-                            color: p.themeMode === mode ? "var(--control-active-text)" : "var(--text-muted)",
-                        }}
-                        onClick={() => p.onThemeModeChange(mode)}
-                    >
-                        <ThemeIcon mode={mode} />
-                        <span className="sr-only">{p.content.themeModes[mode]}</span>
-                    </button>
-                ))}
-            </div>
+            <DraggableSwitch
+                ariaLabel={p.content.languageLabel}
+                value={p.locale}
+                options={localeOptions}
+                metrics={{ slotWidth: 44, thumbWidth: 44 }}
+                onChange={p.onLocaleChange}
+            />
+            <DraggableSwitch
+                ariaLabel={p.content.themeLabel}
+                value={p.themeMode}
+                options={themeOptions}
+                metrics={{ slotWidth: 36, thumbWidth: 32 }}
+                onChange={p.onThemeModeChange}
+            />
         </div>
     )
 }
