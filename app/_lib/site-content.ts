@@ -10,7 +10,11 @@ export const siteConfig = {
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.28summits.app",
     launchUpdatesUrl: "mailto:support@async.studio?subject=28s%20launch%20updates",
     siteUrl: "https://28summits.com",
-    description: "28s is a mountain companion for planning and remembering Poland's Crown of Mountains.",
+    description: "28s pomaga planować Koronę Gór Polski, zapisywać wejścia i porządkować zdjęcia z tras.",
+    socialTitle: "28s - Korona Gór Polski bez chaosu w notatkach",
+    socialDescription: "Planuj szczyty, zapisuj wejścia i zdjęcia z tras. Premiera w czerwcu 2026.",
+    socialImage: "/og-image.png",
+    socialImageAlt: "28s - aplikacja do planowania i zapisywania Korony Gór Polski.",
 } as const
 
 export const siteLocales = ["pl", "en"] as const

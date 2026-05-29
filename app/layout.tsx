@@ -10,6 +10,13 @@ const inter = localFont({
     weight: "100 900",
 })
 
+const socialImage = {
+    url: siteConfig.socialImage,
+    width: 1200,
+    height: 630,
+    alt: siteConfig.socialImageAlt,
+} as const
+
 export const metadata: Metadata = {
     metadataBase: new URL(siteConfig.siteUrl),
     title: {
@@ -18,6 +25,9 @@ export const metadata: Metadata = {
     },
     description: siteConfig.description,
     applicationName: siteConfig.name,
+    alternates: {
+        canonical: siteConfig.siteUrl,
+    },
     icons: {
         icon: "/moments-icon-figma.png",
         apple: "/moments-icon-figma.png",
@@ -25,10 +35,18 @@ export const metadata: Metadata = {
     openGraph: {
         type: "website",
         url: siteConfig.siteUrl,
-        title: siteConfig.name,
-        description: siteConfig.description,
+        title: siteConfig.socialTitle,
+        description: siteConfig.socialDescription,
         siteName: siteConfig.name,
-        images: [{ url: "/mascot-hiker.jpg", width: 1023, height: 1537, alt: siteConfig.name }],
+        locale: "pl_PL",
+        alternateLocale: ["en_US"],
+        images: [socialImage],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: siteConfig.socialTitle,
+        description: siteConfig.socialDescription,
+        images: [siteConfig.socialImage],
     },
 }
 

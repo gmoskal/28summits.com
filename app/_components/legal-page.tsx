@@ -6,6 +6,12 @@ import { SmoothBackButton, SmoothLink } from "./smooth-navigation"
 export function buildLegalMetadata(document: LegalDocument): Metadata {
     const description = document.intro.join(" ")
     const url = `${siteConfig.siteUrl}/${document.slug}`
+    const image = {
+        url: siteConfig.socialImage,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.socialImageAlt,
+    } as const
 
     return {
         title: document.title,
@@ -17,6 +23,15 @@ export function buildLegalMetadata(document: LegalDocument): Metadata {
             title: `${document.title} | ${siteConfig.name}`,
             description,
             siteName: siteConfig.name,
+            locale: "pl_PL",
+            alternateLocale: ["en_US"],
+            images: [image],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${document.title} | ${siteConfig.name}`,
+            description,
+            images: [siteConfig.socialImage],
         },
     }
 }
