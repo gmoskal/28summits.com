@@ -43,6 +43,19 @@ function browserTheme(): SiteThemeMode {
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
+function queryPreferences(): { locale: SiteLocale | null; themeMode: SiteThemeMode | null } {
+    if (typeof window === "undefined") {
+        return { locale: null, themeMode: null }
+    }
+
+    const params = new URLSearchParams(window.location.search)
+
+    return {
+        locale: parseSiteLocale(params.get("locale") ?? params.get("lang")),
+        themeMode: parseSiteThemeMode(params.get("theme") ?? params.get("themeMode") ?? params.get("mode")),
+    }
+}
+
 function updateDocumentTheme(theme: SiteThemeMode) {
     document.documentElement.dataset.theme = theme
     document.documentElement.style.colorScheme = theme
@@ -57,9 +70,17 @@ export function useSitePreferences() {
     const [activeTheme, setActiveTheme] = useState<SiteThemeMode>("light")
 
     useEffect(() => {
-        setLocaleState(parseSiteLocale(localStorage.getItem(sitePreferenceStorageKeys.locale)) ?? browserLocale())
+        const query = queryPreferences()
+
+        setLocaleState(
+            query.locale
+                ?? parseSiteLocale(localStorage.getItem(sitePreferenceStorageKeys.locale))
+                ?? browserLocale(),
+        )
         setThemeModeState(
-            parseSiteThemeMode(localStorage.getItem(sitePreferenceStorageKeys.themeMode)) ?? browserTheme(),
+            query.themeMode
+                ?? parseSiteThemeMode(localStorage.getItem(sitePreferenceStorageKeys.themeMode))
+                ?? browserTheme(),
         )
     }, [])
 
