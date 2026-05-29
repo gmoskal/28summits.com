@@ -200,7 +200,7 @@ export function HomePageClient() {
                         />
                     </header>
 
-                    <div className="grid flex-1 items-center gap-5 xl:grid-cols-[minmax(340px,0.9fr)_minmax(360px,0.86fr)] xl:gap-6">
+                    <div className="grid gap-0 pt-2 pb-8 xl:flex-1 xl:grid-cols-[minmax(340px,0.9fr)_minmax(360px,0.86fr)] xl:items-center xl:gap-6 xl:pt-0 xl:pb-0">
                         <article className="order-2 mx-auto flex w-full max-w-[618px] flex-col items-center gap-3 text-center xl:order-1 xl:mx-0 xl:items-start xl:gap-[38px] xl:text-left">
                             <div className="flex flex-col items-center gap-3 xl:items-start xl:gap-[20px]">
                                 <span
@@ -248,7 +248,7 @@ export function HomePageClient() {
                         </div>
                     </div>
 
-                    <footer className="z-10 flex flex-col items-center gap-3 xl:items-start">
+                    <footer className="z-10 mt-auto flex flex-col items-center gap-3 xl:mt-0 xl:items-start">
                         <LocalizedLegalNav labels={content.nav} />
                         <ComplianceNotice content={content.compliance} />
                     </footer>

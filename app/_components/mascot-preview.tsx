@@ -78,7 +78,7 @@ export function MascotPreview({ variant }: MascotPreviewProps) {
 
     const frameClassName = isDesktop
         ? "relative flex h-[min(66dvh,640px)] min-h-[500px] w-full items-center justify-center overflow-visible px-14 py-16"
-        : "relative flex h-[min(48dvh,430px)] min-h-[330px] w-full items-center justify-center overflow-visible px-8 py-12"
+        : "relative flex w-full items-center justify-center overflow-visible px-8 pt-5 pb-1"
 
     const imageClassName = isDesktop
         ? "relative aspect-[1023/1537] h-[min(56dvh,560px)] max-h-[560px] overflow-hidden rounded-[38px]"
@@ -92,12 +92,15 @@ export function MascotPreview({ variant }: MascotPreviewProps) {
     const shellStyle = {
         boxShadow: isDesktop ? "0 36px 92px var(--shadow-mascot)" : "0 24px 66px var(--shadow-mascot)",
     }
+    const motionClassName = isDesktop
+        ? "relative flex items-center justify-center p-8 will-change-transform"
+        : "relative flex items-center justify-center p-4 will-change-transform"
 
     return (
         <div ref={frameRef} className={frameClassName} onPointerMove={handlePointerMove}>
             <motion.div
                 style={{ transform, transformStyle: "preserve-3d" }}
-                className="relative flex items-center justify-center p-8 will-change-transform"
+                className={motionClassName}
             >
                 <div
                     aria-hidden
