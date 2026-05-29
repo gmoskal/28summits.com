@@ -4,5 +4,5 @@ import { legalDocuments } from "../_lib/site-content";
 export const metadata = buildLegalMetadata(legalDocuments.support);
 
 export default function SupportPage() {
-  return <LegalPage document={legalDocuments.support} />;
+  return <LegalPage slug="support" />;
 }

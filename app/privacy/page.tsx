@@ -4,5 +4,5 @@ import { legalDocuments } from "../_lib/site-content";
 export const metadata = buildLegalMetadata(legalDocuments.privacy);
 
 export default function PrivacyPage() {
-  return <LegalPage document={legalDocuments.privacy} />;
+  return <LegalPage slug="privacy" />;
 }

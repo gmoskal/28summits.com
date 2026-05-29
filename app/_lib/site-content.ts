@@ -592,3 +592,458 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
         ],
     },
 }
+
+export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
+    privacy: {
+        slug: "privacy",
+        title: "Privacy Policy",
+        effectiveDate: "Effective from May 29, 2026",
+        intro: [
+            `This policy explains how ${siteConfig.operatorName}, as the operator of 28s / 28 Summits, processes personal data of users of ${siteConfig.siteHost} and the planned mobile app.`,
+            "28s is planned to launch in June 2026. This document covers the launch website, user contact, and planned app features such as accounts, summit logs, photos, preferences, and data synchronization.",
+        ],
+        sections: [
+            {
+                heading: "Controller and contact",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `The data controller is ${siteConfig.operatorName}, operator of 28s / 28 Summits. For privacy, personal data, and user support matters, contact us at ${siteConfig.contactEmail}.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: "If additional registered operator details are published before the public launch, this document will be updated without carrying over third-party company data.",
+                    },
+                ],
+            },
+            {
+                heading: "Data we process",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "contact data, such as an email address provided for launch updates or support contact,",
+                            "account data, such as a user identifier, email address, profile name, and account settings if an account is created,",
+                            "app usage data, such as planned peaks, summit completion status, notes, photos, captions, preferences, and settings,",
+                            "technical data, such as IP address, device type, browser, operating system, error logs, diagnostic identifiers, and approximate region,",
+                            "payment or physical order status information if collectible pins or related merch are launched in the future.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Purposes and legal bases",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "providing the service, account handling, data synchronization, and app features - Article 6(1)(b) GDPR,",
+                            "handling inquiries, support requests, and launch communications - Article 6(1)(a) or 6(1)(f) GDPR, depending on the nature of the contact,",
+                            "security, abuse prevention, diagnostics, and maintaining the website and app - Article 6(1)(f) GDPR,",
+                            "legal, accounting, or tax obligations where applicable - Article 6(1)(c) GDPR,",
+                            "product analytics and quality improvements where based on legitimate interest or required consent.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Device permissions",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The app may request access to device features only when a feature needs it. Permissions can be changed in system settings.",
+                    },
+                    {
+                        type: "list",
+                        items: [
+                            "location may help show nearby peaks, estimate distance, and provide route context,",
+                            "camera or photo library access is used when you add a photo to your log,",
+                            "notifications may be used for reminders that you choose to enable.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Cookies and similar technologies",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The website may use necessary cookies, localStorage, or similar technologies to remember language, theme, interface settings, and basic website behavior. If analytics or marketing tools are added, they will be used in line with applicable consent requirements.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Cookie settings can be changed in your browser. Restricting cookies may affect some website features, such as remembering preferences.",
+                    },
+                ],
+            },
+            {
+                heading: "Physical product orders",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "If physical collectible pins or related merch are launched in the app, we may process name, email address, delivery address, order details, and payment status to handle the order.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Payments for physical products are handled by ${siteConfig.paymentProcessorName}. ${siteConfig.operatorName} does not store full payment card numbers.`,
+                    },
+                ],
+            },
+            {
+                heading: "Recipients of data",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "providers of hosting, infrastructure, database, authorization, and account synchronization,",
+                            "tools for email, support, error diagnostics, security, and analytics,",
+                            "payment processors, app stores, or logistics providers where a feature or order requires it,",
+                            "legal advisors, accountants, public authorities, or courts where required by law.",
+                        ],
+                    },
+                    {
+                        type: "paragraph",
+                        text: "We do not sell personal data. Data is shared only as needed to operate the service, provide security, meet legal obligations, or handle a user request.",
+                    },
+                ],
+            },
+            {
+                heading: "Transfers outside the EEA",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Some technology providers may process data outside the European Economic Area. In those cases, safeguards required by GDPR are used, in particular standard contractual clauses or other lawful mechanisms.",
+                    },
+                ],
+            },
+            {
+                heading: "Retention",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "launch contact data is kept until consent is withdrawn, an objection is made, or the communication purpose ends,",
+                            "account and app data is kept while you use the service and, after account deletion, for the period needed for claims, security, or legal obligations,",
+                            "technical and diagnostic logs are kept for the period needed to maintain security and service stability,",
+                            "billing data is kept for the period required by law if payments are launched.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Your rights",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "access, rectification, deletion, or restriction of processing,",
+                            "data portability where applicable,",
+                            "objection to processing based on legitimate interest,",
+                            "withdrawal of consent at any time without affecting processing before withdrawal,",
+                            "the right to lodge a complaint with the President of the Polish Personal Data Protection Office.",
+                        ],
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Data requests can be sent to ${siteConfig.contactEmail}. In some cases, we may need to confirm the identity of the person making the request.`,
+                    },
+                ],
+            },
+            {
+                heading: "Automation and AI features",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "28s does not make decisions that produce legal effects for users solely by automated means. If AI features are launched, they will process user-provided data only as needed for a specific feature, for example to summarize a note or organize a route description.",
+                    },
+                ],
+            },
+            {
+                heading: "Children and security",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The service is not directed to children under 13. Minors should use the app with a guardian's consent and supervision. The controller uses organizational and technical safeguards, but no transmission or storage method can be guaranteed fully secure.",
+                    },
+                ],
+            },
+            {
+                heading: "Policy changes",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `This policy may be updated as the product, providers, or legal requirements change. The current version will be available at ${siteConfig.siteHost}.`,
+                    },
+                ],
+            },
+        ],
+    },
+    terms: {
+        slug: "terms",
+        title: "Terms",
+        effectiveDate: "Effective from May 29, 2026",
+        intro: [
+            `These terms define the rules for using ${siteConfig.siteHost} and the 28s / 28 Summits app. The product is developed by ${siteConfig.operatorName}, and the app launch is planned for June 2026.`,
+            "28s helps users plan and document the Crown of Polish Mountains. It does not replace maps, GOPR/TOPR notices, weather forecasts, trail signs, or your own assessment of conditions.",
+        ],
+        sections: [
+            {
+                heading: "Service provider and contact",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `${siteConfig.operatorName} is the service provider and operator of 28s / 28 Summits. For questions about these terms, the service, or user support, contact ${siteConfig.contactEmail}.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: "If additional registered provider details are published before public launch, these terms will be updated.",
+                    },
+                ],
+            },
+            {
+                heading: "Definitions",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            `Service - ${siteConfig.siteHost}, the 28s / 28 Summits app, and features made available to users.`,
+                            "User - a person using the website, app, contact form, or account features.",
+                            "Account - individual access to app features if an account is created.",
+                            "User Content - photos, notes, descriptions, summit statuses, preferences, and other data added by the user.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Scope of the service",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include peak planning, summit logs, photo storage, account synchronization, preferences, and other features related to the Crown of Polish Mountains.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "The app may allow users to buy limited collectible pins and related merch as physical products shipped to customers. Purchase terms will be shown before payment.",
+                    },
+                ],
+            },
+            {
+                heading: "Technical requirements",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Using the website requires a device with a current web browser and internet access. Using the app will require a compatible mobile device, a supported operating system, and, for some features, an active internet connection.",
+                    },
+                ],
+            },
+            {
+                heading: "User account",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The user is responsible for the accuracy of account data and for protecting login details. If you suspect unauthorized access to your account, contact support promptly.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `An account can be deleted using app features or by contacting ${siteConfig.contactEmail}. Account deletion may not cover data that must be retained by law or for claim defense.`,
+                    },
+                ],
+            },
+            {
+                heading: "Rules of use",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "do not violate law, third-party rights, or generally accepted standards,",
+                            "do not add unlawful, offensive, copyright-infringing, or privacy-infringing content,",
+                            "do not bypass security, disrupt infrastructure, or use automation without the operator's consent,",
+                            "do not use the service in a way that could endanger you or others.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Mountain safety",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The user is responsible for decisions made outdoors, route choice, weather assessment, equipment, and reacting to local conditions. App data may be inaccurate, incomplete, or outdated, and should not be the only source of trail information.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Before going into the mountains, check current notices, forecasts, trail closures, avalanche warnings, and rescue-service recommendations. In an emergency, contact the appropriate rescue services.",
+                    },
+                ],
+            },
+            {
+                heading: "User content",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Users keep rights to the content they add in the app. By adding content, the user grants the operator a non-exclusive technical license needed to store, synchronize, display, back up, and support that content.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "The operator may remove or restrict access to content that violates these terms, law, service security, or third-party rights.",
+                    },
+                ],
+            },
+            {
+                heading: "Physical products and payments",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `${siteConfig.paymentProcessorName} handles payments only for physical 28s products shipped to customers. 28s does not use ${siteConfig.paymentProcessorName} to sell digital app features, subscriptions, credits, premium access, feature unlocks, or digital content.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Prices for physical products will be shown in ${siteConfig.currencyCode} before payment. Shipping costs, taxes, and additional charges, if any, will be shown before payment confirmation.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Payment card data is handled by ${siteConfig.paymentProcessorName} and is not stored directly by ${siteConfig.operatorName}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Shipping",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Physical products are shipped from Poland. Available delivery countries, shipping costs, and estimated delivery times will be shown before payment.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Some products may be limited or available for preorder. If production time is required before shipping, the estimated fulfillment time will be shown before purchase.",
+                    },
+                ],
+            },
+            {
+                heading: "Returns",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Returns of physical products can be requested by contacting ${siteConfig.contactEmail}. The product should be unused, undamaged, and returned in its original condition unless mandatory law provides otherwise.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Return instructions will be sent by email after the request is reviewed.",
+                    },
+                ],
+            },
+            {
+                heading: "Refunds and complaints",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Refund or complaint requests can be sent to ${siteConfig.contactEmail}. If a product is defective, damaged, not delivered, or materially different from the description, the request should include the order number and a description of the issue.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Approved refunds are processed to the original payment method. Posting time may depend on the bank or payment provider.",
+                    },
+                ],
+            },
+            {
+                heading: "Order cancellation",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "A physical product order may be cancelled before fulfillment starts. If the order has already shipped, the return process may need to be used.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "For preorder products, cancellation terms will be shown before payment.",
+                    },
+                ],
+            },
+            {
+                heading: "QR and NFC in pins",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Some pin editions may include QR or NFC that opens information about the physical product or lets the user associate the pin with an existing 28s profile. QR and NFC are not used to unlock paid digital app features.",
+                    },
+                ],
+            },
+            {
+                heading: "Reports and support requests",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Service-related reports can be sent to ${siteConfig.contactEmail}. A report should describe the issue, device, app or browser version, and expected resolution where relevant.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: "We usually reply within 2 business days, prioritizing matters related to accounts, payments, data access, and security.",
+                    },
+                ],
+            },
+            {
+                heading: "Availability and changes",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The service may be developed, temporarily unavailable, changed, or partly discontinued, especially before and after launch. The operator aims to keep the service stable but does not guarantee uninterrupted availability of every feature.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `These terms may be updated if the product, payment model, legal requirements, or operator details change. The current version will be available at ${siteConfig.siteHost}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Intellectual property",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "The 28s and 28 Summits names, the website and app appearance, text, interface layout, graphics, and product elements are owned by the operator or used under appropriate rights. Using the service does not transfer intellectual property rights to the user.",
+                    },
+                ],
+            },
+            {
+                heading: "Privacy",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Personal data processing rules are described in the Privacy Policy available at ${siteConfig.siteHost}/privacy.`,
+                    },
+                ],
+            },
+            {
+                heading: "Final provisions",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Matters not covered by these terms are governed by applicable Polish law, subject to mandatory consumer rights. Nothing in these terms is intended to limit consumer rights granted by law.",
+                    },
+                ],
+            },
+        ],
+    },
+    support: {
+        slug: "support",
+        title: "Support",
+        effectiveDate: "Updated: May 29, 2026",
+        intro: [
+            "Need help with your account, data access, a physical product order, or a technical issue? Briefly describe what happened, what device you used, and what you expected.",
+        ],
+        sections: [
+            {
+                heading: "Email support",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Send a message to ${siteConfig.contactEmail}. If useful, include a screenshot, app version, device model, order number, or the page URL where the issue occurs. We usually reply within 2 business days.`,
+                    },
+                ],
+            },
+        ],
+    },
+}
+
+export const legalDocumentsByLocale = {
+    pl: legalDocuments,
+    en: englishLegalDocuments,
+} satisfies Record<SiteLocale, Record<LegalDocument["slug"], LegalDocument>>
