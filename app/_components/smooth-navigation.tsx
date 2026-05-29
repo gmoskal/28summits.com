@@ -4,12 +4,6 @@ import { startTransition, type AnchorHTMLAttributes, type MouseEvent, type React
 import { useRouter } from "next/navigation"
 
 const previousPathStorageKey = "28s.previousPath"
-const fallbackTransitionDelayMs = 120
-const fallbackCleanupDelayMs = 260
-
-type DocumentWithViewTransition = Document & {
-    startViewTransition?: (callback: () => void) => void
-}
 
 type NavigateOptions = {
     replace?: boolean
@@ -23,10 +17,6 @@ type SmoothBackButtonProps = {
     fallbackHref?: string
     className?: string
     children?: ReactNode
-}
-
-function reducedMotionPreferred() {
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
 }
 
 function currentLocalPath() {
@@ -77,24 +67,7 @@ function storedPreviousPath() {
 }
 
 function runRouteTransition(callback: () => void) {
-    if (reducedMotionPreferred()) {
-        callback()
-        return
-    }
-
-    const viewTransition = (document as DocumentWithViewTransition).startViewTransition?.bind(document)
-    if (viewTransition) {
-        viewTransition(() => startTransition(callback))
-        return
-    }
-
-    document.documentElement.dataset.routeTransition = "leaving"
-    window.setTimeout(() => {
-        startTransition(callback)
-        window.setTimeout(() => {
-            delete document.documentElement.dataset.routeTransition
-        }, fallbackCleanupDelayMs)
-    }, fallbackTransitionDelayMs)
+    startTransition(callback)
 }
 
 function useSmoothNavigation() {
@@ -145,8 +118,8 @@ export function SmoothBackButton({ fallbackHref = "/", className = "", children 
     return (
         <button
             type="button"
-            aria-label="Wróć"
-            className={`inline-flex h-10 items-center gap-2 rounded-full px-3.5 text-[14px] leading-[18px] font-semibold backdrop-blur transition-[background-color,color,transform] hover:-translate-y-px ${className}`}
+            aria-label={typeof children === "string" ? children : "Wróć"}
+            className={`inline-grid h-10 w-10 cursor-pointer place-items-center rounded-full text-[19px] leading-none font-semibold backdrop-blur transition-[background-color,color,box-shadow] ${className}`}
             style={{
                 backgroundColor: "var(--button-secondary-bg)",
                 boxShadow: "inset 0 0 0 1px var(--border-muted)",
@@ -164,7 +137,6 @@ export function SmoothBackButton({ fallbackHref = "/", className = "", children 
             }}
         >
             <span aria-hidden>←</span>
-            <span>{children}</span>
         </button>
     )
 }
