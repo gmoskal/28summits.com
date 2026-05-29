@@ -1,12 +1,12 @@
-# Nextjs real-life usage example
+# 28summits.com
 
-This is `nextjs` source code for static page designed for [https://28summits.com](28summits project).
-Nextjs was used together with `typescript` and `styled-components`, also [HSLuv (human-friendly alternative to HSL)](https://www.hsluv.org/) was used for a theme colors manipulations.
+Standalone Next.js + TypeScript landing page for 28s.
 
 ## Usage
 
 ```sh
-yarn; yarn dev
+npm install
+npm run dev
 ```
 
-then your development server should be started on http://localhost:3000
+The development server starts on http://localhost:3000.
