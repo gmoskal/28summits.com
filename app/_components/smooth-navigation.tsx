@@ -66,6 +66,15 @@ function storedPreviousPath() {
     }
 }
 
+function backTargetPath(fallbackHref: string) {
+    const previousPath = storedPreviousPath()
+    if (previousPath && previousPath !== currentLocalPath()) {
+        return previousPath
+    }
+
+    return fallbackHref
+}
+
 function runRouteTransition(callback: () => void) {
     startTransition(callback)
 }
@@ -112,7 +121,6 @@ export function SmoothLink({ href, onClick, ...props }: SmoothLinkProps) {
 }
 
 export function SmoothBackButton({ fallbackHref = "/", className = "", children = "Wróć" }: SmoothBackButtonProps) {
-    const router = useRouter()
     const navigate = useSmoothNavigation()
 
     return (
@@ -126,14 +134,7 @@ export function SmoothBackButton({ fallbackHref = "/", className = "", children 
                 color: "var(--button-secondary-text)",
             }}
             onClick={() => {
-                const hasPreviousPath = Boolean(storedPreviousPath())
-
-                if (hasPreviousPath && window.history.length > 1) {
-                    runRouteTransition(() => router.back())
-                    return
-                }
-
-                navigate(fallbackHref, { replace: true })
+                navigate(backTargetPath(fallbackHref), { replace: true })
             }}
         >
             <span aria-hidden>←</span>
