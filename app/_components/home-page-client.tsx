@@ -212,11 +212,11 @@ export function HomePageClient() {
     const content = homeContent[locale]
 
     return (
-        <main className="page-transition-shell overflow-hidden bg-[var(--page-bg)] text-[var(--text-primary)]">
+        <main className="page-transition-shell bg-[var(--page-bg)] text-[var(--text-primary)]">
             <section className="relative min-h-dvh">
                 <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-[var(--border-muted)]" />
 
-                <div className="relative mx-auto flex min-h-dvh max-w-[var(--layout-max-width)] flex-col px-5 pt-6 pb-8 lg:px-[32px] lg:py-[36px] xl:px-[42px]">
+                <div className="relative mx-auto flex min-h-dvh max-w-[var(--layout-max-width)] flex-col px-5 pt-6 pb-8 lg:px-[28px] lg:py-[34px] xl:px-[32px]">
                     <header className="z-10 flex items-start justify-between gap-4">
                         <BrandMark compact showName={false} />
                         <SiteControls
@@ -228,7 +228,7 @@ export function HomePageClient() {
                         />
                     </header>
 
-                    <div className="grid flex-1 items-center gap-2 lg:grid-cols-[minmax(360px,0.9fr)_minmax(420px,1.1fr)] lg:gap-8">
+                    <div className="grid flex-1 items-center gap-2 lg:grid-cols-[minmax(340px,0.9fr)_minmax(360px,0.86fr)] lg:gap-6">
                         <article className="order-2 mx-auto flex w-full max-w-[618px] flex-col items-center gap-3 text-center lg:order-1 lg:mx-0 lg:items-start lg:gap-[38px] lg:text-left">
                             <div className="flex flex-col items-center gap-3 lg:items-start lg:gap-[20px]">
                                 <span
@@ -266,16 +266,7 @@ export function HomePageClient() {
                             </div>
                         </article>
 
-                        <div className="relative order-1 flex items-center justify-center overflow-hidden lg:order-2">
-                            <div
-                                aria-hidden
-                                className="absolute top-[13%] right-[15%] hidden h-[64%] w-[50%] rounded-[44px] border lg:block"
-                                style={{
-                                    backgroundColor: "var(--hero-plate-bg)",
-                                    borderColor: "var(--border-muted)",
-                                    boxShadow: "inset 0 0 0 1px var(--hero-plate-highlight)",
-                                }}
-                            />
+                        <div className="relative order-1 flex items-center justify-center lg:order-2">
                             <div className="hidden w-full lg:block">
                                 <MascotPreview variant="desktop" />
                             </div>

@@ -77,16 +77,16 @@ export function MascotPreview({ variant }: MascotPreviewProps) {
     }
 
     const frameClassName = isDesktop
-        ? "relative flex h-[min(72dvh,760px)] min-h-[520px] w-full items-center justify-center"
-        : "relative flex h-[292px] w-full items-center justify-center overflow-hidden"
+        ? "relative flex h-[min(68dvh,680px)] min-h-[460px] w-full items-center justify-center overflow-visible px-8 py-7"
+        : "relative flex h-[286px] w-full items-center justify-center overflow-visible px-5 py-4"
 
     const imageClassName = isDesktop
-        ? "relative aspect-[1023/1537] h-[min(72dvh,760px)] max-h-[760px] overflow-hidden rounded-[42px]"
-        : "relative aspect-[1023/1537] w-[min(58vw,218px)] overflow-hidden rounded-[28px]"
+        ? "relative aspect-[1023/1537] h-[min(60dvh,620px)] max-h-[620px] overflow-hidden rounded-[38px]"
+        : "relative aspect-[1023/1537] w-[min(54vw,204px)] overflow-hidden rounded-[26px]"
     const imageStyle = {
         backgroundColor: "var(--mascot-bg)",
         border: "1px solid var(--border-muted)",
-        boxShadow: isDesktop ? "0 40px 110px var(--shadow-mascot)" : "0 24px 70px var(--shadow-mascot)",
+        boxShadow: isDesktop ? "0 34px 86px var(--shadow-mascot)" : "0 22px 58px var(--shadow-mascot)",
     }
 
     return (
@@ -107,7 +107,7 @@ export function MascotPreview({ variant }: MascotPreviewProps) {
                         width={mascotImage.width}
                         height={mascotImage.height}
                         priority
-                        sizes={isDesktop ? "570px" : "280px"}
+                        sizes={isDesktop ? "480px" : "240px"}
                         className="h-full w-full object-cover"
                     />
                 </div>

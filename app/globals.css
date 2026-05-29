@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-    --layout-max-width: 1920px;
+    --layout-max-width: 1180px;
     --page-bg: #f7f3ea;
     --surface-bg: #fffaf1;
     --panel-bg: rgba(255, 250, 241, 0.72);
@@ -13,8 +13,6 @@
     --button-primary-text: #fffaf1;
     --button-secondary-bg: rgba(255, 250, 241, 0.72);
     --button-secondary-text: #1d1b16;
-    --hero-plate-bg: rgba(255, 250, 241, 0.22);
-    --hero-plate-highlight: rgba(255, 255, 255, 0.52);
     --mascot-bg: #f6efe6;
     --ink: #171717;
     --text-primary: #171717;
@@ -42,8 +40,6 @@
         --button-primary-text: #16130f;
         --button-secondary-bg: rgba(255, 250, 241, 0.08);
         --button-secondary-text: #fff2df;
-        --hero-plate-bg: rgba(255, 250, 241, 0.04);
-        --hero-plate-highlight: rgba(255, 255, 255, 0.08);
         --mascot-bg: #201d18;
         --ink: #fff2df;
         --text-primary: #fff2df;
@@ -71,8 +67,6 @@
     --button-primary-text: #fffaf1;
     --button-secondary-bg: rgba(255, 250, 241, 0.72);
     --button-secondary-text: #1d1b16;
-    --hero-plate-bg: rgba(255, 250, 241, 0.22);
-    --hero-plate-highlight: rgba(255, 255, 255, 0.52);
     --mascot-bg: #f6efe6;
     --ink: #171717;
     --text-primary: #171717;
@@ -99,8 +93,6 @@
     --button-primary-text: #16130f;
     --button-secondary-bg: rgba(255, 250, 241, 0.08);
     --button-secondary-text: #fff2df;
-    --hero-plate-bg: rgba(255, 250, 241, 0.04);
-    --hero-plate-highlight: rgba(255, 255, 255, 0.08);
     --mascot-bg: #201d18;
     --ink: #fff2df;
     --text-primary: #fff2df;
