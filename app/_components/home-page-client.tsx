@@ -1,14 +1,11 @@
 "use client"
 
-import { motion, useReducedMotion } from "motion/react"
 import { SiteLocale, SiteThemeMode, homeContent, siteConfig, siteLocales, siteThemeModes } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { DraggableSwitch, type DraggableSwitchOption } from "./draggable-switch"
 import { BrandMark } from "./site-shell"
 import { MascotPreview } from "./mascot-preview"
 import { SmoothLink } from "./smooth-navigation"
-
-const ctaSpring = { stiffness: 360, damping: 26, mass: 0.74 }
 
 function HeroLink({
     href,
@@ -21,15 +18,6 @@ function HeroLink({
     variant?: "primary" | "secondary"
     className?: string
 }) {
-    const reducedMotion = useReducedMotion()
-    const motionProps = reducedMotion
-        ? {}
-        : {
-              whileHover: { y: -1, scale: 1.01 },
-              whileTap: { scale: 0.985 },
-              transition: { type: "spring" as const, ...ctaSpring },
-          }
-
     const colors = variant === "primary" ? "" : "backdrop-blur"
     const linkStyle =
         variant === "primary"
@@ -45,15 +33,13 @@ function HeroLink({
               }
 
     return (
-        <motion.div {...motionProps}>
-            <a
-                href={href}
-                className={`inline-flex h-[50px] items-center justify-center rounded-[15px] px-6 text-[16px] leading-[20px] font-semibold ${colors} ${className}`}
-                style={linkStyle}
-            >
-                {children}
-            </a>
-        </motion.div>
+        <a
+            href={href}
+            className={`inline-flex h-[50px] items-center justify-center rounded-[15px] px-6 text-[16px] leading-[20px] font-semibold transition-[background-color,color,box-shadow] ${colors} ${className}`}
+            style={linkStyle}
+        >
+            {children}
+        </a>
     )
 }
 
