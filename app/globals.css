@@ -30,6 +30,9 @@
     --ambient-gradient-c: rgba(199, 96, 66, 0.18);
     --ambient-gradient-d: rgba(255, 250, 241, 0.82);
     --ambient-gradient-e: rgba(238, 220, 191, 0.42);
+    --ambient-gradient-f: rgba(245, 214, 178, 0.3);
+    --ambient-gradient-opacity: 0.78;
+    --ambient-vignette-opacity: 0.6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,6 +65,9 @@
         --ambient-gradient-c: rgba(122, 64, 44, 0.24);
         --ambient-gradient-d: rgba(18, 19, 15, 0.88);
         --ambient-gradient-e: rgba(44, 35, 25, 0.52);
+        --ambient-gradient-f: rgba(78, 93, 66, 0.22);
+        --ambient-gradient-opacity: 0.74;
+        --ambient-vignette-opacity: 0.72;
     }
 }
 
@@ -94,6 +100,9 @@
     --ambient-gradient-c: rgba(199, 96, 66, 0.18);
     --ambient-gradient-d: rgba(255, 250, 241, 0.82);
     --ambient-gradient-e: rgba(238, 220, 191, 0.42);
+    --ambient-gradient-f: rgba(245, 214, 178, 0.3);
+    --ambient-gradient-opacity: 0.78;
+    --ambient-vignette-opacity: 0.6;
 }
 
 :root[data-theme="dark"] {
@@ -125,6 +134,9 @@
     --ambient-gradient-c: rgba(122, 64, 44, 0.24);
     --ambient-gradient-d: rgba(18, 19, 15, 0.88);
     --ambient-gradient-e: rgba(44, 35, 25, 0.52);
+    --ambient-gradient-f: rgba(78, 93, 66, 0.22);
+    --ambient-gradient-opacity: 0.74;
+    --ambient-vignette-opacity: 0.72;
 }
 
 * {
@@ -162,14 +174,17 @@ body {
     z-index: -2;
     pointer-events: none;
     background:
-        radial-gradient(circle at 16% 24%, var(--ambient-gradient-a) 0 12%, transparent 34%),
-        radial-gradient(circle at 82% 14%, var(--ambient-gradient-b) 0 13%, transparent 34%),
-        radial-gradient(circle at 52% 86%, var(--ambient-gradient-c) 0 15%, transparent 38%),
+        radial-gradient(circle at 16% 24%, var(--ambient-gradient-a) 0 11%, transparent 35%),
+        radial-gradient(circle at 82% 14%, var(--ambient-gradient-b) 0 12%, transparent 34%),
+        radial-gradient(circle at 52% 86%, var(--ambient-gradient-c) 0 14%, transparent 40%),
+        radial-gradient(circle at 6% 74%, var(--ambient-gradient-f) 0 10%, transparent 36%),
         linear-gradient(120deg, var(--ambient-gradient-d), transparent 54%, var(--ambient-gradient-e));
-    background-size: 126% 126%;
+    background-size: 128% 128%, 132% 132%, 124% 124%, 118% 118%, 100% 100%;
+    opacity: var(--ambient-gradient-opacity);
     transform: translate3d(-5%, -4%, 0) scale(1.08);
-    animation: ambient-gradient-walk 18s cubic-bezier(0.45, 0, 0.2, 1) infinite alternate;
-    will-change: transform, background-position;
+    animation: ambient-gradient-walk 28s cubic-bezier(0.45, 0, 0.2, 1) infinite alternate;
+    filter: saturate(1.04);
+    will-change: transform, background-position, opacity;
 }
 
 .page-transition-shell::after {
@@ -181,28 +196,28 @@ body {
     background:
         linear-gradient(180deg, var(--page-bg) 0%, transparent 24%, transparent 72%, var(--page-bg) 100%),
         radial-gradient(circle at 50% 10%, transparent 0 34%, var(--page-bg) 94%);
-    opacity: 0.66;
+    opacity: var(--ambient-vignette-opacity);
 }
 
 @keyframes ambient-gradient-walk {
     0% {
-        background-position: 0% 38%;
+        background-position: 0% 36%, 92% 18%, 48% 90%, 8% 70%, 50% 50%;
         transform: translate3d(-7%, -5%, 0) scale(1.08) rotate(0deg);
     }
 
-    38% {
-        background-position: 78% 24%;
-        transform: translate3d(4%, -2%, 0) scale(1.12) rotate(4deg);
+    32% {
+        background-position: 60% 24%, 74% 32%, 36% 78%, 20% 54%, 50% 50%;
+        transform: translate3d(3%, -2%, 0) scale(1.11) rotate(2deg);
     }
 
-    72% {
-        background-position: 42% 92%;
-        transform: translate3d(2%, 6%, 0) scale(1.1) rotate(-5deg);
+    68% {
+        background-position: 86% 56%, 18% 40%, 60% 98%, 42% 82%, 50% 50%;
+        transform: translate3d(2%, 6%, 0) scale(1.1) rotate(-3deg);
     }
 
     100% {
-        background-position: 100% 58%;
-        transform: translate3d(7%, 4%, 0) scale(1.13) rotate(3deg);
+        background-position: 100% 62%, 8% 18%, 76% 72%, 70% 34%, 50% 50%;
+        transform: translate3d(7%, 4%, 0) scale(1.12) rotate(2deg);
     }
 }
 
