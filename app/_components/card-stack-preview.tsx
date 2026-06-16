@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react"
 type CardStackCard = {
     src: string
     label: string
+    badgeRotation: number
 }
 
 type CardStackCardLayout = CardStackCard & {
@@ -23,38 +24,54 @@ type DepartingCard = {
 
 const cardStackCards = [
     {
-        src: "/card-stack/walking2.png",
+        src: "/card-stack/walking2.jpeg",
         label: "Pierwszy krok",
+        badgeRotation: -9,
     },
     {
-        src: "/card-stack/drinking.png",
+        src: "/card-stack/drinking.jpeg",
         label: "Łyk wody",
+        badgeRotation: 8,
     },
     {
-        src: "/card-stack/eating.png",
+        src: "/card-stack/eating.jpeg",
         label: "Coś dobrego",
+        badgeRotation: -5,
     },
     {
-        src: "/card-stack/taking-picture.png",
+        src: "/card-stack/taking-picture.jpeg",
         label: "Kadr z trasy",
+        badgeRotation: 12,
     },
     {
-        src: "/card-stack/selfie.png",
+        src: "/card-stack/selfie.jpeg",
         label: "Rysek melduje",
+        badgeRotation: -12,
     },
     {
-        src: "/card-stack/relaxing.png",
+        src: "/card-stack/relaxing.jpeg",
         label: "Chwila ciszy",
+        badgeRotation: 5,
     },
     {
-        src: "/card-stack/walking.png",
+        src: "/card-stack/walking.jpeg",
         label: "Jeszcze wyżej",
+        badgeRotation: -7,
     },
     {
-        src: "/card-stack/rysy.png",
+        src: "/card-stack/rysy.jpeg",
         label: "Na Rysach",
+        badgeRotation: 10,
     },
 ] as const satisfies readonly CardStackCard[]
+
+const appBadge = {
+    src: "/app-icon.png",
+    size: 44,
+    inset: 15,
+} as const
+
+const cardPhotoSize = 720
 
 const fallbackCardLayout = [
     { x: -35, y: 18, rotation: -11 },
@@ -241,14 +258,27 @@ export function CardStackPreview() {
                                         <Image
                                             src={card.src}
                                             alt=""
-                                            width={1535}
-                                            height={1024}
+                                            width={cardPhotoSize}
+                                            height={cardPhotoSize}
                                             priority={index >= cardStackCards.length - 2}
-                                            quality={100}
                                             unoptimized
                                             draggable={false}
                                             sizes="(min-width: 1280px) 360px, 236px"
                                             className="pointer-events-none h-full w-full select-none object-cover object-center"
+                                            onDragStart={(event) => event.preventDefault()}
+                                        />
+                                        <Image
+                                            src={appBadge.src}
+                                            alt=""
+                                            width={appBadge.size}
+                                            height={appBadge.size}
+                                            draggable={false}
+                                            className="pointer-events-none absolute select-none rounded-[10px] shadow-[0_8px_20px_rgba(0,0,0,0.22)]"
+                                            style={{
+                                                right: appBadge.inset,
+                                                top: appBadge.inset,
+                                                transform: `rotate(${card.badgeRotation}deg)`,
+                                            }}
                                             onDragStart={(event) => event.preventDefault()}
                                         />
                                     </div>
