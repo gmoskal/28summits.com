@@ -14,11 +14,11 @@ export const siteConfig = {
     appleTouchIcon: "/apple-touch-icon.png",
     faviconIcon16: "/favicon-16x16.png",
     faviconIcon32: "/favicon-32x32.png",
-    description: "28 gór pomaga planować szczyty, zapisywać wejścia i porządkować zdjęcia z tras.",
-    socialTitle: "28 gór - górskie wejścia bez chaosu w notatkach",
-    socialDescription: "Planuj szczyty, zapisuj wejścia i zdjęcia z tras. Premiera w czerwcu 2026.",
+    description: "28 gór zbiera plan szczytów, historię wejść, zdjęcia i pamiątki z tras w jednym miejscu.",
+    socialTitle: "28 gór - 28 szczytów w jednym miejscu",
+    socialDescription: "Planuj kolejne szczyty, zapisuj realne wejścia, dodawaj zdjęcia i zbieraj pamiątki z tras.",
     socialImage: "/og-image.png",
-    socialImageAlt: "28 gór - aplikacja do planowania i zapisywania wejść w górach.",
+    socialImageAlt: "28 gór - aplikacja do planowania 28 szczytów, zapisywania wejść i zdjęć z tras.",
 } as const
 
 export const siteLocales = ["pl", "en"] as const
@@ -73,20 +73,20 @@ export const homeContent: Record<
             support: "Kontakt",
         },
         hero: {
-            eyebrow: "Premiera w czerwcu 2026",
+            eyebrow: "Premiera na iOS w czerwcu 2026",
             headline: "28 gór",
-            body: "Aplikacja dla osób, które chcą przejść 28 gór bez chaosu w notatkach: planuj szczyty, zapisuj wejścia, dodawaj zdjęcia i wracaj do tras, które naprawdę zrobiłeś.",
+            body: "Twoje szczyty, wejścia i zdjęcia w jednym miejscu. Planuj kolejne trasy, zapisuj zdobyte góry i zbieraj pieczątki oraz pamiątki, kiedy faktycznie wejdziesz na szczyt.",
             ctas: {
-                updates: "Daj znać o starcie",
+                updates: "Chcę dostać info o starcie",
             },
-            caption: "Startujemy na iOS. Android dołączy po premierze.",
-            featureLabels: ["Plan szczytów", "Dziennik wejść", "Zdjęcia z tras"],
+            caption: "Najpierw iOS. Android dołączy później.",
+            featureLabels: ["28 szczytów", "Historia wejść", "Zdjęcia i pieczątki"],
             mascotBadge: "Czerwiec 2026",
         },
         compliance: {
             summaryParts: [
                 `28 gór to produkt ${siteConfig.operatorName}`,
-                "fizyczne piny kolekcjonerskie w aplikacji",
+                "fizyczne pamiątki w aplikacji",
                 `ceny w ${siteConfig.currencyCode}`,
                 `${siteConfig.paymentProcessorName} tylko dla fizycznych produktów`,
             ],
@@ -109,20 +109,20 @@ export const homeContent: Record<
             support: "Support",
         },
         hero: {
-            eyebrow: "Coming June 2026",
+            eyebrow: "Coming to iOS in June 2026",
             headline: "28 gór",
-            body: "A mountain companion for people planning their next peaks: record real completions, attach photos, and keep the routes you actually walked in one tidy place.",
+            body: "Your peaks, climbs, and photos in one place. Plan the next route, record the summits you actually reached, and collect stamps or physical keepsakes tied to real trips.",
             ctas: {
-                updates: "Get launch updates",
+                updates: "Tell me when it launches",
             },
-            caption: "Launching first on iOS. Android follows after release.",
-            featureLabels: ["Peak plan", "Summit log", "Route photos"],
+            caption: "iOS first. Android follows later.",
+            featureLabels: ["28 peaks", "Trip history", "Photos & stamps"],
             mascotBadge: "June 2026",
         },
         compliance: {
             summaryParts: [
                 `28 gór is a product by ${siteConfig.operatorName}`,
-                "physical collectible pins in app",
+                "physical keepsakes in app",
                 `prices in ${siteConfig.currencyCode}`,
                 `${siteConfig.paymentProcessorName} only for physical products`,
             ],
@@ -338,7 +338,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
         effectiveDate: "Obowiązuje od 29 maja 2026 r.",
         intro: [
             `Regulamin określa zasady korzystania ze strony ${siteConfig.siteHost} oraz aplikacji 28 gór. Produkt jest rozwijany przez ${siteConfig.operatorName}, a premiera aplikacji jest planowana na czerwiec 2026 r.`,
-            "28 gór ma pomagać w planowaniu i dokumentowaniu górskich wejść. Nie zastępuje map, komunikatów GOPR/TOPR, prognoz pogody, oznaczeń w terenie ani rozsądnej oceny warunków.",
+            "28 gór pomaga planować i dokumentować wejścia na 28 szczytów. Nie zastępuje map, komunikatów GOPR/TOPR, prognoz pogody, oznaczeń w terenie ani rozsądnej oceny warunków.",
         ],
         sections: [
             {
@@ -373,7 +373,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: "Na etapie zapowiedzi strona może umożliwiać zapoznanie się z produktem oraz kontakt w sprawie premiery. Po uruchomieniu aplikacja może obejmować planowanie szczytów, dziennik wejść, zapisywanie zdjęć, synchronizację konta, preferencje i inne funkcje związane z Koroną Gór Polski.",
+                        text: "Na etapie zapowiedzi strona może umożliwiać zapoznanie się z produktem oraz kontakt w sprawie premiery. Po uruchomieniu aplikacja może obejmować planowanie 28 szczytów, historię wejść, zapisywanie zdjęć, synchronizację konta, preferencje i inne funkcje związane z dokumentowaniem tras.",
                     },
                     {
                         type: "paragraph",
@@ -788,7 +788,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
         effectiveDate: "Effective from May 29, 2026",
         intro: [
             `These terms define the rules for using ${siteConfig.siteHost} and the 28 gór app. The product is developed by ${siteConfig.operatorName}, and the app launch is planned for June 2026.`,
-            "28 gór helps users plan and document mountain hikes. It does not replace maps, GOPR/TOPR notices, weather forecasts, trail signs, or your own assessment of conditions.",
+            "28 gór helps users plan and document trips across 28 peaks. It does not replace maps, GOPR/TOPR notices, weather forecasts, trail signs, or your own assessment of conditions.",
         ],
         sections: [
             {
@@ -823,7 +823,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include peak planning, summit logs, photo storage, account synchronization, preferences, and other features related to mountain planning and trip documentation.",
+                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include planning for 28 peaks, trip history, photo storage, account synchronization, preferences, and other features related to documenting routes.",
                     },
                     {
                         type: "paragraph",
