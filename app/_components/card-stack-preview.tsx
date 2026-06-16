@@ -266,6 +266,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
 
                     const isTopCard = index === activeCardIndex
                     const isDeparting = departingCard?.index === index
+                    const canDragCard = isTopCard && !isDeparting
                     const stackDepth = Math.max(index - activeCardIndex, 0)
                     const scale = isTopCard ? 1 : Math.max(0.9, 1 - stackDepth * 0.018)
                     const y = card.y
@@ -281,7 +282,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                         >
                             <motion.div
                                 className="aspect-[1/1.18] w-full touch-none select-none cursor-grab active:cursor-grabbing"
-                                drag={isTopCard && !isDeparting && !prefersReducedMotion ? true : false}
+                                drag={canDragCard}
                                 dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                                 dragElastic={0.88}
                                 initial={
@@ -305,9 +306,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                     mass: 0.82,
                                 }}
                                 style={{ touchAction: "none" }}
-                                whileTap={isTopCard && !prefersReducedMotion ? { scale: scale * 1.035 } : undefined}
-                                onPointerDown={(event) => event.stopPropagation()}
-                                onPointerMove={(event) => event.stopPropagation()}
+                                whileTap={canDragCard && !prefersReducedMotion ? { scale: scale * 1.035 } : undefined}
                                 onDragEnd={(_, info) => handleDragEnd(index, info.offset, info.velocity)}
                                 onAnimationComplete={() => handleAnimationComplete(index)}
                             >
