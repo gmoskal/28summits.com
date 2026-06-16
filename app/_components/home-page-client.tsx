@@ -2,9 +2,9 @@
 
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
+import { CardStackPreview } from "./card-stack-preview"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
-import { MascotPreview } from "./mascot-preview"
 import { SmoothLink } from "./smooth-navigation"
 
 function HeroLink({
@@ -145,8 +145,12 @@ export function HomePageClient() {
                                     {content.hero.eyebrow}
                                 </span>
                                 <h1
-                                    className="text-[76px] leading-[0.88] font-semibold tracking-normal text-[var(--text-primary)] xl:text-[clamp(76px,7vw,116px)]"
-                                    style={{ fontFeatureSettings: "'liga' 0" }}
+                                    className="text-[76px] leading-[0.88] tracking-normal text-[var(--text-primary)] xl:text-[clamp(76px,7vw,116px)]"
+                                    style={{
+                                        fontFamily: 'Caveat, "Caveat Fallback"',
+                                        fontFeatureSettings: "'liga' 0",
+                                        fontWeight: 900,
+                                    }}
                                 >
                                     {content.hero.headline}
                                 </h1>
@@ -170,12 +174,7 @@ export function HomePageClient() {
                         </article>
 
                         <div className="relative order-1 flex items-center justify-center xl:order-2">
-                            <div className="hidden w-full xl:block">
-                                <MascotPreview variant="desktop" />
-                            </div>
-                            <div className="w-full xl:hidden">
-                                <MascotPreview variant="mobile" />
-                            </div>
+                            <CardStackPreview />
                         </div>
                     </div>
 

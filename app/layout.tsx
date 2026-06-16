@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import { Caveat } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
 import { siteConfig } from "./_lib/site-content"
@@ -8,6 +9,13 @@ const inter = localFont({
     variable: "--font-inter",
     display: "swap",
     weight: "100 900",
+})
+
+const caveat = Caveat({
+    subsets: ["latin", "latin-ext"],
+    variable: "--font-caveat",
+    display: "swap",
+    weight: ["400", "500", "600", "700"],
 })
 
 const socialImage = {
@@ -58,12 +66,12 @@ export const viewport: Viewport = {
     width: "device-width",
     initialScale: 1,
     colorScheme: "light dark",
-    themeColor: "#f7f3ea",
+    themeColor: "#ffffff",
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en" className={inter.variable}>
+        <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
             <body>{children}</body>
         </html>
     )

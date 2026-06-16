@@ -14,11 +14,11 @@ export const siteConfig = {
     appleTouchIcon: "/apple-touch-icon.png",
     faviconIcon16: "/favicon-16x16.png",
     faviconIcon32: "/favicon-32x32.png",
-    description: "28 gór zbiera plan szczytów, historię wejść, zdjęcia i pamiątki z tras w jednym miejscu.",
-    socialTitle: "28 gór - 28 szczytów w jednym miejscu",
-    socialDescription: "Planuj kolejne szczyty, zapisuj realne wejścia, dodawaj zdjęcia i zbieraj pamiątki z tras.",
+    description: "28 gór zbiera plany, wejścia, zdjęcia, ręcznie rysowane pieczątki, edukację i górskie pamiątki w jednej dopracowanej aplikacji.",
+    socialTitle: "28 gór - wszystko z gór w jednym pięknym miejscu",
+    socialDescription: "Zbieraj wejścia, zdjęcia, notatki i pieczątki rysowane dla każdego szczytu. Zamawiaj pamiątki i odkrywaj edukacyjne treści z Ryskiem.",
     socialImage: "/og-image.png",
-    socialImageAlt: "28 gór - aplikacja do planowania 28 szczytów, zapisywania wejść i zdjęć z tras.",
+    socialImageAlt: "28 gór - dopracowana aplikacja z ręcznie rysowanymi pieczątkami, zdjęciami, edukacją i pamiątkami z tras.",
 } as const
 
 export const siteLocales = ["pl", "en"] as const
@@ -73,20 +73,21 @@ export const homeContent: Record<
             support: "Kontakt",
         },
         hero: {
-            eyebrow: "Premiera na iOS w czerwcu 2026",
+            eyebrow: "Wszystko z gór w jednym miejscu",
             headline: "28 gór",
-            body: "Twoje szczyty, wejścia i zdjęcia w jednym miejscu. Planuj kolejne trasy, zapisuj zdobyte góry i zbieraj pieczątki oraz pamiątki, kiedy faktycznie wejdziesz na szczyt.",
+            body: "Zbierz całą górską historię w jednej pięknej, dopracowanej aplikacji: plany, wejścia, zdjęcia i ręcznie rysowane pieczątki dla każdego szczytu. Zamów własną pamiątkę z trasy, wracaj do centrum edukacyjnego dla dzieci i dorosłych oraz zobacz, jak Rysek używa 28 gór na co dzień.",
             ctas: {
-                updates: "Chcę dostać info o starcie",
+                updates: "Daj znać, gdy ruszymy",
             },
-            caption: "Najpierw iOS. Android dołączy później.",
-            featureLabels: ["28 szczytów", "Historia wejść", "Zdjęcia i pieczątki"],
+            caption: "Rysek już używa 28 gór na co dzień. iOS pierwszy, Android później.",
+            featureLabels: ["Rysowane pieczątki", "Pamiątki na zamówienie", "Centrum edukacyjne"],
             mascotBadge: "Czerwiec 2026",
         },
         compliance: {
             summaryParts: [
                 `28 gór to produkt ${siteConfig.operatorName}`,
-                "fizyczne pamiątki w aplikacji",
+                "ręcznie rysowane pieczątki w aplikacji",
+                "pamiątki fizyczne na zamówienie",
                 `ceny w ${siteConfig.currencyCode}`,
                 `${siteConfig.paymentProcessorName} tylko dla fizycznych produktów`,
             ],
@@ -109,20 +110,21 @@ export const homeContent: Record<
             support: "Support",
         },
         hero: {
-            eyebrow: "Coming to iOS in June 2026",
+            eyebrow: "Every mountain memory in one place",
             headline: "28 gór",
-            body: "Your peaks, climbs, and photos in one place. Plan the next route, record the summits you actually reached, and collect stamps or physical keepsakes tied to real trips.",
+            body: "Keep your mountain story in one polished app: plans, climbs, photos, and hand-drawn stamps made for every peak. Order a custom keepsake from a real trip, explore an education center for children and adults, and see how Rysek uses 28 gór every day.",
             ctas: {
                 updates: "Tell me when it launches",
             },
-            caption: "iOS first. Android follows later.",
-            featureLabels: ["28 peaks", "Trip history", "Photos & stamps"],
+            caption: "Rysek is already using 28 gór every day. iOS first, Android later.",
+            featureLabels: ["Hand-drawn stamps", "Custom keepsakes", "Education center"],
             mascotBadge: "June 2026",
         },
         compliance: {
             summaryParts: [
                 `28 gór is a product by ${siteConfig.operatorName}`,
-                "physical keepsakes in app",
+                "hand-drawn stamps in app",
+                "custom physical keepsakes",
                 `prices in ${siteConfig.currencyCode}`,
                 `${siteConfig.paymentProcessorName} only for physical products`,
             ],
@@ -373,11 +375,11 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: "Na etapie zapowiedzi strona może umożliwiać zapoznanie się z produktem oraz kontakt w sprawie premiery. Po uruchomieniu aplikacja może obejmować planowanie 28 szczytów, historię wejść, zapisywanie zdjęć, synchronizację konta, preferencje i inne funkcje związane z dokumentowaniem tras.",
+                        text: "Na etapie zapowiedzi strona może umożliwiać zapoznanie się z produktem oraz kontakt w sprawie premiery. Po uruchomieniu aplikacja może obejmować planowanie 28 szczytów, historię wejść, zapisywanie zdjęć, ręcznie rysowane pieczątki dedykowane szczytom, centrum edukacyjne, synchronizację konta, preferencje i inne funkcje związane z dokumentowaniem tras.",
                     },
                     {
                         type: "paragraph",
-                        text: "W aplikacji 28 gór będzie można kupić limitowane piny kolekcjonerskie oraz powiązany merch jako fizyczne produkty wysyłane do klientów. Warunki zakupu będą prezentowane przed płatnością.",
+                        text: "W aplikacji 28 gór będzie można kupić limitowane piny kolekcjonerskie, pamiątki na zamówienie oraz powiązany merch jako fizyczne produkty wysyłane do klientów. Warunki zakupu będą prezentowane przed płatnością.",
                     },
                 ],
             },
@@ -823,11 +825,11 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include planning for 28 peaks, trip history, photo storage, account synchronization, preferences, and other features related to documenting routes.",
+                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include planning for 28 peaks, trip history, photo storage, hand-drawn stamps dedicated to each peak, an education center, account synchronization, preferences, and other features related to documenting routes.",
                     },
                     {
                         type: "paragraph",
-                        text: "The app may allow users to buy limited collectible pins and related merch as physical products shipped to customers. Purchase terms will be shown before payment.",
+                        text: "The app may allow users to buy limited collectible pins, custom keepsakes, and related merch as physical products shipped to customers. Purchase terms will be shown before payment.",
                     },
                 ],
             },

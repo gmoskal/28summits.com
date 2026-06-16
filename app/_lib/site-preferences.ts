@@ -61,7 +61,7 @@ function updateDocumentTheme(theme: SiteThemeMode) {
     document.documentElement.style.colorScheme = theme
     document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute("content", theme === "dark" ? "#12130f" : "#f7f3ea")
+        ?.setAttribute("content", theme === "dark" ? "#000000" : "#ffffff")
 }
 
 export function useSitePreferences() {
