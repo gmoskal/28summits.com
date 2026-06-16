@@ -47,37 +47,15 @@ const cardStackCards = [
         badgeRotation: 8,
     },
     {
-        src: "/card-stack/eating.jpeg",
-        labels: {
-            pl: "Coś dobrego",
-            en: "Something good",
-            cs: "Něco dobrého",
-            sk: "Niečo dobré",
-            uk: "Щось смачне",
-        },
-        badgeRotation: -5,
-    },
-    {
         src: "/card-stack/taking-picture.jpeg",
         labels: {
-            pl: "Kadr z trasy",
-            en: "Trail frame",
-            cs: "Záběr z trasy",
-            sk: "Záber z trasy",
-            uk: "Кадр з маршруту",
+            pl: "Szybkie zdjęcie",
+            en: "Quick photo",
+            cs: "Rychlá fotka",
+            sk: "Rýchla fotka",
+            uk: "Швидке фото",
         },
         badgeRotation: 12,
-    },
-    {
-        src: "/card-stack/selfie.jpeg",
-        labels: {
-            pl: "Rysek melduje",
-            en: "Rysek checks in",
-            cs: "Rysek hlásí",
-            sk: "Rysek hlási",
-            uk: "Rysek на зв’язку",
-        },
-        badgeRotation: -12,
     },
     {
         src: "/card-stack/relaxing.jpeg",
@@ -100,6 +78,28 @@ const cardStackCards = [
             uk: "Ще вище",
         },
         badgeRotation: -7,
+    },
+    {
+        src: "/card-stack/eating.jpeg",
+        labels: {
+            pl: "Coś dobrego",
+            en: "Something good",
+            cs: "Něco dobrého",
+            sk: "Niečo dobré",
+            uk: "Щось смачне",
+        },
+        badgeRotation: -5,
+    },
+    {
+        src: "/card-stack/selfie.jpeg",
+        labels: {
+            pl: "Rysek melduje",
+            en: "Rysek checks in",
+            cs: "Rysek hlásí",
+            sk: "Rysek hlási",
+            uk: "Rysek на зв’язку",
+        },
+        badgeRotation: -12,
     },
     {
         src: "/card-stack/rysy.jpeg",
@@ -143,9 +143,10 @@ const fallbackCardLayout = [
 
 const flick = {
     exitDistance: 980,
+    exitDurationSeconds: 0.32,
     offsetThreshold: 92,
     velocityThreshold: 520,
-    resetDelayMs: 560,
+    resetDelayMs: 40,
 } as const
 
 function randomBetween(min: number, max: number) {
@@ -207,7 +208,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
 
     useEffect(() => {
         setCardLayouts(createRandomCardStackLayout())
-    }, [deckResetKey])
+    }, [])
 
     useEffect(() => {
         if (dismissedCards.size !== cardStackCards.length) {
@@ -215,6 +216,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
         }
 
         const resetTimer = window.setTimeout(() => {
+            setCardLayouts(createRandomCardStackLayout())
             setDismissedCards(new Set())
             setDeckResetKey((currentKey) => currentKey + 1)
         }, flick.resetDelayMs)
@@ -248,6 +250,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
         "relative h-[310px] w-full max-w-[320px] touch-none select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
     const cardClassName =
         "absolute left-1/2 top-1/2 w-[236px] xl:w-[min(30vw,360px)] xl:max-w-[360px]"
+    const shouldPlayDeckEntryAnimation = !prefersReducedMotion
 
     return (
         <div className={frameClassName}>
@@ -277,8 +280,8 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                     const exitY = isDeparting ? y + departingCard.directionY * flick.exitDistance : y
                     const rotation = isDeparting ? card.rotation + departingCard.directionX * 28 : card.rotation
                     const animationDelay =
-                        dismissedCards.size === 0 && departingCard === null && !prefersReducedMotion
-                            ? index * 0.055
+                        dismissedCards.size === 0 && departingCard === null && shouldPlayDeckEntryAnimation
+                            ? (cardStackCards.length - 1 - index) * 0.055
                             : 0
 
                     return (
@@ -295,9 +298,9 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                 drag={canDragCard}
                                 dragMomentum={false}
                                 initial={
-                                    prefersReducedMotion
-                                        ? { opacity: 1, x, y, rotate: card.rotation, scale }
-                                        : { opacity: 0, x: 0, y: -620, rotate: 0, scale: 1.16 }
+                                    shouldPlayDeckEntryAnimation
+                                        ? { opacity: 0, x: 0, y: -620, rotate: 0, scale: 1.16 }
+                                        : { opacity: 1, x, y, rotate: card.rotation, scale }
                                 }
                                 animate={{
                                     opacity: isDeparting ? 0 : 1,
@@ -308,8 +311,13 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                 }}
                                 transition={{
                                     delay: animationDelay,
-                                    type: prefersReducedMotion ? "tween" : "spring",
-                                    duration: prefersReducedMotion ? 0.01 : undefined,
+                                    type: isDeparting || prefersReducedMotion ? "tween" : "spring",
+                                    duration: isDeparting
+                                        ? flick.exitDurationSeconds
+                                        : prefersReducedMotion
+                                            ? 0.01
+                                            : undefined,
+                                    ease: isDeparting ? "easeOut" : undefined,
                                     stiffness: isDeparting ? 170 : 360,
                                     damping: isDeparting ? 22 : 32,
                                     mass: 0.82,
