@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
@@ -7,73 +8,29 @@ import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
 import { SmoothLink } from "./smooth-navigation"
 
-function HeroLink({
-    href,
-    children,
-    variant = "primary",
-    className = "",
-}: {
-    href: string
-    children: React.ReactNode
-    variant?: "primary" | "secondary"
-    className?: string
-}) {
-    const colors = variant === "primary" ? "" : "backdrop-blur"
-    const linkStyle =
-        variant === "primary"
-            ? {
-                  backgroundColor: "var(--button-primary-bg)",
-                  boxShadow: "0 16px 34px var(--shadow-button)",
-                  color: "var(--button-primary-text)",
-              }
-            : {
-                  backgroundColor: "var(--button-secondary-bg)",
-                  boxShadow: "inset 0 0 0 1px var(--border-muted)",
-                  color: "var(--button-secondary-text)",
-              }
-
-    return (
-        <a
-            href={href}
-            className={`inline-flex h-[50px] items-center justify-center rounded-[15px] px-6 text-[16px] leading-[20px] font-semibold transition-[background-color,color,box-shadow] ${colors} ${className}`}
-            style={linkStyle}
-        >
-            {children}
-        </a>
-    )
-}
-
-function AppleIcon() {
-    return (
-        <svg aria-hidden="true" className="h-[25px] w-[21px] shrink-0" viewBox="0 0 20 24" fill="currentColor">
-            <path d="M16.37 12.73c-.02-2.44 2-3.62 2.09-3.67-1.14-1.67-2.9-1.9-3.52-1.92-1.48-.15-2.92.88-3.67.88-.77 0-1.93-.86-3.18-.84-1.61.03-3.12.96-3.95 2.42-1.71 2.96-.44 7.31 1.2 9.7.82 1.17 1.78 2.47 3.03 2.42 1.22-.05 1.67-.78 3.14-.78 1.46 0 1.88.78 3.16.75 1.32-.02 2.15-1.17 2.93-2.35.95-1.35 1.33-2.68 1.35-2.75-.03-.01-2.55-.98-2.58-3.86ZM13.97 5.57c.66-.83 1.1-1.95.98-3.09-.96.04-2.16.67-2.85 1.48-.61.7-1.16 1.87-1.01 2.96 1.08.08 2.19-.54 2.88-1.35Z" />
-        </svg>
-    )
-}
-
 type AppStoreButtonProps = {
     badge: (typeof homeContent)[SiteLocale]["hero"]["appStoreBadge"]
 }
 
 function AppStoreButton({ badge }: AppStoreButtonProps) {
     return (
-        <button
-            type="button"
-            disabled
-            aria-label={badge.disabledLabel}
-            title={badge.disabledLabel}
-            className="inline-flex h-[50px] min-w-[166px] items-center justify-center gap-2 rounded-[15px] border border-[#2c2c2c] bg-[#050505] px-4 text-white opacity-55 shadow-[0_16px_34px_rgba(0,0,0,0.16)]"
+        <a
+            href={siteConfig.launchUpdatesUrl}
+            aria-label={badge.actionLabel}
+            title={badge.actionLabel}
+            className="inline-flex h-[54px] w-[182px] items-center justify-center transition-[filter,transform] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
         >
-            <AppleIcon />
-            <span className="flex min-w-0 flex-col items-start leading-none">
-                <span className="text-[10px] leading-[12px] font-semibold tracking-normal whitespace-nowrap">
-                    {badge.prefix}
-                </span>
-                <span className="text-[18px] leading-[20px] font-bold tracking-normal whitespace-nowrap">
-                    {badge.label}
-                </span>
-            </span>
-        </button>
+            <Image
+                src={siteConfig.appStoreBadgeImage}
+                alt=""
+                width={135}
+                height={40}
+                unoptimized
+                draggable={false}
+                className="h-full w-full select-none"
+                style={{ filter: "var(--app-store-badge-filter)" }}
+            />
+        </a>
     )
 }
 
@@ -186,19 +143,20 @@ export function HomePageClient() {
                                 >
                                     {content.hero.headline}
                                 </h1>
-                                <p
-                                    className="max-w-[350px] text-[15px] leading-[21px] font-semibold text-[var(--text-secondary)] xl:max-w-[588px] xl:text-[20px] xl:leading-[28px]"
+                                <div
+                                    className="flex max-w-[350px] flex-col gap-2 text-[15px] leading-[21px] font-semibold text-[var(--text-secondary)] xl:max-w-[588px] xl:gap-3 xl:text-[19px] xl:leading-[27px]"
                                     style={{ fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
                                 >
-                                    {content.hero.body}
-                                </p>
+                                    {content.hero.body.map((paragraph) => (
+                                        <p key={paragraph}>{paragraph}</p>
+                                    ))}
+                                </div>
                                 <FeatureLabels labels={content.hero.featureLabels} />
                             </div>
 
                             <div className="flex w-full flex-col items-center gap-3 xl:items-start">
-                                <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row">
+                                <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
                                     <AppStoreButton badge={content.hero.appStoreBadge} />
-                                    <HeroLink href={siteConfig.launchUpdatesUrl}>{content.hero.ctas.updates}</HeroLink>
                                 </div>
                                 <p className="text-[14px] leading-[20px] font-semibold text-[var(--text-muted)] xl:pl-[6px] xl:text-[15px] xl:leading-[21px]">
                                     {content.hero.caption}

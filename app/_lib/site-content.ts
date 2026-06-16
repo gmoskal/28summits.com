@@ -7,6 +7,7 @@ export const siteConfig = {
     currencyCode: "PLN",
     paymentProcessorName: "Stripe",
     appStoreUrl: "https://apps.apple.com/app/28-summits/id0000000000",
+    appStoreBadgeImage: "/download-on-the-app-store-badge.svg",
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.28summits.app",
     launchUpdatesUrl: "mailto:support@async.studio?subject=28%20g%C3%B3r%20launch%20updates",
     siteUrl: "https://28gor.app",
@@ -58,14 +59,9 @@ export const homeContent: Record<
         hero: {
             eyebrow: string
             headline: string
-            body: string
-            ctas: {
-                updates: string
-            }
+            body: string[]
             appStoreBadge: {
-                prefix: string
-                label: string
-                disabledLabel: string
+                actionLabel: string
             }
             caption: string
             featureLabels: string[]
@@ -96,17 +92,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Wszystko z gór w jednym miejscu",
             headline: "28 gór",
-            body: "28 gór to nowa aplikacja w App Store, która zbiera całą górską historię w jednym pięknym miejscu: plany, wejścia, zdjęcia i ręcznie rysowane pieczątki dla każdego szczytu. Zamów własną pamiątkę z trasy, wracaj do centrum edukacyjnego dla dzieci i dorosłych oraz zobacz, jak Rysek używa 28 gór na co dzień.",
-            ctas: {
-                updates: "Daj znać, gdy ruszymy",
-            },
+            body: [
+                "28 gór to nowa aplikacja w App Store dla osób, które chcą mieć swoje wejścia, zdjęcia, notatki i plany w jednym spokojnym, dopracowanym miejscu.",
+                "Każdy szczyt ma własną, ręcznie rysowaną pieczątkę. Z ukończonej trasy możesz też zamówić osobistą pamiątkę, która zostaje z Tobą poza ekranem.",
+                "W środku czeka centrum edukacyjne dla dzieci i dorosłych oraz Rysek, który używa 28 gór na co dzień i prowadzi przez kolejne górskie historie.",
+            ],
             appStoreBadge: {
-                prefix: "Pobierz w",
-                label: "App Store",
-                disabledLabel: "App Store będzie aktywny przy premierze",
+                actionLabel: "Daj znać, gdy 28 gór pojawi się w App Store",
             },
-            caption: "Przycisk App Store odblokujemy przy premierze. Rysek już używa 28 gór na co dzień.",
-            featureLabels: ["Rysowane pieczątki", "Pamiątki na zamówienie", "Centrum edukacyjne"],
+            caption: "Kliknij badge App Store, a przygotujemy wiadomość, żeby dać Ci znać przy starcie.",
+            featureLabels: ["Rysowane pieczątki", "Pamiątki na zamówienie", "Centrum edukacyjne", "Informacje o górach"],
             mascotBadge: "Czerwiec 2026",
         },
         compliance: {
@@ -139,17 +134,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Every mountain memory in one place",
             headline: "28 gór",
-            body: "28 gór is a new App Store app for keeping your mountain story in one polished place: plans, climbs, photos, and hand-drawn stamps made for every peak. Order a custom keepsake from a real trip, explore an education center for children and adults, and see how Rysek uses 28 gór every day.",
-            ctas: {
-                updates: "Tell me when it launches",
-            },
+            body: [
+                "28 gór is a new App Store app for keeping climbs, photos, notes, and plans in one calm, beautifully finished place.",
+                "Every peak has its own hand-drawn stamp. From a completed route, you can also order a personal keepsake that stays with you beyond the screen.",
+                "Inside, there is an education center for children and adults, plus Rysek, who uses 28 gór every day and carries each mountain story forward.",
+            ],
             appStoreBadge: {
-                prefix: "Download on the",
-                label: "App Store",
-                disabledLabel: "App Store download will be enabled at launch",
+                actionLabel: "Tell me when 28 gór is available on the App Store",
             },
-            caption: "The App Store button will unlock at launch. Rysek is already using 28 gór every day.",
-            featureLabels: ["Hand-drawn stamps", "Custom keepsakes", "Education center"],
+            caption: "Tap the App Store badge and we will prepare a launch notification message.",
+            featureLabels: ["Hand-drawn stamps", "Custom keepsakes", "Education center", "Mountain info"],
             mascotBadge: "June 2026",
         },
         compliance: {
@@ -182,17 +176,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Všechno z hor na jednom místě",
             headline: "28 gór",
-            body: "28 gór je nová aplikace v App Storu, která ukládá celý horský příběh na jednom krásném místě: plány, výstupy, fotky a ručně kreslená razítka pro každý vrchol. Objednej si vlastní památku z trasy, vracej se do vzdělávacího centra pro děti i dospělé a podívej se, jak Rysek používá 28 gór každý den.",
-            ctas: {
-                updates: "Dejte mi vědět při spuštění",
-            },
+            body: [
+                "28 gór je nová aplikace v App Storu pro výstupy, fotky, poznámky a plány uložené v jednom klidném, krásně dotaženém místě.",
+                "Každý vrchol má vlastní ručně kreslené razítko. Z dokončené trasy si můžeš objednat i osobní památku, která zůstane i mimo obrazovku.",
+                "Uvnitř čeká vzdělávací centrum pro děti i dospělé a také Rysek, který používá 28 gór každý den a provází další horské příběhy.",
+            ],
             appStoreBadge: {
-                prefix: "Stáhnout v",
-                label: "App Store",
-                disabledLabel: "Tlačítko App Store bude aktivní při spuštění",
+                actionLabel: "Dejte mi vědět, až bude 28 gór v App Storu",
             },
-            caption: "Tlačítko App Store odemkneme při spuštění. Rysek už používá 28 gór každý den.",
-            featureLabels: ["Kreslená razítka", "Památky na objednávku", "Vzdělávací centrum"],
+            caption: "Klepni na badge App Store a připravíme zprávu s upozorněním na spuštění.",
+            featureLabels: ["Kreslená razítka", "Památky na objednávku", "Vzdělávací centrum", "Informace o horách"],
             mascotBadge: "Červen 2026",
         },
         compliance: {
@@ -225,17 +218,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Všetko z hôr na jednom mieste",
             headline: "28 gór",
-            body: "28 gór je nová aplikácia v App Store, ktorá ukladá celý horský príbeh na jednom krásnom mieste: plány, výstupy, fotky a ručne kreslené pečiatky pre každý vrchol. Objednaj si vlastnú pamiatku z trasy, vracaj sa do vzdelávacieho centra pre deti aj dospelých a pozri sa, ako Rysek používa 28 gór každý deň.",
-            ctas: {
-                updates: "Dajte mi vedieť pri spustení",
-            },
+            body: [
+                "28 gór je nová aplikácia v App Store pre výstupy, fotky, poznámky a plány uložené na jednom pokojnom, krásne dotiahnutom mieste.",
+                "Každý vrchol má vlastnú ručne kreslenú pečiatku. Z dokončenej trasy si môžeš objednať aj osobnú pamiatku, ktorá zostane aj mimo obrazovky.",
+                "Vo vnútri čaká vzdelávacie centrum pre deti aj dospelých a tiež Rysek, ktorý používa 28 gór každý deň a sprevádza ďalšie horské príbehy.",
+            ],
             appStoreBadge: {
-                prefix: "Stiahnuť v",
-                label: "App Store",
-                disabledLabel: "Tlačidlo App Store bude aktívne pri spustení",
+                actionLabel: "Dajte mi vedieť, keď bude 28 gór v App Store",
             },
-            caption: "Tlačidlo App Store odomkneme pri spustení. Rysek už používa 28 gór každý deň.",
-            featureLabels: ["Kreslené pečiatky", "Pamiatky na objednávku", "Vzdelávacie centrum"],
+            caption: "Ťukni na badge App Store a pripravíme správu s upozornením na spustenie.",
+            featureLabels: ["Kreslené pečiatky", "Pamiatky na objednávku", "Vzdelávacie centrum", "Informácie o horách"],
             mascotBadge: "Jún 2026",
         },
         compliance: {
@@ -268,17 +260,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Усе з гір в одному місці",
             headline: "28 gór",
-            body: "28 gór - це новий застосунок в App Store, який збирає всю гірську історію в одному красивому місці: плани, сходження, фото та намальовані вручну штампи для кожної вершини. Замов власну пам’ятку з маршруту, повертайся до освітнього центру для дітей і дорослих та подивись, як Rysek користується 28 gór щодня.",
-            ctas: {
-                updates: "Повідомте мене про запуск",
-            },
+            body: [
+                "28 gór - це новий застосунок в App Store для сходжень, фото, нотаток і планів, зібраних в одному спокійному та красиво продуманому місці.",
+                "Кожна вершина має власний намальований вручну штамп. Із завершеного маршруту можна замовити особисту пам’ятку, яка залишиться з тобою поза екраном.",
+                "Усередині є освітній центр для дітей і дорослих, а також Rysek, який користується 28 gór щодня і веде наступні гірські історії.",
+            ],
             appStoreBadge: {
-                prefix: "Завантажити в",
-                label: "App Store",
-                disabledLabel: "Кнопка App Store стане активною під час запуску",
+                actionLabel: "Повідомте мене, коли 28 gór буде в App Store",
             },
-            caption: "Кнопку App Store відкриємо під час запуску. Rysek уже користується 28 gór щодня.",
-            featureLabels: ["Мальовані штампи", "Пам’ятки на замовлення", "Освітній центр"],
+            caption: "Натисни badge App Store, і ми підготуємо повідомлення про запуск.",
+            featureLabels: ["Мальовані штампи", "Пам’ятки на замовлення", "Освітній центр", "Інформація про гори"],
             mascotBadge: "Червень 2026",
         },
         compliance: {

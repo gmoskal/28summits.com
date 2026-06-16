@@ -169,7 +169,7 @@ function createRandomCardStackLayout(): CardStackCardLayout[] {
 }
 
 function topVisibleCardIndex(dismissedCards: Set<number>) {
-    for (let index = cardStackCards.length - 1; index >= 0; index -= 1) {
+    for (let index = 0; index < cardStackCards.length; index += 1) {
         if (!dismissedCards.has(index)) {
             return index
         }
@@ -240,9 +240,9 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
     }
 
     const frameClassName =
-        "relative flex w-full items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
+        "relative flex w-full touch-none select-none items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
     const deckClassName =
-        "relative h-[310px] w-full max-w-[320px] xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
+        "relative h-[310px] w-full max-w-[320px] touch-none select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
     const cardClassName =
         "absolute left-1/2 top-1/2 w-[236px] xl:w-[min(30vw,360px)] xl:max-w-[360px]"
 
@@ -266,7 +266,8 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
 
                     const isTopCard = index === activeCardIndex
                     const isDeparting = departingCard?.index === index
-                    const scale = isTopCard ? 1 : 0.91 + index * 0.012
+                    const stackDepth = Math.max(index - activeCardIndex, 0)
+                    const scale = isTopCard ? 1 : Math.max(0.9, 1 - stackDepth * 0.018)
                     const y = card.y
                     const x = isDeparting ? departingCard.directionX * flick.exitDistance : card.x
                     const exitY = isDeparting ? y + departingCard.directionY * flick.exitDistance : y
@@ -276,10 +277,10 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                         <div
                             key={card.src}
                             className={`${cardClassName} -translate-x-1/2 -translate-y-1/2`}
-                            style={{ zIndex: index + 1 }}
+                            style={{ zIndex: cardStackCards.length - index }}
                         >
                             <motion.div
-                                className="aspect-[1/1.18] w-full"
+                                className="aspect-[1/1.18] w-full touch-none select-none cursor-grab active:cursor-grabbing"
                                 drag={isTopCard && !isDeparting && !prefersReducedMotion ? true : false}
                                 dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                                 dragElastic={0.88}
@@ -305,6 +306,8 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                 }}
                                 style={{ touchAction: "none" }}
                                 whileTap={isTopCard && !prefersReducedMotion ? { scale: scale * 1.035 } : undefined}
+                                onPointerDown={(event) => event.stopPropagation()}
+                                onPointerMove={(event) => event.stopPropagation()}
                                 onDragEnd={(_, info) => handleDragEnd(index, info.offset, info.velocity)}
                                 onAnimationComplete={() => handleAnimationComplete(index)}
                             >
@@ -317,7 +320,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                             alt=""
                                             width={cardPhotoSize}
                                             height={cardPhotoSize}
-                                            priority={index >= cardStackCards.length - 2}
+                                            priority={index <= 1}
                                             unoptimized
                                             draggable={false}
                                             sizes="(min-width: 1280px) 360px, 236px"
