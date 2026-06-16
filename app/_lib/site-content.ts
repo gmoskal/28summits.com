@@ -93,9 +93,8 @@ export const homeContent: Record<
             eyebrow: "Wszystko z gór w jednym miejscu",
             headline: "28 gór",
             body: [
-                "28 gór to nowa aplikacja w App Store dla osób, które chcą mieć swoje wejścia, zdjęcia, notatki i plany w jednym spokojnym, dopracowanym miejscu.",
-                "Każdy szczyt ma własną, ręcznie rysowaną pieczątkę. Z ukończonej trasy możesz też zamówić osobistą pamiątkę, która zostaje z Tobą poza ekranem.",
-                "W środku czeka centrum edukacyjne dla dzieci i dorosłych oraz Rysek, który używa 28 gór na co dzień i prowadzi przez kolejne górskie historie.",
+                "28 gór to nowa aplikacja w App Store, która zbiera wejścia, zdjęcia i ślady z trasy w jednym pięknym miejscu. Każdy szczyt dostaje własną, ręcznie rysowaną pieczątkę.",
+                "Rysek już zabiera ją w góry. W środku czekają małe odkrycia: informacje o szczytach, edukacyjne tropy i pamiątki, które można zamówić po prawdziwej wyprawie.",
             ],
             appStoreBadge: {
                 actionLabel: "Daj znać, gdy 28 gór pojawi się w App Store",
@@ -135,9 +134,8 @@ export const homeContent: Record<
             eyebrow: "Every mountain memory in one place",
             headline: "28 gór",
             body: [
-                "28 gór is a new App Store app for keeping climbs, photos, notes, and plans in one calm, beautifully finished place.",
-                "Every peak has its own hand-drawn stamp. From a completed route, you can also order a personal keepsake that stays with you beyond the screen.",
-                "Inside, there is an education center for children and adults, plus Rysek, who uses 28 gór every day and carries each mountain story forward.",
+                "28 gór is a new App Store app that keeps climbs, photos, and trail traces in one beautifully made place. Every peak gets its own hand-drawn stamp.",
+                "Rysek is already taking it into the mountains. Inside are small discoveries: peak notes, learning moments, and keepsakes you can order after a real trip.",
             ],
             appStoreBadge: {
                 actionLabel: "Tell me when 28 gór is available on the App Store",
@@ -177,9 +175,8 @@ export const homeContent: Record<
             eyebrow: "Všechno z hor na jednom místě",
             headline: "28 gór",
             body: [
-                "28 gór je nová aplikace v App Storu pro výstupy, fotky, poznámky a plány uložené v jednom klidném, krásně dotaženém místě.",
-                "Každý vrchol má vlastní ručně kreslené razítko. Z dokončené trasy si můžeš objednat i osobní památku, která zůstane i mimo obrazovku.",
-                "Uvnitř čeká vzdělávací centrum pro děti i dospělé a také Rysek, který používá 28 gór každý den a provází další horské příběhy.",
+                "28 gór je nová aplikace v App Storu, která ukládá výstupy, fotky a stopy z trasy na jednom krásně vytvořeném místě. Každý vrchol dostane vlastní ručně kreslené razítko.",
+                "Rysek ji už bere do hor. Uvnitř čekají malá objevení: informace o vrcholech, vzdělávací zastavení a památky, které si můžeš objednat po skutečné cestě.",
             ],
             appStoreBadge: {
                 actionLabel: "Dejte mi vědět, až bude 28 gór v App Storu",
@@ -219,9 +216,8 @@ export const homeContent: Record<
             eyebrow: "Všetko z hôr na jednom mieste",
             headline: "28 gór",
             body: [
-                "28 gór je nová aplikácia v App Store pre výstupy, fotky, poznámky a plány uložené na jednom pokojnom, krásne dotiahnutom mieste.",
-                "Každý vrchol má vlastnú ručne kreslenú pečiatku. Z dokončenej trasy si môžeš objednať aj osobnú pamiatku, ktorá zostane aj mimo obrazovky.",
-                "Vo vnútri čaká vzdelávacie centrum pre deti aj dospelých a tiež Rysek, ktorý používa 28 gór každý deň a sprevádza ďalšie horské príbehy.",
+                "28 gór je nová aplikácia v App Store, ktorá ukladá výstupy, fotky a stopy z trasy na jednom krásne vytvorenom mieste. Každý vrchol dostane vlastnú ručne kreslenú pečiatku.",
+                "Rysek ju už berie do hôr. Vo vnútri čakajú malé objavy: informácie o vrcholoch, vzdelávacie zastavenia a pamiatky, ktoré si môžeš objednať po skutočnej trase.",
             ],
             appStoreBadge: {
                 actionLabel: "Dajte mi vedieť, keď bude 28 gór v App Store",
@@ -261,9 +257,8 @@ export const homeContent: Record<
             eyebrow: "Усе з гір в одному місці",
             headline: "28 gór",
             body: [
-                "28 gór - це новий застосунок в App Store для сходжень, фото, нотаток і планів, зібраних в одному спокійному та красиво продуманому місці.",
-                "Кожна вершина має власний намальований вручну штамп. Із завершеного маршруту можна замовити особисту пам’ятку, яка залишиться з тобою поза екраном.",
-                "Усередині є освітній центр для дітей і дорослих, а також Rysek, який користується 28 gór щодня і веде наступні гірські історії.",
+                "28 gór - це новий застосунок в App Store, що збирає сходження, фото й сліди маршруту в одному красиво зробленому місці. Кожна вершина має власний намальований вручну штамп.",
+                "Rysek уже бере його в гори. Усередині чекають маленькі відкриття: нотатки про вершини, освітні моменти й пам’ятки, які можна замовити після справжньої мандрівки.",
             ],
             appStoreBadge: {
                 actionLabel: "Повідомте мене, коли 28 gór буде в App Store",
