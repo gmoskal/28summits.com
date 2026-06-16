@@ -170,7 +170,7 @@ body {
 .page-transition-shell::before {
     content: "";
     position: fixed;
-    inset: -28vmax;
+    inset: 0;
     z-index: -2;
     pointer-events: none;
     background:
@@ -181,10 +181,9 @@ body {
         linear-gradient(120deg, var(--ambient-gradient-d), transparent 54%, var(--ambient-gradient-e));
     background-size: 128% 128%, 132% 132%, 124% 124%, 118% 118%, 100% 100%;
     opacity: var(--ambient-gradient-opacity);
-    transform: translate3d(-5%, -4%, 0) scale(1.08);
-    animation: ambient-gradient-walk 28s cubic-bezier(0.45, 0, 0.2, 1) infinite alternate;
+    animation: none;
     filter: saturate(1.04);
-    will-change: transform, background-position, opacity;
+    will-change: background-position, opacity;
 }
 
 .page-transition-shell::after {
@@ -202,35 +201,29 @@ body {
 @keyframes ambient-gradient-walk {
     0% {
         background-position: 0% 36%, 92% 18%, 48% 90%, 8% 70%, 50% 50%;
-        transform: translate3d(-7%, -5%, 0) scale(1.08) rotate(0deg);
     }
 
     32% {
         background-position: 60% 24%, 74% 32%, 36% 78%, 20% 54%, 50% 50%;
-        transform: translate3d(3%, -2%, 0) scale(1.11) rotate(2deg);
     }
 
     68% {
         background-position: 86% 56%, 18% 40%, 60% 98%, 42% 82%, 50% 50%;
-        transform: translate3d(2%, 6%, 0) scale(1.1) rotate(-3deg);
     }
 
     100% {
         background-position: 100% 62%, 8% 18%, 76% 72%, 70% 34%, 50% 50%;
-        transform: translate3d(7%, 4%, 0) scale(1.12) rotate(2deg);
     }
 }
 
 @keyframes page-route-enter {
     from {
         opacity: 0;
-        transform: translateY(8px);
         filter: blur(4px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
         filter: blur(0);
     }
 }

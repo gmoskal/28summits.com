@@ -115,7 +115,7 @@ export function HomePageClient() {
     const content = homeContent[locale]
 
     return (
-        <main className="page-transition-shell overflow-clip bg-[var(--page-bg)] text-[var(--text-primary)]">
+        <main className="page-transition-shell bg-[var(--page-bg)] text-[var(--text-primary)]">
             <section className="relative min-h-screen">
                 <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-[var(--border-muted)]" />
 
