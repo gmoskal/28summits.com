@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Caveat } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
-import { siteConfig } from "./_lib/site-content"
+import { siteConfig, siteLanguages } from "./_lib/site-content"
 
 const inter = localFont({
     src: "./fonts/InterVariable.woff2",
@@ -51,7 +51,9 @@ export const metadata: Metadata = {
         description: siteConfig.socialDescription,
         siteName: siteConfig.name,
         locale: "pl_PL",
-        alternateLocale: ["en_US"],
+        alternateLocale: siteLanguages
+            .filter((language) => language.ogLocale !== "pl_PL")
+            .map((language) => language.ogLocale),
         images: [socialImage],
     },
     twitter: {

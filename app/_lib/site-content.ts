@@ -21,8 +21,21 @@ export const siteConfig = {
     socialImageAlt: "28 gór - dopracowana aplikacja z ręcznie rysowanymi pieczątkami, zdjęciami, edukacją i pamiątkami z tras.",
 } as const
 
-export const siteLocales = ["pl", "en"] as const
-export type SiteLocale = (typeof siteLocales)[number]
+export const siteLanguages = [
+    { locale: "pl", flag: "🇵🇱", name: "Polski", htmlLang: "pl", ogLocale: "pl_PL" },
+    { locale: "en", flag: "🇬🇧", name: "English", htmlLang: "en", ogLocale: "en_US" },
+    { locale: "cs", flag: "🇨🇿", name: "Čeština", htmlLang: "cs", ogLocale: "cs_CZ" },
+    { locale: "sk", flag: "🇸🇰", name: "Slovenčina", htmlLang: "sk", ogLocale: "sk_SK" },
+    { locale: "uk", flag: "🇺🇦", name: "Українська", htmlLang: "uk", ogLocale: "uk_UA" },
+] as const
+
+export type SiteLocale = (typeof siteLanguages)[number]["locale"]
+export type SiteLanguage = (typeof siteLanguages)[number]
+
+export const siteLocales = siteLanguages.map((language) => language.locale)
+export const siteLanguageByLocale = Object.fromEntries(
+    siteLanguages.map((language) => [language.locale, language]),
+) as Record<SiteLocale, SiteLanguage>
 
 export const siteThemeModes = ["light", "dark"] as const
 export type SiteThemeMode = (typeof siteThemeModes)[number]
@@ -39,6 +52,7 @@ export const homeContent: Record<
             privacy: string
             terms: string
             support: string
+            back: string
         }
         hero: {
             eyebrow: string
@@ -71,6 +85,7 @@ export const homeContent: Record<
             privacy: "Prywatność",
             terms: "Regulamin",
             support: "Kontakt",
+            back: "Wróć",
         },
         hero: {
             eyebrow: "Wszystko z gór w jednym miejscu",
@@ -108,6 +123,7 @@ export const homeContent: Record<
             privacy: "Privacy",
             terms: "Terms",
             support: "Support",
+            back: "Back",
         },
         hero: {
             eyebrow: "Every mountain memory in one place",
@@ -130,6 +146,120 @@ export const homeContent: Record<
             ],
             contactLabel: "Contact",
             legalPolicies: "Legal & Policies",
+        },
+    },
+    cs: {
+        controls: {
+            languageLabel: "Jazyk",
+            themeLabel: "Motiv",
+            themeModes: {
+                light: "Světlý",
+                dark: "Tmavý",
+            },
+        },
+        nav: {
+            privacy: "Soukromí",
+            terms: "Podmínky",
+            support: "Podpora",
+            back: "Zpět",
+        },
+        hero: {
+            eyebrow: "Všechno z hor na jednom místě",
+            headline: "28 gór",
+            body: "Ulož si celý horský příběh do jedné krásné a promyšlené aplikace: plány, výstupy, fotky a ručně kreslená razítka pro každý vrchol. Objednej si vlastní památku z trasy, vracej se do vzdělávacího centra pro děti i dospělé a podívej se, jak Rysek používá 28 gór každý den.",
+            ctas: {
+                updates: "Dejte mi vědět při spuštění",
+            },
+            caption: "Rysek už používá 28 gór každý den. Nejprve iOS, Android později.",
+            featureLabels: ["Kreslená razítka", "Památky na objednávku", "Vzdělávací centrum"],
+            mascotBadge: "Červen 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór je produkt ${siteConfig.operatorName}`,
+                "ručně kreslená razítka v aplikaci",
+                "fyzické památky na objednávku",
+                `ceny v ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} pouze pro fyzické produkty`,
+            ],
+            contactLabel: "Kontakt",
+            legalPolicies: "Právní dokumenty",
+        },
+    },
+    sk: {
+        controls: {
+            languageLabel: "Jazyk",
+            themeLabel: "Motív",
+            themeModes: {
+                light: "Svetlý",
+                dark: "Tmavý",
+            },
+        },
+        nav: {
+            privacy: "Súkromie",
+            terms: "Podmienky",
+            support: "Podpora",
+            back: "Späť",
+        },
+        hero: {
+            eyebrow: "Všetko z hôr na jednom mieste",
+            headline: "28 gór",
+            body: "Ulož si celý horský príbeh do jednej krásnej a premyslenej aplikácie: plány, výstupy, fotky a ručne kreslené pečiatky pre každý vrchol. Objednaj si vlastnú pamiatku z trasy, vracaj sa do vzdelávacieho centra pre deti aj dospelých a pozri sa, ako Rysek používa 28 gór každý deň.",
+            ctas: {
+                updates: "Dajte mi vedieť pri spustení",
+            },
+            caption: "Rysek už používa 28 gór každý deň. Najprv iOS, Android neskôr.",
+            featureLabels: ["Kreslené pečiatky", "Pamiatky na objednávku", "Vzdelávacie centrum"],
+            mascotBadge: "Jún 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór je produkt ${siteConfig.operatorName}`,
+                "ručne kreslené pečiatky v aplikácii",
+                "fyzické pamiatky na objednávku",
+                `ceny v ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} iba pre fyzické produkty`,
+            ],
+            contactLabel: "Kontakt",
+            legalPolicies: "Právne dokumenty",
+        },
+    },
+    uk: {
+        controls: {
+            languageLabel: "Мова",
+            themeLabel: "Тема",
+            themeModes: {
+                light: "Світла",
+                dark: "Темна",
+            },
+        },
+        nav: {
+            privacy: "Приватність",
+            terms: "Умови",
+            support: "Підтримка",
+            back: "Назад",
+        },
+        hero: {
+            eyebrow: "Усе з гір в одному місці",
+            headline: "28 gór",
+            body: "Збери всю свою гірську історію в одному красивому й продуманому застосунку: плани, сходження, фото та намальовані вручну штампи для кожної вершини. Замов власну пам’ятку з маршруту, повертайся до освітнього центру для дітей і дорослих та подивись, як Rysek користується 28 gór щодня.",
+            ctas: {
+                updates: "Повідомте мене про запуск",
+            },
+            caption: "Rysek уже користується 28 gór щодня. Спочатку iOS, Android пізніше.",
+            featureLabels: ["Мальовані штампи", "Пам’ятки на замовлення", "Освітній центр"],
+            mascotBadge: "Червень 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór - продукт ${siteConfig.operatorName}`,
+                "намальовані вручну штампи в застосунку",
+                "фізичні пам’ятки на замовлення",
+                `ціни в ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} лише для фізичних продуктів`,
+            ],
+            contactLabel: "Контакт",
+            legalPolicies: "Правові документи",
         },
     },
 } as const
@@ -1049,7 +1179,598 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
     },
 }
 
+export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
+    privacy: {
+        slug: "privacy",
+        title: "Zásady ochrany soukromí",
+        effectiveDate: "Platné od 29. května 2026",
+        intro: [
+            `Tyto zásady popisují, jak ${siteConfig.operatorName}, provozovatel produktu 28 gór, zpracovává osobní údaje uživatelů webu ${siteConfig.siteHost} a připravované mobilní aplikace.`,
+            "28 gór má být spuštěno v červnu 2026. Dokument se týká webu, kontaktu s uživateli a plánovaných funkcí aplikace, jako je účet, deník výstupů, fotky, preference a synchronizace dat.",
+        ],
+        sections: [
+            {
+                heading: "Správce a kontakt",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Správcem osobních údajů je ${siteConfig.operatorName}, provozovatel produktu 28 gór. Ve věcech soukromí, osobních údajů a podpory pište na ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Jaké údaje zpracováváme",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "kontaktní údaje, například e-mail zadaný pro informace o spuštění nebo podporu,",
+                            "údaje účtu, pokud bude účet vytvořen, včetně e-mailu, názvu profilu a nastavení,",
+                            "údaje z aplikace, například plánované vrcholy, výstupy, poznámky, fotky, popisky, preference a nastavení,",
+                            "technické údaje, například IP adresa, typ zařízení, prohlížeč, operační systém, diagnostické údaje a přibližný region,",
+                            "údaje o objednávce fyzického produktu, pokud budou spuštěny piny, památky na objednávku nebo související merch.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Účely zpracování",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "poskytování služby, vedení účtu, synchronizace dat a funkce aplikace,",
+                            "odpovědi na dotazy, podporu a zprávy o spuštění produktu,",
+                            "bezpečnost, diagnostika chyb, prevence zneužití a zlepšování kvality služby,",
+                            "splnění právních, účetních nebo daňových povinností, pokud se použijí.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Oprávnění zařízení a cookies",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Aplikace může požádat o přístup k poloze, fotoaparátu, knihovně fotek nebo oznámením pouze tehdy, když je to potřeba pro konkrétní funkci. Oprávnění lze změnit v nastavení systému.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Web může používat nezbytné cookies, localStorage nebo podobné technologie k zapamatování jazyka, motivu a základních nastavení rozhraní.",
+                    },
+                ],
+            },
+            {
+                heading: "Fyzické produkty a platby",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Pokud budou v aplikaci dostupné fyzické produkty, můžeme zpracovávat jméno, e-mail, doručovací adresu, údaje objednávky a stav platby. Platby zpracovává ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukládá úplná čísla platebních karet.`,
+                    },
+                ],
+            },
+            {
+                heading: "Příjemci, uchování a práva",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Údaje můžeme předávat poskytovatelům hostingu, databází, e-mailu, podpory, diagnostiky, plateb a logistiky pouze v rozsahu potřebném pro provoz služby. Údaje neprodáváme.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Údaje uchováváme po dobu potřebnou pro daný účel nebo zákonné povinnosti. Žádosti o přístup, opravu, výmaz, omezení zpracování, přenositelnost nebo námitku můžete posílat na ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Děti, bezpečnost a změny",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Služba není určena dětem mladším 13 let. Nezletilí by ji měli používat se souhlasem a dohledem zákonného zástupce. Tyto zásady mohou být aktualizovány podle vývoje produktu nebo právních požadavků.",
+                    },
+                ],
+            },
+        ],
+    },
+    terms: {
+        slug: "terms",
+        title: "Podmínky služby",
+        effectiveDate: "Platné od 29. května 2026",
+        intro: [
+            `Tyto podmínky upravují používání webu ${siteConfig.siteHost} a aplikace 28 gór. Produkt vyvíjí ${siteConfig.operatorName} a spuštění aplikace je plánováno na červen 2026.`,
+            "28 gór pomáhá plánovat a dokumentovat výstupy na 28 vrcholů. Nenahrazuje mapy, hlášení horské služby, předpověď počasí, značení v terénu ani vlastní úsudek.",
+        ],
+        sections: [
+            {
+                heading: "Provozovatel a kontakt",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Provozovatelem služby je ${siteConfig.operatorName}. Ve věcech podmínek, služby nebo podpory pište na ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Rozsah služby",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Po spuštění může aplikace obsahovat plánování vrcholů, historii výstupů, ukládání fotek, ručně kreslená razítka pro jednotlivé vrcholy, vzdělávací centrum, synchronizaci účtu a další funkce pro dokumentování tras.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "V aplikaci může být možné kupovat limitované piny, památky na objednávku a související merch jako fyzické produkty zasílané zákazníkům.",
+                    },
+                ],
+            },
+            {
+                heading: "Účet a obsah uživatele",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Uživatel odpovídá za správnost údajů účtu a ochranu přihlašovacích údajů. Práva k fotkám, poznámkám a dalšímu vlastnímu obsahu zůstávají uživateli.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Přidáním obsahu uděluje uživatel provozovateli technickou licenci potřebnou k uložení, synchronizaci, zobrazení, zálohování a podpoře obsahu.",
+                    },
+                ],
+            },
+            {
+                heading: "Bezpečnost v horách",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Za rozhodnutí v terénu, volbu trasy, počasí, vybavení a reakci na místní podmínky odpovídá uživatel. Před cestou je nutné ověřit aktuální zprávy, uzávěry tras, varování a doporučení záchranných složek.",
+                    },
+                ],
+            },
+            {
+                heading: "Fyzické produkty a platby",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `${siteConfig.paymentProcessorName} zpracovává pouze platby za fyzické produkty 28 gór. 28 gór nepoužívá ${siteConfig.paymentProcessorName} k prodeji digitálních funkcí aplikace, předplatného, kreditů ani digitálního obsahu.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Ceny fyzických produktů budou uvedeny v ${siteConfig.currencyCode} před platbou. Podmínky doručení, vrácení, reklamací a zrušení objednávky budou zobrazeny před nákupem nebo zaslány podporou.`,
+                    },
+                ],
+            },
+            {
+                heading: "Dostupnost, změny a práva",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Služba se může vyvíjet, měnit, být dočasně nedostupná nebo být v některých funkcích ukončena. Název 28 gór, vzhled aplikace, texty, grafika a prvky produktu jsou chráněny právy provozovatele nebo oprávněných držitelů.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Pravidla zpracování osobních údajů popisují Zásady ochrany soukromí dostupné na ${siteConfig.siteHost}/privacy.`,
+                    },
+                ],
+            },
+        ],
+    },
+    support: {
+        slug: "support",
+        title: "Podpora",
+        effectiveDate: "Aktualizováno: 29. května 2026",
+        intro: [
+            "Potřebujete pomoc s účtem, přístupem k údajům, objednávkou fyzického produktu nebo technickým problémem? Stručně popište, co se stalo, na jakém zařízení a co jste očekávali.",
+        ],
+        sections: [
+            {
+                heading: "E-mailová podpora",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Napište na ${siteConfig.contactEmail}. Pokud to pomůže, přiložte snímek obrazovky, verzi aplikace, model zařízení, číslo objednávky nebo adresu stránky, kde problém nastal. Obvykle odpovídáme do 2 pracovních dnů.`,
+                    },
+                ],
+            },
+        ],
+    },
+}
+
+export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
+    privacy: {
+        slug: "privacy",
+        title: "Zásady ochrany súkromia",
+        effectiveDate: "Platné od 29. mája 2026",
+        intro: [
+            `Tieto zásady opisujú, ako ${siteConfig.operatorName}, prevádzkovateľ produktu 28 gór, spracúva osobné údaje používateľov webu ${siteConfig.siteHost} a pripravovanej mobilnej aplikácie.`,
+            "28 gór má byť spustené v júni 2026. Dokument sa týka webu, kontaktu s používateľmi a plánovaných funkcií aplikácie, ako je účet, denník výstupov, fotky, preferencie a synchronizácia údajov.",
+        ],
+        sections: [
+            {
+                heading: "Prevádzkovateľ a kontakt",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Prevádzkovateľom osobných údajov je ${siteConfig.operatorName}, prevádzkovateľ produktu 28 gór. Vo veciach súkromia, osobných údajov a podpory píšte na ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Aké údaje spracúvame",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "kontaktné údaje, napríklad e-mail zadaný pre informácie o spustení alebo podporu,",
+                            "údaje účtu, ak bude účet vytvorený, vrátane e-mailu, názvu profilu a nastavení,",
+                            "údaje z aplikácie, napríklad plánované vrcholy, výstupy, poznámky, fotky, popisy, preferencie a nastavenia,",
+                            "technické údaje, napríklad IP adresa, typ zariadenia, prehliadač, operačný systém, diagnostické údaje a približný región,",
+                            "údaje o objednávke fyzického produktu, ak budú spustené piny, pamiatky na objednávku alebo súvisiaci merch.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Účely spracúvania",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "poskytovanie služby, vedenie účtu, synchronizácia údajov a funkcie aplikácie,",
+                            "odpovede na otázky, podporu a správy o spustení produktu,",
+                            "bezpečnosť, diagnostika chýb, prevencia zneužitia a zlepšovanie kvality služby,",
+                            "splnenie právnych, účtovných alebo daňových povinností, ak sa použijú.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Oprávnenia zariadenia a cookies",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Aplikácia môže požiadať o prístup k polohe, fotoaparátu, knižnici fotiek alebo oznámeniam iba vtedy, keď je to potrebné pre konkrétnu funkciu. Oprávnenia možno zmeniť v nastaveniach systému.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Web môže používať nevyhnutné cookies, localStorage alebo podobné technológie na zapamätanie jazyka, motívu a základných nastavení rozhrania.",
+                    },
+                ],
+            },
+            {
+                heading: "Fyzické produkty a platby",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Ak budú v aplikácii dostupné fyzické produkty, môžeme spracúvať meno, e-mail, doručovaciu adresu, údaje objednávky a stav platby. Platby spracúva ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukladá úplné čísla platobných kariet.`,
+                    },
+                ],
+            },
+            {
+                heading: "Príjemcovia, uchovanie a práva",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Údaje môžeme poskytovať dodávateľom hostingu, databáz, e-mailu, podpory, diagnostiky, platieb a logistiky iba v rozsahu potrebnom na prevádzku služby. Údaje nepredávame.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Údaje uchovávame počas obdobia potrebného pre daný účel alebo zákonné povinnosti. Žiadosti o prístup, opravu, vymazanie, obmedzenie spracúvania, prenosnosť alebo námietku môžete posielať na ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Deti, bezpečnosť a zmeny",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Služba nie je určená deťom mladším ako 13 rokov. Maloletí by ju mali používať so súhlasom a dohľadom zákonného zástupcu. Tieto zásady môžu byť aktualizované podľa vývoja produktu alebo právnych požiadaviek.",
+                    },
+                ],
+            },
+        ],
+    },
+    terms: {
+        slug: "terms",
+        title: "Podmienky služby",
+        effectiveDate: "Platné od 29. mája 2026",
+        intro: [
+            `Tieto podmienky upravujú používanie webu ${siteConfig.siteHost} a aplikácie 28 gór. Produkt vyvíja ${siteConfig.operatorName} a spustenie aplikácie je plánované na jún 2026.`,
+            "28 gór pomáha plánovať a dokumentovať výstupy na 28 vrcholov. Nenahrádza mapy, hlásenia horskej služby, predpoveď počasia, značenie v teréne ani vlastný úsudok.",
+        ],
+        sections: [
+            {
+                heading: "Prevádzkovateľ a kontakt",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Prevádzkovateľom služby je ${siteConfig.operatorName}. Vo veciach podmienok, služby alebo podpory píšte na ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Rozsah služby",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Po spustení môže aplikácia obsahovať plánovanie vrcholov, históriu výstupov, ukladanie fotiek, ručne kreslené pečiatky pre jednotlivé vrcholy, vzdelávacie centrum, synchronizáciu účtu a ďalšie funkcie na dokumentovanie trás.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "V aplikácii môže byť možné kupovať limitované piny, pamiatky na objednávku a súvisiaci merch ako fyzické produkty zasielané zákazníkom.",
+                    },
+                ],
+            },
+            {
+                heading: "Účet a obsah používateľa",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Používateľ zodpovedá za správnosť údajov účtu a ochranu prihlasovacích údajov. Práva k fotkám, poznámkam a ďalšiemu vlastnému obsahu zostávajú používateľovi.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Pridaním obsahu používateľ udeľuje prevádzkovateľovi technickú licenciu potrebnú na uloženie, synchronizáciu, zobrazenie, zálohovanie a podporu obsahu.",
+                    },
+                ],
+            },
+            {
+                heading: "Bezpečnosť v horách",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Za rozhodnutia v teréne, voľbu trasy, počasie, vybavenie a reakciu na miestne podmienky zodpovedá používateľ. Pred cestou je potrebné overiť aktuálne správy, uzávery trás, výstrahy a odporúčania záchranných zložiek.",
+                    },
+                ],
+            },
+            {
+                heading: "Fyzické produkty a platby",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `${siteConfig.paymentProcessorName} spracúva iba platby za fyzické produkty 28 gór. 28 gór nepoužíva ${siteConfig.paymentProcessorName} na predaj digitálnych funkcií aplikácie, predplatného, kreditov ani digitálneho obsahu.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Ceny fyzických produktov budú uvedené v ${siteConfig.currencyCode} pred platbou. Podmienky doručenia, vrátenia, reklamácií a zrušenia objednávky budú zobrazené pred nákupom alebo zaslané podporou.`,
+                    },
+                ],
+            },
+            {
+                heading: "Dostupnosť, zmeny a práva",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Služba sa môže vyvíjať, meniť, byť dočasne nedostupná alebo byť v niektorých funkciách ukončená. Názov 28 gór, vzhľad aplikácie, texty, grafika a prvky produktu sú chránené právami prevádzkovateľa alebo oprávnených držiteľov.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Pravidlá spracúvania osobných údajov opisujú Zásady ochrany súkromia dostupné na ${siteConfig.siteHost}/privacy.`,
+                    },
+                ],
+            },
+        ],
+    },
+    support: {
+        slug: "support",
+        title: "Podpora",
+        effectiveDate: "Aktualizované: 29. mája 2026",
+        intro: [
+            "Potrebujete pomoc s účtom, prístupom k údajom, objednávkou fyzického produktu alebo technickým problémom? Stručne opíšte, čo sa stalo, na akom zariadení a čo ste očakávali.",
+        ],
+        sections: [
+            {
+                heading: "E-mailová podpora",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Napíšte na ${siteConfig.contactEmail}. Ak to pomôže, priložte snímku obrazovky, verziu aplikácie, model zariadenia, číslo objednávky alebo adresu stránky, kde problém nastal. Zvyčajne odpovedáme do 2 pracovných dní.`,
+                    },
+                ],
+            },
+        ],
+    },
+}
+
+export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
+    privacy: {
+        slug: "privacy",
+        title: "Політика приватності",
+        effectiveDate: "Чинна з 29 травня 2026 р.",
+        intro: [
+            `Ця політика пояснює, як ${siteConfig.operatorName}, оператор продукту 28 gór, обробляє персональні дані користувачів сайту ${siteConfig.siteHost} і запланованого мобільного застосунку.`,
+            "Запуск 28 gór заплановано на червень 2026 року. Документ охоплює сайт, контакт із користувачами та заплановані функції застосунку: акаунт, журнал сходжень, фото, налаштування та синхронізацію даних.",
+        ],
+        sections: [
+            {
+                heading: "Контролер і контакт",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Контролером персональних даних є ${siteConfig.operatorName}, оператор продукту 28 gór. З питань приватності, персональних даних і підтримки пишіть на ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Які дані ми обробляємо",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "контактні дані, наприклад e-mail для повідомлень про запуск або звернення до підтримки,",
+                            "дані акаунта, якщо акаунт буде створено, зокрема e-mail, назва профілю та налаштування,",
+                            "дані застосунку, наприклад заплановані вершини, сходження, нотатки, фото, підписи, вподобання та налаштування,",
+                            "технічні дані, наприклад IP-адреса, тип пристрою, браузер, операційна система, діагностичні дані та приблизний регіон,",
+                            "дані замовлення фізичного продукту, якщо будуть запущені піни, пам’ятки на замовлення або пов’язаний мерч.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Мета обробки",
+                body: [
+                    {
+                        type: "list",
+                        items: [
+                            "надання сервісу, ведення акаунта, синхронізація даних і функції застосунку,",
+                            "відповіді на запити, підтримка та повідомлення про запуск продукту,",
+                            "безпека, діагностика помилок, запобігання зловживанням і покращення якості сервісу,",
+                            "виконання юридичних, бухгалтерських або податкових обов’язків, якщо вони застосовуються.",
+                        ],
+                    },
+                ],
+            },
+            {
+                heading: "Дозволи пристрою та cookies",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Застосунок може попросити доступ до геолокації, камери, бібліотеки фото або сповіщень лише тоді, коли це потрібно для конкретної функції. Дозволи можна змінити в налаштуваннях системи.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Сайт може використовувати необхідні cookies, localStorage або подібні технології, щоб запам’ятати мову, тему та базові налаштування інтерфейсу.",
+                    },
+                ],
+            },
+            {
+                heading: "Фізичні продукти та платежі",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Якщо в застосунку будуть доступні фізичні продукти, ми можемо обробляти ім’я, e-mail, адресу доставки, дані замовлення та статус платежу. Платежі обробляє ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} не зберігає повні номери платіжних карток.`,
+                    },
+                ],
+            },
+            {
+                heading: "Одержувачі, зберігання та права",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Ми можемо передавати дані постачальникам хостингу, баз даних, e-mail, підтримки, діагностики, платежів і логістики лише в обсязі, потрібному для роботи сервісу. Ми не продаємо персональні дані.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Дані зберігаються протягом часу, потрібного для відповідної мети або юридичних обов’язків. Запити на доступ, виправлення, видалення, обмеження обробки, перенесення даних або заперечення можна надсилати на ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Діти, безпека та зміни",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Сервіс не призначений для дітей молодше 13 років. Неповнолітні мають користуватися ним за згодою та під наглядом опікуна. Ця політика може оновлюватися разом із розвитком продукту або зміною правових вимог.",
+                    },
+                ],
+            },
+        ],
+    },
+    terms: {
+        slug: "terms",
+        title: "Умови користування",
+        effectiveDate: "Чинні з 29 травня 2026 р.",
+        intro: [
+            `Ці умови визначають правила користування сайтом ${siteConfig.siteHost} і застосунком 28 gór. Продукт розробляє ${siteConfig.operatorName}, запуск застосунку заплановано на червень 2026 року.`,
+            "28 gór допомагає планувати та документувати сходження на 28 вершин. Він не замінює карти, повідомлення рятувальних служб, прогноз погоди, маркування на маршруті або власну оцінку умов.",
+        ],
+        sections: [
+            {
+                heading: "Оператор і контакт",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Оператором сервісу є ${siteConfig.operatorName}. З питань умов, роботи сервісу або підтримки пишіть на ${siteConfig.contactEmail}.`,
+                    },
+                ],
+            },
+            {
+                heading: "Обсяг сервісу",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Після запуску застосунок може містити планування вершин, історію сходжень, зберігання фото, намальовані вручну штампи для кожної вершини, освітній центр, синхронізацію акаунта та інші функції для документування маршрутів.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "У застосунку може бути можливість купувати лімітовані піни, пам’ятки на замовлення та пов’язаний мерч як фізичні продукти з доставкою клієнтам.",
+                    },
+                ],
+            },
+            {
+                heading: "Акаунт і контент користувача",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Користувач відповідає за точність даних акаунта та захист даних для входу. Права на фото, нотатки та інший власний контент залишаються за користувачем.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: "Додаючи контент, користувач надає оператору технічну ліцензію, потрібну для зберігання, синхронізації, показу, резервного копіювання та підтримки цього контенту.",
+                    },
+                ],
+            },
+            {
+                heading: "Безпека в горах",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "За рішення на маршруті, вибір дороги, погоду, спорядження та реакцію на місцеві умови відповідає користувач. Перед виходом у гори потрібно перевірити актуальні повідомлення, закриття маршрутів, попередження та рекомендації рятувальних служб.",
+                    },
+                ],
+            },
+            {
+                heading: "Фізичні продукти та платежі",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `${siteConfig.paymentProcessorName} обробляє лише платежі за фізичні продукти 28 gór. 28 gór не використовує ${siteConfig.paymentProcessorName} для продажу цифрових функцій застосунку, підписок, кредитів або цифрового контенту.`,
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Ціни фізичних продуктів будуть показані в ${siteConfig.currencyCode} перед оплатою. Умови доставки, повернення, рекламацій і скасування замовлення будуть показані перед купівлею або надіслані підтримкою.`,
+                    },
+                ],
+            },
+            {
+                heading: "Доступність, зміни та права",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: "Сервіс може розвиватися, змінюватися, бути тимчасово недоступним або втратити частину функцій. Назва 28 gór, вигляд застосунку, тексти, графіка та елементи продукту захищені правами оператора або правовласників.",
+                    },
+                    {
+                        type: "paragraph",
+                        text: `Правила обробки персональних даних описані в Політиці приватності на ${siteConfig.siteHost}/privacy.`,
+                    },
+                ],
+            },
+        ],
+    },
+    support: {
+        slug: "support",
+        title: "Підтримка",
+        effectiveDate: "Оновлено: 29 травня 2026 р.",
+        intro: [
+            "Потрібна допомога з акаунтом, доступом до даних, замовленням фізичного продукту або технічною проблемою? Коротко опишіть, що сталося, на якому пристрої та чого ви очікували.",
+        ],
+        sections: [
+            {
+                heading: "Підтримка e-mail",
+                body: [
+                    {
+                        type: "paragraph",
+                        text: `Напишіть на ${siteConfig.contactEmail}. Якщо це допоможе, додайте знімок екрана, версію застосунку, модель пристрою, номер замовлення або адресу сторінки, де виникла проблема. Зазвичай ми відповідаємо протягом 2 робочих днів.`,
+                    },
+                ],
+            },
+        ],
+    },
+}
+
 export const legalDocumentsByLocale = {
     pl: legalDocuments,
     en: englishLegalDocuments,
+    cs: czechLegalDocuments,
+    sk: slovakLegalDocuments,
+    uk: ukrainianLegalDocuments,
 } satisfies Record<SiteLocale, Record<LegalDocument["slug"], LegalDocument>>

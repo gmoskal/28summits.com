@@ -1,6 +1,7 @@
 "use client"
 
-import { LegalDocument, homeContent, legalDocumentsByLocale } from "../_lib/site-content"
+import { useEffect } from "react"
+import { LegalDocument, homeContent, legalDocumentsByLocale, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
@@ -8,9 +9,19 @@ import { SmoothBackButton, SmoothLink } from "./smooth-navigation"
 
 export function LegalPageClient({ slug }: { slug: LegalDocument["slug"] }) {
     const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
-    const document = legalDocumentsByLocale[locale][slug]
+    const legalDocument = legalDocumentsByLocale[locale][slug]
     const content = homeContent[locale]
-    const backLabel = locale === "pl" ? "Wróć" : "Back"
+    const backLabel = content.nav.back
+
+    useEffect(() => {
+        const pageTitle = `${legalDocument.title} | ${siteConfig.name}`
+        window.document.title = pageTitle
+        const titleTimer = window.setTimeout(() => {
+            window.document.title = pageTitle
+        }, 50)
+
+        return () => window.clearTimeout(titleTimer)
+    }, [legalDocument.title])
 
     return (
         <main className="page-transition-shell min-h-screen bg-[var(--page-bg)] text-[var(--text-primary)]">
@@ -35,7 +46,7 @@ export function LegalPageClient({ slug }: { slug: LegalDocument["slug"] }) {
                 </aside>
 
                 <div className="mt-9 lg:mt-0">
-                    <LegalBody document={document} labels={content.nav} />
+                    <LegalBody document={legalDocument} labels={content.nav} />
                 </div>
             </div>
         </main>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { SiteLocale, SiteThemeMode, siteLocales, siteThemeModes } from "./site-content"
+import { SiteLocale, SiteThemeMode, siteLanguageByLocale, siteLocales, siteThemeModes } from "./site-content"
 
 const sitePreferenceStorageKeys = {
     locale: "28gor.www.locale",
@@ -85,7 +85,7 @@ export function useSitePreferences() {
     }, [])
 
     useEffect(() => {
-        document.documentElement.lang = locale
+        document.documentElement.lang = siteLanguageByLocale[locale].htmlLang
         localStorage.setItem(sitePreferenceStorageKeys.locale, locale)
     }, [locale])
 

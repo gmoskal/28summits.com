@@ -1,6 +1,7 @@
 "use client"
 
-import { SiteLocale, SiteThemeMode, homeContent, siteLocales, siteThemeModes } from "../_lib/site-content"
+import type { ChangeEvent } from "react"
+import { SiteLocale, SiteThemeMode, homeContent, siteLanguageByLocale, siteLanguages, siteThemeModes } from "../_lib/site-content"
 import { DraggableSwitch, type DraggableSwitchOption } from "./draggable-switch"
 
 type SiteControlsProps = {
@@ -42,11 +43,51 @@ function ThemeIcon({ mode }: { mode: SiteThemeMode }) {
     return mode === "light" ? <SunIcon /> : <MoonIcon />
 }
 
+function LanguageSelect(p: Pick<SiteControlsProps, "content" | "locale" | "onLocaleChange">) {
+    const selectedLanguage = siteLanguageByLocale[p.locale]
+
+    function handleLanguageChange(event: ChangeEvent<HTMLSelectElement>) {
+        p.onLocaleChange(event.target.value as SiteLocale)
+    }
+
+    return (
+        <label
+            className="relative inline-flex h-10 min-w-[154px] items-center overflow-hidden rounded-full"
+            style={{
+                backgroundColor: "var(--control-bg)",
+                color: "var(--text-muted)",
+            }}
+        >
+            <span className="pointer-events-none absolute left-3 z-10 text-[17px] leading-none" aria-hidden>
+                {selectedLanguage.flag}
+            </span>
+            <select
+                aria-label={p.content.languageLabel}
+                value={p.locale}
+                className="h-full w-full appearance-none rounded-full bg-transparent py-0 pr-9 pl-10 text-[13px] leading-4 font-bold outline-none transition-[box-shadow,color] focus-visible:shadow-[0_0_0_3px_var(--selection-bg)]"
+                style={{ color: "var(--text-primary)" }}
+                onChange={handleLanguageChange}
+            >
+                {siteLanguages.map((language) => (
+                    <option key={language.locale} value={language.locale}>
+                        {language.flag} {language.name}
+                    </option>
+                ))}
+            </select>
+            <svg
+                aria-hidden="true"
+                className="pointer-events-none absolute right-3 h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="none"
+                style={{ color: "var(--text-muted)" }}
+            >
+                <path d="M5.5 7.75 10 12.25l4.5-4.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+            </svg>
+        </label>
+    )
+}
+
 export function SiteControls(p: SiteControlsProps) {
-    const localeOptions: [DraggableSwitchOption<SiteLocale>, DraggableSwitchOption<SiteLocale>] = [
-        { value: siteLocales[0], label: siteLocales[0].toUpperCase(), content: siteLocales[0].toUpperCase() },
-        { value: siteLocales[1], label: siteLocales[1].toUpperCase(), content: siteLocales[1].toUpperCase() },
-    ]
     const themeOptions: [DraggableSwitchOption<SiteThemeMode>, DraggableSwitchOption<SiteThemeMode>] = [
         { value: siteThemeModes[0], label: p.content.themeModes.light, content: <ThemeIcon mode={siteThemeModes[0]} /> },
         { value: siteThemeModes[1], label: p.content.themeModes.dark, content: <ThemeIcon mode={siteThemeModes[1]} /> },
@@ -54,13 +95,7 @@ export function SiteControls(p: SiteControlsProps) {
 
     return (
         <div className="flex flex-wrap justify-center gap-2 lg:justify-end">
-            <DraggableSwitch
-                ariaLabel={p.content.languageLabel}
-                value={p.locale}
-                options={localeOptions}
-                metrics={{ slotWidth: 44, thumbWidth: 44 }}
-                onChange={p.onLocaleChange}
-            />
+            <LanguageSelect content={p.content} locale={p.locale} onLocaleChange={p.onLocaleChange} />
             <DraggableSwitch
                 ariaLabel={p.content.themeLabel}
                 value={p.themeMode}

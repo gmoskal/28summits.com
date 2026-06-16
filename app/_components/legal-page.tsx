@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { LegalDocument, siteConfig } from "../_lib/site-content"
+import { LegalDocument, siteConfig, siteLanguages } from "../_lib/site-content"
 import { LegalPageClient } from "./legal-page-client"
 
 export function buildLegalMetadata(document: LegalDocument): Metadata {
@@ -23,7 +23,9 @@ export function buildLegalMetadata(document: LegalDocument): Metadata {
             description,
             siteName: siteConfig.name,
             locale: "pl_PL",
-            alternateLocale: ["en_US"],
+            alternateLocale: siteLanguages
+                .filter((language) => language.ogLocale !== "pl_PL")
+                .map((language) => language.ogLocale),
             images: [image],
         },
         twitter: {

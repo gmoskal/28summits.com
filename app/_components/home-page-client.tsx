@@ -174,7 +174,7 @@ export function HomePageClient() {
                         </article>
 
                         <div className="relative order-1 flex items-center justify-center xl:order-2">
-                            <CardStackPreview />
+                            <CardStackPreview locale={locale} />
                         </div>
                     </div>
 

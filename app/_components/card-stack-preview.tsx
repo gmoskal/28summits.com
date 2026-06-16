@@ -3,10 +3,11 @@
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useMemo, useState } from "react"
+import type { SiteLocale } from "../_lib/site-content"
 
 type CardStackCard = {
     src: string
-    label: string
+    labels: Record<SiteLocale, string>
     badgeRotation: number
 }
 
@@ -25,45 +26,101 @@ type DepartingCard = {
 const cardStackCards = [
     {
         src: "/card-stack/walking2.jpeg",
-        label: "Pierwszy krok",
+        labels: {
+            pl: "Pierwszy krok",
+            en: "First step",
+            cs: "První krok",
+            sk: "Prvý krok",
+            uk: "Перший крок",
+        },
         badgeRotation: -9,
     },
     {
         src: "/card-stack/drinking.jpeg",
-        label: "Łyk wody",
+        labels: {
+            pl: "Łyk wody",
+            en: "Water break",
+            cs: "Doušek vody",
+            sk: "Dúšok vody",
+            uk: "Ковток води",
+        },
         badgeRotation: 8,
     },
     {
         src: "/card-stack/eating.jpeg",
-        label: "Coś dobrego",
+        labels: {
+            pl: "Coś dobrego",
+            en: "Something good",
+            cs: "Něco dobrého",
+            sk: "Niečo dobré",
+            uk: "Щось смачне",
+        },
         badgeRotation: -5,
     },
     {
         src: "/card-stack/taking-picture.jpeg",
-        label: "Kadr z trasy",
+        labels: {
+            pl: "Kadr z trasy",
+            en: "Trail frame",
+            cs: "Záběr z trasy",
+            sk: "Záber z trasy",
+            uk: "Кадр з маршруту",
+        },
         badgeRotation: 12,
     },
     {
         src: "/card-stack/selfie.jpeg",
-        label: "Rysek melduje",
+        labels: {
+            pl: "Rysek melduje",
+            en: "Rysek checks in",
+            cs: "Rysek hlásí",
+            sk: "Rysek hlási",
+            uk: "Rysek на зв’язку",
+        },
         badgeRotation: -12,
     },
     {
         src: "/card-stack/relaxing.jpeg",
-        label: "Chwila ciszy",
+        labels: {
+            pl: "Chwila ciszy",
+            en: "Quiet moment",
+            cs: "Chvíle ticha",
+            sk: "Chvíľa ticha",
+            uk: "Мить тиші",
+        },
         badgeRotation: 5,
     },
     {
         src: "/card-stack/walking.jpeg",
-        label: "Jeszcze wyżej",
+        labels: {
+            pl: "Jeszcze wyżej",
+            en: "Higher still",
+            cs: "Ještě výš",
+            sk: "Ešte vyššie",
+            uk: "Ще вище",
+        },
         badgeRotation: -7,
     },
     {
         src: "/card-stack/rysy.jpeg",
-        label: "Na Rysach",
+        labels: {
+            pl: "Na Rysach",
+            en: "On Rysy",
+            cs: "Na Rysách",
+            sk: "Na Rysoch",
+            uk: "На Рисах",
+        },
         badgeRotation: 10,
     },
 ] as const satisfies readonly CardStackCard[]
+
+const cardStackAriaLabels: Record<SiteLocale, string> = {
+    pl: "Stos zdjęć Ryska z aplikacji 28 gór.",
+    en: "A stack of Rysek photos from the 28 gór app.",
+    cs: "Stoh fotek Ryska z aplikace 28 gór.",
+    sk: "Stoh fotiek Ryska z aplikácie 28 gór.",
+    uk: "Стос фото Ryska із застосунку 28 gór.",
+}
 
 const appBadge = {
     src: "/app-icon.png",
@@ -137,7 +194,7 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
     }
 }
 
-export function CardStackPreview() {
+export function CardStackPreview({ locale }: { locale: SiteLocale }) {
     const prefersReducedMotion = useReducedMotion()
     const [cardLayouts, setCardLayouts] = useState<CardStackCardLayout[]>(createFallbackCardStackLayout)
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
@@ -200,7 +257,7 @@ export function CardStackPreview() {
                 key={deckResetKey}
                 className={deckClassName}
                 role="img"
-                aria-label="Stos zdjęć Ryska z aplikacji 28 gór."
+                aria-label={cardStackAriaLabels[locale]}
             >
                 {cardLayouts.map((card, index) => {
                     if (dismissedCards.has(index)) {
@@ -287,7 +344,7 @@ export function CardStackPreview() {
                                             className="text-center text-[28px] leading-none font-semibold text-[#171717] xl:text-[34px]"
                                             style={{ fontFamily: "var(--font-caveat)" }}
                                         >
-                                            {card.label}
+                                            {card.labels[locale]}
                                         </span>
                                     </div>
                                 </div>
