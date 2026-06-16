@@ -151,8 +151,6 @@ export function HomePageClient() {
     return (
         <main className="page-transition-shell bg-[var(--page-bg)] text-[var(--text-primary)]">
             <section className="relative min-h-screen">
-                <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-[var(--border-muted)]" />
-
                 <div className="relative mx-auto flex min-h-screen max-w-[var(--layout-max-width)] flex-col px-5 pt-6 pb-8 lg:px-[28px] lg:py-[34px] xl:px-[32px]">
                     <header className="z-10 flex items-start justify-between gap-4">
                         <BrandMark compact showName={false} />
