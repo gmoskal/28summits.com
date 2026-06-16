@@ -168,9 +168,9 @@ function createRandomCardStackLayout(): CardStackCardLayout[] {
     })
 }
 
-function topVisibleCardIndex(dismissedCards: Set<number>) {
+function topVisibleCardIndex(dismissedCards: Set<number>, departingCardIndex: number | null) {
     for (let index = 0; index < cardStackCards.length; index += 1) {
-        if (!dismissedCards.has(index)) {
+        if (!dismissedCards.has(index) && index !== departingCardIndex) {
             return index
         }
     }
@@ -200,7 +200,10 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
     const [deckResetKey, setDeckResetKey] = useState(0)
-    const activeCardIndex = useMemo(() => topVisibleCardIndex(dismissedCards), [dismissedCards])
+    const activeCardIndex = useMemo(
+        () => topVisibleCardIndex(dismissedCards, departingCard?.index ?? null),
+        [departingCard, dismissedCards],
+    )
 
     useEffect(() => {
         setCardLayouts(createRandomCardStackLayout())
@@ -273,18 +276,24 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                     const x = isDeparting ? departingCard.directionX * flick.exitDistance : card.x
                     const exitY = isDeparting ? y + departingCard.directionY * flick.exitDistance : y
                     const rotation = isDeparting ? card.rotation + departingCard.directionX * 28 : card.rotation
+                    const animationDelay =
+                        dismissedCards.size === 0 && departingCard === null && !prefersReducedMotion
+                            ? index * 0.055
+                            : 0
 
                     return (
                         <div
                             key={card.src}
                             className={`${cardClassName} -translate-x-1/2 -translate-y-1/2`}
-                            style={{ zIndex: cardStackCards.length - index }}
+                            style={{
+                                pointerEvents: canDragCard ? "auto" : "none",
+                                zIndex: cardStackCards.length - index,
+                            }}
                         >
                             <motion.div
                                 className="aspect-[1/1.18] w-full touch-none select-none cursor-grab active:cursor-grabbing"
                                 drag={canDragCard}
-                                dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                                dragElastic={0.88}
+                                dragMomentum={false}
                                 initial={
                                     prefersReducedMotion
                                         ? { opacity: 1, x, y, rotate: card.rotation, scale }
@@ -298,14 +307,17 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                     scale,
                                 }}
                                 transition={{
-                                    delay: isDeparting || prefersReducedMotion ? 0 : index * 0.055,
+                                    delay: animationDelay,
                                     type: prefersReducedMotion ? "tween" : "spring",
                                     duration: prefersReducedMotion ? 0.01 : undefined,
                                     stiffness: isDeparting ? 170 : 360,
                                     damping: isDeparting ? 22 : 32,
                                     mass: 0.82,
                                 }}
-                                style={{ touchAction: "none" }}
+                                style={{
+                                    pointerEvents: canDragCard ? "auto" : "none",
+                                    touchAction: "none",
+                                }}
                                 whileTap={canDragCard && !prefersReducedMotion ? { scale: scale * 1.035 } : undefined}
                                 onDragEnd={(_, info) => handleDragEnd(index, info.offset, info.velocity)}
                                 onAnimationComplete={() => handleAnimationComplete(index)}
