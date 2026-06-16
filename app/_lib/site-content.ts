@@ -11,6 +11,7 @@ export const siteConfig = {
     launchUpdatesUrl: "mailto:support@async.studio?subject=28%20g%C3%B3r%20launch%20updates",
     siteUrl: "https://28gor.app",
     appIcon: "/app-icon.png",
+    appIconHeader: "/app-icon-header.png",
     appleTouchIcon: "/apple-touch-icon.png",
     faviconIcon16: "/favicon-16x16.png",
     faviconIcon32: "/favicon-32x32.png",
@@ -61,6 +62,11 @@ export const homeContent: Record<
             ctas: {
                 updates: string
             }
+            appStoreBadge: {
+                prefix: string
+                label: string
+                disabledLabel: string
+            }
             caption: string
             featureLabels: string[]
             mascotBadge: string
@@ -90,11 +96,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Wszystko z gór w jednym miejscu",
             headline: "28 gór",
-            body: "Zbierz całą górską historię w jednej pięknej, dopracowanej aplikacji: plany, wejścia, zdjęcia i ręcznie rysowane pieczątki dla każdego szczytu. Zamów własną pamiątkę z trasy, wracaj do centrum edukacyjnego dla dzieci i dorosłych oraz zobacz, jak Rysek używa 28 gór na co dzień.",
+            body: "28 gór to nowa aplikacja w App Store, która zbiera całą górską historię w jednym pięknym miejscu: plany, wejścia, zdjęcia i ręcznie rysowane pieczątki dla każdego szczytu. Zamów własną pamiątkę z trasy, wracaj do centrum edukacyjnego dla dzieci i dorosłych oraz zobacz, jak Rysek używa 28 gór na co dzień.",
             ctas: {
                 updates: "Daj znać, gdy ruszymy",
             },
-            caption: "Rysek już używa 28 gór na co dzień. iOS pierwszy, Android później.",
+            appStoreBadge: {
+                prefix: "Pobierz w",
+                label: "App Store",
+                disabledLabel: "App Store będzie aktywny przy premierze",
+            },
+            caption: "Przycisk App Store odblokujemy przy premierze. Rysek już używa 28 gór na co dzień.",
             featureLabels: ["Rysowane pieczątki", "Pamiątki na zamówienie", "Centrum edukacyjne"],
             mascotBadge: "Czerwiec 2026",
         },
@@ -128,11 +139,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Every mountain memory in one place",
             headline: "28 gór",
-            body: "Keep your mountain story in one polished app: plans, climbs, photos, and hand-drawn stamps made for every peak. Order a custom keepsake from a real trip, explore an education center for children and adults, and see how Rysek uses 28 gór every day.",
+            body: "28 gór is a new App Store app for keeping your mountain story in one polished place: plans, climbs, photos, and hand-drawn stamps made for every peak. Order a custom keepsake from a real trip, explore an education center for children and adults, and see how Rysek uses 28 gór every day.",
             ctas: {
                 updates: "Tell me when it launches",
             },
-            caption: "Rysek is already using 28 gór every day. iOS first, Android later.",
+            appStoreBadge: {
+                prefix: "Download on the",
+                label: "App Store",
+                disabledLabel: "App Store download will be enabled at launch",
+            },
+            caption: "The App Store button will unlock at launch. Rysek is already using 28 gór every day.",
             featureLabels: ["Hand-drawn stamps", "Custom keepsakes", "Education center"],
             mascotBadge: "June 2026",
         },
@@ -166,11 +182,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Všechno z hor na jednom místě",
             headline: "28 gór",
-            body: "Ulož si celý horský příběh do jedné krásné a promyšlené aplikace: plány, výstupy, fotky a ručně kreslená razítka pro každý vrchol. Objednej si vlastní památku z trasy, vracej se do vzdělávacího centra pro děti i dospělé a podívej se, jak Rysek používá 28 gór každý den.",
+            body: "28 gór je nová aplikace v App Storu, která ukládá celý horský příběh na jednom krásném místě: plány, výstupy, fotky a ručně kreslená razítka pro každý vrchol. Objednej si vlastní památku z trasy, vracej se do vzdělávacího centra pro děti i dospělé a podívej se, jak Rysek používá 28 gór každý den.",
             ctas: {
                 updates: "Dejte mi vědět při spuštění",
             },
-            caption: "Rysek už používá 28 gór každý den. Nejprve iOS, Android později.",
+            appStoreBadge: {
+                prefix: "Stáhnout v",
+                label: "App Store",
+                disabledLabel: "Tlačítko App Store bude aktivní při spuštění",
+            },
+            caption: "Tlačítko App Store odemkneme při spuštění. Rysek už používá 28 gór každý den.",
             featureLabels: ["Kreslená razítka", "Památky na objednávku", "Vzdělávací centrum"],
             mascotBadge: "Červen 2026",
         },
@@ -204,11 +225,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Všetko z hôr na jednom mieste",
             headline: "28 gór",
-            body: "Ulož si celý horský príbeh do jednej krásnej a premyslenej aplikácie: plány, výstupy, fotky a ručne kreslené pečiatky pre každý vrchol. Objednaj si vlastnú pamiatku z trasy, vracaj sa do vzdelávacieho centra pre deti aj dospelých a pozri sa, ako Rysek používa 28 gór každý deň.",
+            body: "28 gór je nová aplikácia v App Store, ktorá ukladá celý horský príbeh na jednom krásnom mieste: plány, výstupy, fotky a ručne kreslené pečiatky pre každý vrchol. Objednaj si vlastnú pamiatku z trasy, vracaj sa do vzdelávacieho centra pre deti aj dospelých a pozri sa, ako Rysek používa 28 gór každý deň.",
             ctas: {
                 updates: "Dajte mi vedieť pri spustení",
             },
-            caption: "Rysek už používa 28 gór každý deň. Najprv iOS, Android neskôr.",
+            appStoreBadge: {
+                prefix: "Stiahnuť v",
+                label: "App Store",
+                disabledLabel: "Tlačidlo App Store bude aktívne pri spustení",
+            },
+            caption: "Tlačidlo App Store odomkneme pri spustení. Rysek už používa 28 gór každý deň.",
             featureLabels: ["Kreslené pečiatky", "Pamiatky na objednávku", "Vzdelávacie centrum"],
             mascotBadge: "Jún 2026",
         },
@@ -242,11 +268,16 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Усе з гір в одному місці",
             headline: "28 gór",
-            body: "Збери всю свою гірську історію в одному красивому й продуманому застосунку: плани, сходження, фото та намальовані вручну штампи для кожної вершини. Замов власну пам’ятку з маршруту, повертайся до освітнього центру для дітей і дорослих та подивись, як Rysek користується 28 gór щодня.",
+            body: "28 gór - це новий застосунок в App Store, який збирає всю гірську історію в одному красивому місці: плани, сходження, фото та намальовані вручну штампи для кожної вершини. Замов власну пам’ятку з маршруту, повертайся до освітнього центру для дітей і дорослих та подивись, як Rysek користується 28 gór щодня.",
             ctas: {
                 updates: "Повідомте мене про запуск",
             },
-            caption: "Rysek уже користується 28 gór щодня. Спочатку iOS, Android пізніше.",
+            appStoreBadge: {
+                prefix: "Завантажити в",
+                label: "App Store",
+                disabledLabel: "Кнопка App Store стане активною під час запуску",
+            },
+            caption: "Кнопку App Store відкриємо під час запуску. Rysek уже користується 28 gór щодня.",
             featureLabels: ["Мальовані штампи", "Пам’ятки на замовлення", "Освітній центр"],
             mascotBadge: "Червень 2026",
         },

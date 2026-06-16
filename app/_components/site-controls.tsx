@@ -1,7 +1,7 @@
 "use client"
 
 import type { ChangeEvent } from "react"
-import { SiteLocale, SiteThemeMode, homeContent, siteLanguageByLocale, siteLanguages, siteThemeModes } from "../_lib/site-content"
+import { SiteLocale, SiteThemeMode, homeContent, siteLanguages, siteThemeModes } from "../_lib/site-content"
 import { DraggableSwitch, type DraggableSwitchOption } from "./draggable-switch"
 
 type SiteControlsProps = {
@@ -44,27 +44,22 @@ function ThemeIcon({ mode }: { mode: SiteThemeMode }) {
 }
 
 function LanguageSelect(p: Pick<SiteControlsProps, "content" | "locale" | "onLocaleChange">) {
-    const selectedLanguage = siteLanguageByLocale[p.locale]
-
     function handleLanguageChange(event: ChangeEvent<HTMLSelectElement>) {
         p.onLocaleChange(event.target.value as SiteLocale)
     }
 
     return (
         <label
-            className="relative inline-flex h-10 min-w-[154px] items-center overflow-hidden rounded-full"
+            className="relative inline-flex h-10 w-[142px] items-center overflow-hidden rounded-full sm:w-[170px]"
             style={{
                 backgroundColor: "var(--control-bg)",
                 color: "var(--text-muted)",
             }}
         >
-            <span className="pointer-events-none absolute left-3 z-10 text-[17px] leading-none" aria-hidden>
-                {selectedLanguage.flag}
-            </span>
             <select
                 aria-label={p.content.languageLabel}
                 value={p.locale}
-                className="h-full w-full appearance-none rounded-full bg-transparent py-0 pr-9 pl-10 text-[13px] leading-4 font-bold outline-none transition-[box-shadow,color] focus-visible:shadow-[0_0_0_3px_var(--selection-bg)]"
+                className="h-full w-full appearance-none rounded-full bg-transparent py-0 pr-9 pl-4 text-[13px] leading-4 font-bold outline-none transition-[box-shadow,color] focus-visible:shadow-[0_0_0_3px_var(--selection-bg)]"
                 style={{ color: "var(--text-primary)" }}
                 onChange={handleLanguageChange}
             >
@@ -94,7 +89,7 @@ export function SiteControls(p: SiteControlsProps) {
     ]
 
     return (
-        <div className="flex flex-wrap justify-center gap-2 lg:justify-end">
+        <div className="flex flex-nowrap justify-center gap-2 lg:justify-end">
             <LanguageSelect content={p.content} locale={p.locale} onLocaleChange={p.onLocaleChange} />
             <DraggableSwitch
                 ariaLabel={p.content.themeLabel}

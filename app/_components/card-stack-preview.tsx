@@ -104,11 +104,11 @@ const cardStackCards = [
     {
         src: "/card-stack/rysy.jpeg",
         labels: {
-            pl: "Na Rysach",
-            en: "On Rysy",
-            cs: "Na Rysách",
-            sk: "Na Rysoch",
-            uk: "На Рисах",
+            pl: "Wreszcie na Rysach",
+            en: "Finally on Rysy",
+            cs: "Konečně na Rysách",
+            sk: "Konečne na Rysoch",
+            uk: "Нарешті на Рисах",
         },
         badgeRotation: 10,
     },

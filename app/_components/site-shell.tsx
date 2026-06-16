@@ -21,11 +21,13 @@ export function BrandMark({ compact = false, showName = true }: BrandMarkProps) 
             className="flex w-[99px] flex-col items-center gap-2 text-center"
         >
             <Image
-                src={siteConfig.appIcon}
+                src={siteConfig.appIconHeader}
                 alt=""
                 width={80}
                 height={80}
                 priority={!compact}
+                unoptimized
+                sizes="80px"
                 className="h-20 w-20 rounded-[15px] shadow-[0_16px_38px_rgba(0,0,0,0.08)]"
             />
             {showName ? (
