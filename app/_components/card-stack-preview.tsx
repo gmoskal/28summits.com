@@ -50,6 +50,10 @@ const cardStackCards = [
         src: "/card-stack/walking.png",
         label: "Jeszcze wyżej",
     },
+    {
+        src: "/card-stack/rysy.png",
+        label: "Na Rysach",
+    },
 ] as const satisfies readonly CardStackCard[]
 
 const fallbackCardLayout = [
@@ -60,6 +64,7 @@ const fallbackCardLayout = [
     { x: -28, y: -34, rotation: -8 },
     { x: 14, y: 12, rotation: 5 },
     { x: -4, y: -42, rotation: -2 },
+    { x: 30, y: -20, rotation: 8 },
 ] as const
 
 const flick = {
