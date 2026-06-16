@@ -1,20 +1,24 @@
 export const siteConfig = {
-    name: "28s",
-    productName: "28 Summits",
+    name: "28 gór",
+    productName: "28 gór",
     operatorName: "async.studio",
     contactEmail: "support@async.studio",
-    siteHost: "28summits.com",
+    siteHost: "28gor.app",
     currencyCode: "PLN",
     paymentProcessorName: "Stripe",
     appStoreUrl: "https://apps.apple.com/app/28-summits/id0000000000",
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.28summits.app",
-    launchUpdatesUrl: "mailto:support@async.studio?subject=28s%20launch%20updates",
-    siteUrl: "https://28summits.com",
-    description: "28s pomaga planować Koronę Gór Polski, zapisywać wejścia i porządkować zdjęcia z tras.",
-    socialTitle: "28s - Korona Gór Polski bez chaosu w notatkach",
+    launchUpdatesUrl: "mailto:support@async.studio?subject=28%20g%C3%B3r%20launch%20updates",
+    siteUrl: "https://28gor.app",
+    appIcon: "/app-icon.png",
+    appleTouchIcon: "/apple-touch-icon.png",
+    faviconIcon16: "/favicon-16x16.png",
+    faviconIcon32: "/favicon-32x32.png",
+    description: "28 gór pomaga planować szczyty, zapisywać wejścia i porządkować zdjęcia z tras.",
+    socialTitle: "28 gór - górskie wejścia bez chaosu w notatkach",
     socialDescription: "Planuj szczyty, zapisuj wejścia i zdjęcia z tras. Premiera w czerwcu 2026.",
     socialImage: "/og-image.png",
-    socialImageAlt: "28s - aplikacja do planowania i zapisywania Korony Gór Polski.",
+    socialImageAlt: "28 gór - aplikacja do planowania i zapisywania wejść w górach.",
 } as const
 
 export const siteLocales = ["pl", "en"] as const
@@ -70,8 +74,8 @@ export const homeContent: Record<
         },
         hero: {
             eyebrow: "Premiera w czerwcu 2026",
-            headline: "28s",
-            body: "Aplikacja dla osób, które chcą przejść Koronę Gór Polski bez chaosu w notatkach: planuj szczyty, zapisuj wejścia, dodawaj zdjęcia i wracaj do tras, które naprawdę zrobiłeś.",
+            headline: "28 gór",
+            body: "Aplikacja dla osób, które chcą przejść 28 gór bez chaosu w notatkach: planuj szczyty, zapisuj wejścia, dodawaj zdjęcia i wracaj do tras, które naprawdę zrobiłeś.",
             ctas: {
                 updates: "Daj znać o starcie",
             },
@@ -81,7 +85,7 @@ export const homeContent: Record<
         },
         compliance: {
             summaryParts: [
-                `28s to produkt ${siteConfig.operatorName}`,
+                `28 gór to produkt ${siteConfig.operatorName}`,
                 "fizyczne piny kolekcjonerskie w aplikacji",
                 `ceny w ${siteConfig.currencyCode}`,
                 `${siteConfig.paymentProcessorName} tylko dla fizycznych produktów`,
@@ -106,8 +110,8 @@ export const homeContent: Record<
         },
         hero: {
             eyebrow: "Coming June 2026",
-            headline: "28s",
-            body: "A mountain companion for the Crown of Polish Mountains: plan your peaks, record real completions, attach photos, and keep the routes you actually walked in one tidy place.",
+            headline: "28 gór",
+            body: "A mountain companion for people planning their next peaks: record real completions, attach photos, and keep the routes you actually walked in one tidy place.",
             ctas: {
                 updates: "Get launch updates",
             },
@@ -117,7 +121,7 @@ export const homeContent: Record<
         },
         compliance: {
             summaryParts: [
-                `28s is a product by ${siteConfig.operatorName}`,
+                `28 gór is a product by ${siteConfig.operatorName}`,
                 "physical collectible pins in app",
                 `prices in ${siteConfig.currencyCode}`,
                 `${siteConfig.paymentProcessorName} only for physical products`,
@@ -149,8 +153,8 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
         title: "Polityka prywatności",
         effectiveDate: "Obowiązuje od 29 maja 2026 r.",
         intro: [
-            `Ta polityka opisuje, jak ${siteConfig.operatorName} jako operator produktu 28s / 28 Summits przetwarza dane osobowe użytkowników strony ${siteConfig.siteHost} oraz planowanej aplikacji mobilnej.`,
-            "28s ma wystartować w czerwcu 2026 r. Dokument obejmuje stronę zapowiadającą, kontakt z użytkownikami oraz funkcje aplikacji, takie jak konto, dziennik wejść, zdjęcia, preferencje i synchronizacja danych.",
+            `Ta polityka opisuje, jak ${siteConfig.operatorName} jako operator produktu 28 gór przetwarza dane osobowe użytkowników strony ${siteConfig.siteHost} oraz planowanej aplikacji mobilnej.`,
+            "28 gór ma wystartować w czerwcu 2026 r. Dokument obejmuje stronę zapowiadającą, kontakt z użytkownikami oraz funkcje aplikacji, takie jak konto, dziennik wejść, zdjęcia, preferencje i synchronizacja danych.",
         ],
         sections: [
             {
@@ -158,7 +162,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: `Administratorem danych osobowych jest ${siteConfig.operatorName}, operator produktu 28s / 28 Summits. Kontakt w sprawach prywatności, danych osobowych i obsługi użytkownika: ${siteConfig.contactEmail}.`,
+                        text: `Administratorem danych osobowych jest ${siteConfig.operatorName}, operator produktu 28 gór. Kontakt w sprawach prywatności, danych osobowych i obsługi użytkownika: ${siteConfig.contactEmail}.`,
                     },
                     {
                         type: "paragraph",
@@ -304,7 +308,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: "28s nie podejmuje decyzji wywołujących wobec użytkownika skutki prawne wyłącznie w sposób zautomatyzowany. Jeżeli zostaną uruchomione funkcje AI, będą przetwarzać dane przekazane przez użytkownika tylko w zakresie potrzebnym do działania konkretnej funkcji, np. podsumowania notatki albo uporządkowania opisu trasy.",
+                        text: "28 gór nie podejmuje decyzji wywołujących wobec użytkownika skutki prawne wyłącznie w sposób zautomatyzowany. Jeżeli zostaną uruchomione funkcje AI, będą przetwarzać dane przekazane przez użytkownika tylko w zakresie potrzebnym do działania konkretnej funkcji, np. podsumowania notatki albo uporządkowania opisu trasy.",
                     },
                 ],
             },
@@ -333,8 +337,8 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
         title: "Regulamin",
         effectiveDate: "Obowiązuje od 29 maja 2026 r.",
         intro: [
-            `Regulamin określa zasady korzystania ze strony ${siteConfig.siteHost} oraz aplikacji 28s / 28 Summits. Produkt jest rozwijany przez ${siteConfig.operatorName}, a premiera aplikacji jest planowana na czerwiec 2026 r.`,
-            "28s ma pomagać w planowaniu i dokumentowaniu Korony Gór Polski. Nie zastępuje map, komunikatów GOPR/TOPR, prognoz pogody, oznaczeń w terenie ani rozsądnej oceny warunków.",
+            `Regulamin określa zasady korzystania ze strony ${siteConfig.siteHost} oraz aplikacji 28 gór. Produkt jest rozwijany przez ${siteConfig.operatorName}, a premiera aplikacji jest planowana na czerwiec 2026 r.`,
+            "28 gór ma pomagać w planowaniu i dokumentowaniu górskich wejść. Nie zastępuje map, komunikatów GOPR/TOPR, prognoz pogody, oznaczeń w terenie ani rozsądnej oceny warunków.",
         ],
         sections: [
             {
@@ -342,7 +346,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: `Usługodawcą i operatorem produktu 28s / 28 Summits jest ${siteConfig.operatorName}. Kontakt w sprawach regulaminu, działania usługi i obsługi użytkownika: ${siteConfig.contactEmail}.`,
+                        text: `Usługodawcą i operatorem produktu 28 gór jest ${siteConfig.operatorName}. Kontakt w sprawach regulaminu, działania usługi i obsługi użytkownika: ${siteConfig.contactEmail}.`,
                     },
                     {
                         type: "paragraph",
@@ -356,7 +360,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                     {
                         type: "list",
                         items: [
-                            `Usługa - strona ${siteConfig.siteHost}, aplikacja 28s / 28 Summits oraz funkcje udostępniane użytkownikom.`,
+                            `Usługa - strona ${siteConfig.siteHost}, aplikacja 28 gór oraz funkcje udostępniane użytkownikom.`,
                             "Użytkownik - osoba korzystająca ze strony, aplikacji, formularza kontaktowego lub funkcji konta.",
                             "Konto - indywidualny dostęp do funkcji aplikacji, jeżeli konto zostanie utworzone.",
                             "Treści użytkownika - zdjęcia, notatki, opisy, statusy wejść, preferencje i inne dane dodane przez użytkownika.",
@@ -373,7 +377,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                     },
                     {
                         type: "paragraph",
-                        text: "W aplikacji 28s będzie można kupić limitowane piny kolekcjonerskie oraz powiązany merch jako fizyczne produkty wysyłane do klientów. Warunki zakupu będą prezentowane przed płatnością.",
+                        text: "W aplikacji 28 gór będzie można kupić limitowane piny kolekcjonerskie oraz powiązany merch jako fizyczne produkty wysyłane do klientów. Warunki zakupu będą prezentowane przed płatnością.",
                     },
                 ],
             },
@@ -444,7 +448,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} obsługuje wyłącznie płatności za fizyczne produkty 28s wysyłane do klientów. 28s nie używa ${siteConfig.paymentProcessorName} do sprzedaży cyfrowych funkcji aplikacji, subskrypcji, kredytów, dostępu premium, odblokowań funkcji ani treści cyfrowych.`,
+                        text: `${siteConfig.paymentProcessorName} obsługuje wyłącznie płatności za fizyczne produkty 28 gór wysyłane do klientów. 28 gór nie używa ${siteConfig.paymentProcessorName} do sprzedaży cyfrowych funkcji aplikacji, subskrypcji, kredytów, dostępu premium, odblokowań funkcji ani treści cyfrowych.`,
                     },
                     {
                         type: "paragraph",
@@ -513,7 +517,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: "Niektóre edycje pinów mogą zawierać QR lub NFC, które otwierają informacje o fizycznym produkcie albo pozwalają powiązać pin z istniejącym profilem 28s. QR ani NFC nie służą do płatnego odblokowywania cyfrowych funkcji aplikacji.",
+                        text: "Niektóre edycje pinów mogą zawierać QR lub NFC, które otwierają informacje o fizycznym produkcie albo pozwalają powiązać pin z istniejącym profilem 28 gór. QR ani NFC nie służą do płatnego odblokowywania cyfrowych funkcji aplikacji.",
                     },
                 ],
             },
@@ -548,7 +552,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: "Nazwa 28s, 28 Summits, wygląd strony i aplikacji, teksty, układ interfejsu, grafiki oraz elementy produktu stanowią własność operatora albo są używane na podstawie odpowiednich uprawnień. Korzystanie z usługi nie przenosi na użytkownika praw własności intelektualnej.",
+                        text: "Nazwa 28 gór, wygląd strony i aplikacji, teksty, układ interfejsu, grafiki oraz elementy produktu stanowią własność operatora albo są używane na podstawie odpowiednich uprawnień. Korzystanie z usługi nie przenosi na użytkownika praw własności intelektualnej.",
                     },
                 ],
             },
@@ -599,8 +603,8 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
         title: "Privacy Policy",
         effectiveDate: "Effective from May 29, 2026",
         intro: [
-            `This policy explains how ${siteConfig.operatorName}, as the operator of 28s / 28 Summits, processes personal data of users of ${siteConfig.siteHost} and the planned mobile app.`,
-            "28s is planned to launch in June 2026. This document covers the launch website, user contact, and planned app features such as accounts, summit logs, photos, preferences, and data synchronization.",
+            `This policy explains how ${siteConfig.operatorName}, as the operator of 28 gór, processes personal data of users of ${siteConfig.siteHost} and the planned mobile app.`,
+            "28 gór is planned to launch in June 2026. This document covers the launch website, user contact, and planned app features such as accounts, summit logs, photos, preferences, and data synchronization.",
         ],
         sections: [
             {
@@ -608,7 +612,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: `The data controller is ${siteConfig.operatorName}, operator of 28s / 28 Summits. For privacy, personal data, and user support matters, contact us at ${siteConfig.contactEmail}.`,
+                        text: `The data controller is ${siteConfig.operatorName}, operator of 28 gór. For privacy, personal data, and user support matters, contact us at ${siteConfig.contactEmail}.`,
                     },
                     {
                         type: "paragraph",
@@ -754,7 +758,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "28s does not make decisions that produce legal effects for users solely by automated means. If AI features are launched, they will process user-provided data only as needed for a specific feature, for example to summarize a note or organize a route description.",
+                        text: "28 gór does not make decisions that produce legal effects for users solely by automated means. If AI features are launched, they will process user-provided data only as needed for a specific feature, for example to summarize a note or organize a route description.",
                     },
                 ],
             },
@@ -783,8 +787,8 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
         title: "Terms",
         effectiveDate: "Effective from May 29, 2026",
         intro: [
-            `These terms define the rules for using ${siteConfig.siteHost} and the 28s / 28 Summits app. The product is developed by ${siteConfig.operatorName}, and the app launch is planned for June 2026.`,
-            "28s helps users plan and document the Crown of Polish Mountains. It does not replace maps, GOPR/TOPR notices, weather forecasts, trail signs, or your own assessment of conditions.",
+            `These terms define the rules for using ${siteConfig.siteHost} and the 28 gór app. The product is developed by ${siteConfig.operatorName}, and the app launch is planned for June 2026.`,
+            "28 gór helps users plan and document mountain hikes. It does not replace maps, GOPR/TOPR notices, weather forecasts, trail signs, or your own assessment of conditions.",
         ],
         sections: [
             {
@@ -792,7 +796,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.operatorName} is the service provider and operator of 28s / 28 Summits. For questions about these terms, the service, or user support, contact ${siteConfig.contactEmail}.`,
+                        text: `${siteConfig.operatorName} is the service provider and operator of 28 gór. For questions about these terms, the service, or user support, contact ${siteConfig.contactEmail}.`,
                     },
                     {
                         type: "paragraph",
@@ -806,7 +810,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                     {
                         type: "list",
                         items: [
-                            `Service - ${siteConfig.siteHost}, the 28s / 28 Summits app, and features made available to users.`,
+                            `Service - ${siteConfig.siteHost}, the 28 gór app, and features made available to users.`,
                             "User - a person using the website, app, contact form, or account features.",
                             "Account - individual access to app features if an account is created.",
                             "User Content - photos, notes, descriptions, summit statuses, preferences, and other data added by the user.",
@@ -819,7 +823,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include peak planning, summit logs, photo storage, account synchronization, preferences, and other features related to the Crown of Polish Mountains.",
+                        text: "At the launch-preview stage, the website may provide product information and contact options. After launch, the app may include peak planning, summit logs, photo storage, account synchronization, preferences, and other features related to mountain planning and trip documentation.",
                     },
                     {
                         type: "paragraph",
@@ -894,7 +898,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} handles payments only for physical 28s products shipped to customers. 28s does not use ${siteConfig.paymentProcessorName} to sell digital app features, subscriptions, credits, premium access, feature unlocks, or digital content.`,
+                        text: `${siteConfig.paymentProcessorName} handles payments only for physical 28 gór products shipped to customers. 28 gór does not use ${siteConfig.paymentProcessorName} to sell digital app features, subscriptions, credits, premium access, feature unlocks, or digital content.`,
                     },
                     {
                         type: "paragraph",
@@ -963,7 +967,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "Some pin editions may include QR or NFC that opens information about the physical product or lets the user associate the pin with an existing 28s profile. QR and NFC are not used to unlock paid digital app features.",
+                        text: "Some pin editions may include QR or NFC that opens information about the physical product or lets the user associate the pin with an existing 28 gór profile. QR and NFC are not used to unlock paid digital app features.",
                     },
                 ],
             },
@@ -998,7 +1002,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "The 28s and 28 Summits names, the website and app appearance, text, interface layout, graphics, and product elements are owned by the operator or used under appropriate rights. Using the service does not transfer intellectual property rights to the user.",
+                        text: "The 28 gór name, the website and app appearance, text, interface layout, graphics, and product elements are owned by the operator or used under appropriate rights. Using the service does not transfer intellectual property rights to the user.",
                     },
                 ],
             },

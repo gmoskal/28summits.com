@@ -21,7 +21,7 @@ export function BrandMark({ compact = false, showName = true }: BrandMarkProps) 
             className="flex w-[99px] flex-col items-center gap-2 text-center"
         >
             <Image
-                src="/moments-icon-figma.png"
+                src={siteConfig.appIcon}
                 alt=""
                 width={80}
                 height={80}

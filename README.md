@@ -1,6 +1,6 @@
-# 28summits.com
+# 28gor.app
 
-Standalone Next.js + TypeScript landing page for 28s.
+Standalone Next.js + TypeScript landing page for 28 gór.
 
 ## Usage
 

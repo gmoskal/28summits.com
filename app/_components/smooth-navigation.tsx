@@ -3,7 +3,7 @@
 import { startTransition, type AnchorHTMLAttributes, type MouseEvent, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
 
-const previousPathStorageKey = "28s.previousPath"
+const previousPathStorageKey = "28gor.previousPath"
 
 type NavigateOptions = {
     replace?: boolean

@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react"
 import { SiteLocale, SiteThemeMode, siteLocales, siteThemeModes } from "./site-content"
 
 const sitePreferenceStorageKeys = {
-    locale: "28s.www.locale",
-    themeMode: "28s.www.theme-mode",
+    locale: "28gor.www.locale",
+    themeMode: "28gor.www.theme-mode",
 } as const
 
 const defaultLocale: SiteLocale = "en"

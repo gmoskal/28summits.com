@@ -29,8 +29,12 @@ export const metadata: Metadata = {
         canonical: siteConfig.siteUrl,
     },
     icons: {
-        icon: "/moments-icon-figma.png",
-        apple: "/moments-icon-figma.png",
+        icon: [
+            { url: siteConfig.faviconIcon16, sizes: "16x16", type: "image/png" },
+            { url: siteConfig.faviconIcon32, sizes: "32x32", type: "image/png" },
+            { url: siteConfig.appIcon, sizes: "1024x1024", type: "image/png" },
+        ],
+        apple: [{ url: siteConfig.appleTouchIcon, sizes: "180x180", type: "image/png" }],
     },
     openGraph: {
         type: "website",

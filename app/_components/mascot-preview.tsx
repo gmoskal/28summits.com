@@ -11,7 +11,7 @@ type MascotPreviewProps = {
 
 const mascotImage = {
     src: "/mascot-hiker.jpg",
-    alt: "White 28 Summits mountain mascot with trekking poles and a Rysy badge.",
+    alt: "White 28 gór mountain mascot with trekking poles and a Rysy badge.",
     width: 1023,
     height: 1537,
 } as const
