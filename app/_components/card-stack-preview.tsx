@@ -323,10 +323,16 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                     mass: 0.82,
                                 }}
                                 style={{
+                                    backfaceVisibility: "hidden",
                                     pointerEvents: canDragCard ? "auto" : "none",
+                                    transformStyle: "preserve-3d",
                                     touchAction: "none",
+                                    WebkitBackfaceVisibility: "hidden",
+                                    WebkitTapHighlightColor: "transparent",
+                                    WebkitTouchCallout: "none",
+                                    WebkitUserSelect: "none",
+                                    willChange: canDragCard || isDeparting ? "transform, opacity" : "transform",
                                 }}
-                                whileTap={canDragCard && !prefersReducedMotion ? { scale: scale * 1.035 } : undefined}
                                 onDragEnd={(_, info) => handleDragEnd(index, info.offset, info.velocity)}
                                 onAnimationComplete={() => handleAnimationComplete(index)}
                             >
