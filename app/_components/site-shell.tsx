@@ -26,7 +26,7 @@ export function BrandMark({ compact = false, showName = true }: BrandMarkProps) 
                 width={80}
                 height={80}
                 priority={!compact}
-                className="h-20 w-20 rounded-[24px] shadow-[0_16px_38px_rgba(0,0,0,0.08)]"
+                className="h-20 w-20 rounded-[15px] shadow-[0_16px_38px_rgba(0,0,0,0.08)]"
             />
             {showName ? (
                 <span className="text-[17px] leading-[20px] font-semibold text-[var(--text-primary)]">
