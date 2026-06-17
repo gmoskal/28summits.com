@@ -159,7 +159,7 @@ export function HomePageClient() {
     }, [storyStarted])
 
     return (
-        <main className="page-transition-shell h-[100dvh] overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)] xl:snap-y xl:snap-mandatory">
+        <main className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]">
             <div className="sticky top-0 z-30 h-0 overflow-visible">
                 <div className={`pointer-events-none justify-start ${topChromeClassName}`}>
                     <div className="pointer-events-auto">
@@ -168,7 +168,7 @@ export function HomePageClient() {
                 </div>
             </div>
 
-            <section className="relative flex h-[100dvh] items-center justify-center overflow-hidden px-0 pt-[84px] pb-8 lg:pt-[120px] xl:snap-start xl:snap-always">
+            <section className="relative flex h-[100dvh] snap-start snap-always items-center justify-center overflow-hidden px-0 pt-[84px] pb-8 lg:pt-[120px]">
                 <div className={`pointer-events-none absolute inset-x-0 top-0 z-20 justify-end ${topChromeClassName}`}>
                     <div className="pointer-events-auto">
                         <SiteControls
@@ -187,7 +187,7 @@ export function HomePageClient() {
 
             <section
                 ref={storySectionRef}
-                className="relative flex min-h-[100dvh] flex-col items-center px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:snap-start xl:snap-always xl:px-[32px]"
+                className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
             >
                 <article className="flex w-full max-w-[720px] flex-col items-center">
                     <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
@@ -208,7 +208,7 @@ export function HomePageClient() {
                     </h1>
 
                     <div
-                        className={`mt-[5em] mb-[2em] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-semibold text-[var(--text-secondary)] transition duration-700 ease-out xl:text-[20px] xl:leading-[29px] ${
+                        className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-semibold text-[var(--text-secondary)] transition duration-700 ease-out xl:mt-[5em] xl:mb-[2em] xl:text-[20px] xl:leading-[29px] ${
                             storyCopyVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
                         style={{ fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
@@ -219,7 +219,7 @@ export function HomePageClient() {
                     </div>
 
                     <div
-                        className={`flex flex-col items-center pt-[2em] transition duration-700 ease-out ${
+                        className={`flex flex-col items-center pt-[clamp(1rem,3dvh,2em)] transition duration-700 ease-out xl:pt-[2em] ${
                             storyActionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
                     >
@@ -228,16 +228,18 @@ export function HomePageClient() {
                             {content.hero.caption}
                         </p>
                     </div>
-
-                    <footer
-                        className={`mt-[10em] flex flex-col items-center gap-3 transition duration-700 ease-out ${
-                            storyFooterVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
-                        }`}
-                    >
-                        <LocalizedLegalNav labels={content.nav} />
-                        <ComplianceNotice content={content.compliance} />
-                    </footer>
                 </article>
+            </section>
+
+            <section className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center justify-center px-5 pt-[96px] pb-[2em] text-center lg:px-[28px] xl:px-[32px]">
+                <footer
+                    className={`flex flex-col items-center gap-3 transition duration-700 ease-out ${
+                        storyFooterVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
+                    }`}
+                >
+                    <LocalizedLegalNav labels={content.nav} />
+                    <ComplianceNotice content={content.compliance} />
+                </footer>
             </section>
         </main>
     )
