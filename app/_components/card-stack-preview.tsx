@@ -282,13 +282,13 @@ const flick = {
     exitDurationSeconds: 0.32,
     offsetThreshold: 92,
     velocityThreshold: 520,
-    resetDelayMs: 40,
+    resetDelayMs: 1000,
 } as const
 
 const deckEntry = {
-    logoDelaySeconds: 0,
-    headlineCardDelaySeconds: 0.5,
-    headlineDurationSeconds: 0.45,
+    headlineDelaySeconds: 0.5,
+    headlineDurationSeconds: 1,
+    cardDelaySeconds: 1.5,
     cardStaggerSeconds: 0.055,
     stiffness: 215,
     damping: 28,
@@ -345,26 +345,28 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
 
 export function CardStackPreview({ locale, variant = "adventure" }: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
+    const shouldPlayDeckEntryAnimation = !prefersReducedMotion
     const stackConfig: CardStackConfig = cardStackConfigs[variant]
     const [cardLayouts, setCardLayouts] = useState<CardStackTransform[]>(() => createFallbackCardStackLayout(stackConfig))
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
     const [deckResetKey, setDeckResetKey] = useState(0)
+    const [isDeckEntryActive, setDeckEntryActive] = useState(shouldPlayDeckEntryAnimation)
     const activeCardIndex = useMemo(
         () => topVisibleCardIndex(stackConfig.cards.length, dismissedCards, departingCard?.index ?? null),
         [departingCard, dismissedCards, stackConfig.cards.length],
     )
-    const shouldPlayDeckEntryAnimation = !prefersReducedMotion
     const headlineLabel = stackConfig.headlineLabels?.[locale]
-    const headlineCardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation
-        ? deckEntry.headlineCardDelaySeconds
+    const cardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation
+        ? deckEntry.cardDelaySeconds
         : 0
 
     useEffect(() => {
         setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
         setDismissedCards(new Set())
         setDepartingCard(null)
-    }, [stackConfig.cards.length])
+        setDeckEntryActive(shouldPlayDeckEntryAnimation)
+    }, [shouldPlayDeckEntryAnimation, stackConfig])
 
     useEffect(() => {
         if (dismissedCards.size !== stackConfig.cards.length) {
@@ -375,10 +377,11 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
             setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
             setDismissedCards(new Set())
             setDeckResetKey((currentKey) => currentKey + 1)
+            setDeckEntryActive(shouldPlayDeckEntryAnimation)
         }, flick.resetDelayMs)
 
         return () => window.clearTimeout(resetTimer)
-    }, [dismissedCards, stackConfig.cards.length])
+    }, [dismissedCards, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
 
     function handleDragEnd(index: number, offset: { x: number; y: number }, velocity: { x: number; y: number }) {
         const shouldDismiss =
@@ -392,6 +395,11 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
     }
 
     function handleAnimationComplete(index: number) {
+        if (isDeckEntryActive && index === 0 && departingCard === null) {
+            setDeckEntryActive(false)
+            return
+        }
+
         if (departingCard?.index !== index) {
             return
         }
@@ -401,10 +409,10 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
     }
 
     const frameClassName = headlineLabel
-        ? "relative flex w-full touch-none select-none flex-col items-center justify-center gap-[4rem] overflow-visible px-5 pt-1 pb-1 sm:gap-[4.5rem] xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:gap-8 xl:px-14 xl:py-12"
-        : "relative flex w-full touch-none select-none items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
+        ? "relative flex w-full select-none flex-col items-center justify-center gap-[4rem] overflow-visible px-5 pt-1 pb-1 sm:gap-[4.5rem] xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:gap-8 xl:px-14 xl:py-12"
+        : "relative flex w-full select-none items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
     const deckClassName =
-        "relative h-[310px] w-full max-w-[320px] touch-none select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
+        "relative h-[310px] w-full max-w-[320px] select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
     const cardClassName =
         "absolute left-1/2 top-1/2 w-[236px] xl:w-[min(30vw,360px)] xl:max-w-[360px]"
 
@@ -412,10 +420,11 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
         <div className={frameClassName}>
             {headlineLabel ? (
                 <motion.h2
-                    className="pointer-events-none max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
+                    className="pointer-events-none mb-[1.5em] max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
                     initial={shouldPlayDeckEntryAnimation ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
+                        delay: prefersReducedMotion ? 0 : deckEntry.headlineDelaySeconds,
                         duration: prefersReducedMotion ? 0.01 : deckEntry.headlineDurationSeconds,
                         ease: "easeOut",
                     }}
@@ -443,7 +452,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                     const cardTransform = cardLayouts[index] ?? stackConfig.fallbackLayout[index] ?? fallbackCardLayout[index % fallbackCardLayout.length]
                     const isTopCard = index === activeCardIndex
                     const isDeparting = departingCard?.index === index
-                    const canDragCard = isTopCard && !isDeparting
+                    const canDragCard = isTopCard && !isDeparting && !isDeckEntryActive
                     const stackDepth = Math.max(index - activeCardIndex, 0)
                     const scale = isTopCard ? 1 : Math.max(0.9, 1 - stackDepth * 0.018)
                     const y = cardTransform.y
@@ -452,7 +461,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                     const rotation = isDeparting ? cardTransform.rotation + departingCard.directionX * 28 : cardTransform.rotation
                     const animationDelay =
                         dismissedCards.size === 0 && departingCard === null && shouldPlayDeckEntryAnimation
-                            ? headlineCardDelaySeconds + deckEntry.logoDelaySeconds + (stackConfig.cards.length - 1 - index) * deckEntry.cardStaggerSeconds
+                            ? cardDelaySeconds + (stackConfig.cards.length - 1 - index) * deckEntry.cardStaggerSeconds
                             : 0
 
                     return (
@@ -465,7 +474,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                             }}
                         >
                             <motion.div
-                                className="aspect-[1/1.18] w-full touch-none select-none cursor-grab active:cursor-grabbing"
+                                className="aspect-[1/1.18] w-full select-none cursor-grab active:cursor-grabbing"
                                 drag={canDragCard}
                                 dragMomentum={false}
                                 initial={
@@ -497,7 +506,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                                     backfaceVisibility: "hidden",
                                     pointerEvents: canDragCard ? "auto" : "none",
                                     transformStyle: "preserve-3d",
-                                    touchAction: "none",
+                                    touchAction: canDragCard ? "none" : "auto",
                                     WebkitBackfaceVisibility: "hidden",
                                     WebkitTapHighlightColor: "transparent",
                                     WebkitTouchCallout: "none",

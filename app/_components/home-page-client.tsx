@@ -45,19 +45,26 @@ type ComplianceNoticeProps = {
     content: (typeof homeContent)[SiteLocale]["compliance"]
 }
 
-type SnapSectionStartOptions = {
+type SectionStartOptions = {
     mainRef: RefObject<HTMLElement | null>
     sectionRef: RefObject<HTMLElement | null>
     hasStarted: boolean
     onStart: () => void
 }
 
+type SectionReentryOptions = {
+    mainRef: RefObject<HTMLElement | null>
+    sectionRef: RefObject<HTMLElement | null>
+    isEnabled: boolean
+    onReentry: () => void
+}
+
 const legalAccentStyle = { color: "#666666" }
 const legalNavLinkClassName = "text-[15px] leading-[20px] font-semibold transition-[color,filter] hover:brightness-95"
 const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
-const snapStart = {
-    idleDelayMs: 150,
+const sectionStart = {
     tolerancePx: 3,
+    visibleRatioThreshold: 0.5,
 } as const
 
 function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
@@ -113,10 +120,28 @@ function isSectionSnapped(mainElement: HTMLElement, sectionElement: HTMLElement)
     const mainTop = mainElement.getBoundingClientRect().top
     const sectionTop = sectionElement.getBoundingClientRect().top
 
-    return Math.abs(sectionTop - mainTop) <= snapStart.tolerancePx
+    return Math.abs(sectionTop - mainTop) <= sectionStart.tolerancePx
 }
 
-function useSnappedSectionStart(p: SnapSectionStartOptions) {
+function sectionVisibleRatio(mainElement: HTMLElement, sectionElement: HTMLElement) {
+    const mainRect = mainElement.getBoundingClientRect()
+    const sectionRect = sectionElement.getBoundingClientRect()
+    const visibleTop = Math.max(mainRect.top, sectionRect.top)
+    const visibleBottom = Math.min(mainRect.bottom, sectionRect.bottom)
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop)
+    const sectionHeight = Math.min(mainRect.height, sectionRect.height)
+
+    return sectionHeight > 0 ? visibleHeight / sectionHeight : 0
+}
+
+function shouldStartSection(mainElement: HTMLElement, sectionElement: HTMLElement) {
+    return (
+        isSectionSnapped(mainElement, sectionElement)
+        || sectionVisibleRatio(mainElement, sectionElement) >= sectionStart.visibleRatioThreshold
+    )
+}
+
+function useSectionStart(p: SectionStartOptions) {
     useEffect(() => {
         const mainElement = p.mainRef.current
         const sectionElement = p.sectionRef.current
@@ -127,29 +152,15 @@ function useSnappedSectionStart(p: SnapSectionStartOptions) {
         const scrollRoot = mainElement
         const snapSection = sectionElement
         let animationFrame = 0
-        let idleTimer = 0
+        let hasTriggered = false
 
-        function clearIdleTimer() {
-            if (idleTimer === 0) {
+        function checkSectionState() {
+            if (hasTriggered || !shouldStartSection(scrollRoot, snapSection)) {
                 return
             }
 
-            window.clearTimeout(idleTimer)
-            idleTimer = 0
-        }
-
-        function checkSnapState() {
-            if (!isSectionSnapped(scrollRoot, snapSection)) {
-                clearIdleTimer()
-                return
-            }
-
-            clearIdleTimer()
-            idleTimer = window.setTimeout(() => {
-                if (isSectionSnapped(scrollRoot, snapSection)) {
-                    p.onStart()
-                }
-            }, snapStart.idleDelayMs)
+            hasTriggered = true
+            p.onStart()
         }
 
         function scheduleCheck() {
@@ -159,7 +170,7 @@ function useSnappedSectionStart(p: SnapSectionStartOptions) {
 
             animationFrame = window.requestAnimationFrame(() => {
                 animationFrame = 0
-                checkSnapState()
+                checkSectionState()
             })
         }
 
@@ -177,12 +188,72 @@ function useSnappedSectionStart(p: SnapSectionStartOptions) {
             observer.disconnect()
             scrollRoot.removeEventListener("scroll", scheduleCheck)
             window.removeEventListener("resize", scheduleCheck)
-            clearIdleTimer()
             if (animationFrame !== 0) {
                 window.cancelAnimationFrame(animationFrame)
             }
         }
     }, [p.hasStarted, p.mainRef, p.onStart, p.sectionRef])
+}
+
+function useSectionReentry(p: SectionReentryOptions) {
+    useEffect(() => {
+        const mainElement = p.mainRef.current
+        const sectionElement = p.sectionRef.current
+        if (!mainElement || !sectionElement || !p.isEnabled) {
+            return
+        }
+
+        const scrollRoot = mainElement
+        const snapSection = sectionElement
+        let animationFrame = 0
+        let hasSeenInitialState = false
+        let wasActive = false
+
+        function checkSectionState() {
+            const isActive = shouldStartSection(scrollRoot, snapSection)
+            if (!hasSeenInitialState) {
+                hasSeenInitialState = true
+                wasActive = isActive
+                return
+            }
+
+            if (isActive && !wasActive) {
+                p.onReentry()
+            }
+
+            wasActive = isActive
+        }
+
+        function scheduleCheck() {
+            if (animationFrame !== 0) {
+                window.cancelAnimationFrame(animationFrame)
+            }
+
+            animationFrame = window.requestAnimationFrame(() => {
+                animationFrame = 0
+                checkSectionState()
+            })
+        }
+
+        const observer = new IntersectionObserver(scheduleCheck, {
+            root: scrollRoot,
+            threshold: [0, 0.5, 0.9, 1],
+        })
+
+        observer.observe(snapSection)
+        scrollRoot.addEventListener("scroll", scheduleCheck, { passive: true })
+        window.addEventListener("resize", scheduleCheck)
+        scheduleCheck()
+
+        return () => {
+            observer.disconnect()
+            scrollRoot.removeEventListener("scroll", scheduleCheck)
+            window.removeEventListener("resize", scheduleCheck)
+            if (animationFrame !== 0) {
+                window.cancelAnimationFrame(animationFrame)
+            }
+        }
+    }, [p.isEnabled, p.mainRef, p.onReentry, p.sectionRef])
 }
 
 export function HomePageClient() {
@@ -207,7 +278,7 @@ export function HomePageClient() {
         brandAnimationRunningRef.current = false
     }, [])
 
-    const handleStoryLogoClick = useCallback(() => {
+    const replayStoryLogo = useCallback(() => {
         if (brandAnimationRunningRef.current) {
             return
         }
@@ -219,14 +290,21 @@ export function HomePageClient() {
     const startStoryAnimation = useCallback(() => setStoryStarted(true), [])
     const startStatsAnimation = useCallback(() => setStatsStarted(true), [])
 
-    useSnappedSectionStart({
+    useSectionStart({
         mainRef,
         sectionRef: storySectionRef,
         hasStarted: storyStarted,
         onStart: startStoryAnimation,
     })
 
-    useSnappedSectionStart({
+    useSectionReentry({
+        mainRef,
+        sectionRef: storySectionRef,
+        isEnabled: storyStarted,
+        onReentry: replayStoryLogo,
+    })
+
+    useSectionStart({
         mainRef,
         sectionRef: statsSectionRef,
         hasStarted: statsStarted,
@@ -298,7 +376,7 @@ export function HomePageClient() {
                                 type="button"
                                 aria-label={content.hero.replayLogoAnimationLabel}
                                 className="inline-flex touch-manipulation cursor-pointer appearance-none items-center justify-center rounded-[24px] border-0 bg-transparent p-0 text-inherit focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
-                                onClick={handleStoryLogoClick}
+                                onClick={replayStoryLogo}
                             >
                                 <GooeyBrandTitle
                                     onAnimationComplete={handleBrandAnimationComplete}
