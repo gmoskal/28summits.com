@@ -397,6 +397,7 @@ export function HomePageClient() {
                                     onAnimationComplete={handleBrandAnimationComplete}
                                     onAnimationStart={handleBrandAnimationStart}
                                     replayToken={brandAnimationCycle}
+                                    themeMode={themeMode}
                                 />
                             </button>
                         ) : null}
