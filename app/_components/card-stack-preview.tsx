@@ -161,7 +161,7 @@ const statsCards = [
         badgeRotation: -8,
     },
     {
-        src: "/misc/app-grid.png",
+        src: "/misc/app-grid.webp",
         labels: {
             pl: "Pluszowe pieczątki?!",
             en: "Plush stamps?!",
@@ -172,7 +172,7 @@ const statsCards = [
         badgeRotation: 7,
     },
     {
-        src: "/misc/app-peak.png",
+        src: "/misc/app-peak.webp",
         labels: {
             pl: "Woow",
             en: "Woow",
@@ -183,7 +183,7 @@ const statsCards = [
         badgeRotation: 10,
     },
     {
-        src: "/misc/app-map.png",
+        src: "/misc/app-map.webp",
         labels: {
             pl: "Kocham Mapy",
             en: "I love maps",
@@ -194,7 +194,7 @@ const statsCards = [
         badgeRotation: -6,
     },
     {
-        src: "/misc/app-game.png",
+        src: "/misc/app-game.webp",
         labels: {
             pl: "Gry!!!",
             en: "Games!!!",
