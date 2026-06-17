@@ -8,7 +8,7 @@ import type { SiteLocale } from "../_lib/site-content"
 type CardStackCard = {
     src: string
     labels: Record<SiteLocale, string>
-    badgeRotation: number
+    badgeRotation?: number
 }
 
 type CardStackTransform = {
@@ -21,7 +21,7 @@ type CardStackConfig = {
     cards: readonly CardStackCard[]
     ariaLabels: Record<SiteLocale, string>
     headlineLabels?: Record<SiteLocale, string>
-    badge: {
+    badge?: {
         src: string
         displaySize: number
         inset: number
@@ -158,51 +158,46 @@ const statsCards = [
             sk: "V práci",
             uk: "За роботою",
         },
-        badgeRotation: -8,
     },
     {
         src: "/misc/app-grid.webp",
         labels: {
-            pl: "Pluszowe pieczątki?!",
-            en: "Plush stamps?!",
-            cs: "Plyšová razítka?!",
-            sk: "Plyšové pečiatky?!",
-            uk: "Плюшеві печатки?!",
+            pl: "tu ekran pieczątek",
+            en: "stamp screen here",
+            cs: "tady obrazovka razítek",
+            sk: "tu obrazovka pečiatok",
+            uk: "тут екран печаток",
         },
-        badgeRotation: 7,
     },
     {
         src: "/misc/app-peak.webp",
         labels: {
-            pl: "Woow",
-            en: "Woow",
-            cs: "Woow",
-            sk: "Woow",
-            uk: "Вау",
+            pl: "tu ekran szczytu",
+            en: "peak screen here",
+            cs: "tady obrazovka vrcholu",
+            sk: "tu obrazovka vrcholu",
+            uk: "тут екран вершини",
         },
-        badgeRotation: 10,
     },
     {
         src: "/misc/app-map.webp",
         labels: {
-            pl: "Kocham Mapy",
-            en: "I love maps",
-            cs: "Miluju mapy",
-            sk: "Milujem mapy",
-            uk: "Люблю мапи",
+            pl: "tu ekran mapy",
+            en: "map screen here",
+            cs: "tady obrazovka mapy",
+            sk: "tu obrazovka mapy",
+            uk: "тут екран мапи",
         },
-        badgeRotation: -6,
     },
     {
         src: "/misc/app-game.webp",
         labels: {
-            pl: "Gry!!!",
-            en: "Games!!!",
-            cs: "Hry!!!",
-            sk: "Hry!!!",
-            uk: "Ігри!!!",
+            pl: "tu gry",
+            en: "games here",
+            cs: "tady hry",
+            sk: "tu hry",
+            uk: "тут ігри",
         },
-        badgeRotation: 5,
     },
     {
         src: "/misc/stats4.jpeg",
@@ -213,7 +208,6 @@ const statsCards = [
             sk: "Rebríček výstupov",
             uk: "Рейтинг сходжень",
         },
-        badgeRotation: -10,
     },
 ] as const satisfies readonly CardStackCard[]
 
@@ -227,13 +221,6 @@ const statsAriaLabels: Record<SiteLocale, string> = {
 
 const adventureBadge = {
     src: "/app-icon.png",
-    displaySize: 44,
-    inset: 15,
-    sourceSize: 88,
-} as const
-
-const statsBadge = {
-    src: "/misc/stats-app-icon.png",
     displaySize: 44,
     inset: 15,
     sourceSize: 88,
@@ -272,7 +259,6 @@ const cardStackConfigs = {
     stats: {
         cards: statsCards,
         ariaLabels: statsAriaLabels,
-        badge: statsBadge,
         fallbackLayout: fallbackStatsLayout,
     },
 } as const satisfies Record<NonNullable<CardStackPreviewProps["variant"]>, CardStackConfig>
@@ -420,7 +406,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
         <div className={frameClassName}>
             {headlineLabel ? (
                 <motion.h2
-                    className="pointer-events-none mb-[1.5em] max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
+                    className="pointer-events-none mb-[1em] max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:mb-[1.5em] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
                     initial={shouldPlayDeckEntryAnimation ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
@@ -532,23 +518,25 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                                             className="pointer-events-none h-full w-full select-none object-cover object-center"
                                             onDragStart={(event) => event.preventDefault()}
                                         />
-                                        <Image
-                                            src={stackConfig.badge.src}
-                                            alt=""
-                                            width={stackConfig.badge.sourceSize}
-                                            height={stackConfig.badge.sourceSize}
-                                            quality={100}
-                                            draggable={false}
-                                            className="pointer-events-none absolute select-none rounded-[10px] shadow-[0_8px_20px_rgba(0,0,0,0.22)]"
-                                            style={{
-                                                width: stackConfig.badge.displaySize,
-                                                height: stackConfig.badge.displaySize,
-                                                right: stackConfig.badge.inset,
-                                                top: stackConfig.badge.inset,
-                                                transform: `rotate(${card.badgeRotation}deg)`,
-                                            }}
-                                            onDragStart={(event) => event.preventDefault()}
-                                        />
+                                        {stackConfig.badge ? (
+                                            <Image
+                                                src={stackConfig.badge.src}
+                                                alt=""
+                                                width={stackConfig.badge.sourceSize}
+                                                height={stackConfig.badge.sourceSize}
+                                                quality={100}
+                                                draggable={false}
+                                                className="pointer-events-none absolute select-none rounded-[10px] shadow-[0_8px_20px_rgba(0,0,0,0.22)]"
+                                                style={{
+                                                    width: stackConfig.badge.displaySize,
+                                                    height: stackConfig.badge.displaySize,
+                                                    right: stackConfig.badge.inset,
+                                                    top: stackConfig.badge.inset,
+                                                    transform: `rotate(${card.badgeRotation ?? 0}deg)`,
+                                                }}
+                                                onDragStart={(event) => event.preventDefault()}
+                                            />
+                                        ) : null}
                                     </div>
                                     <div className="flex min-h-0 flex-1 items-center justify-center p-[2em]">
                                         <span
