@@ -1,4 +1,5 @@
 const siteIconVersion = "20260617-2"
+const siteSocialImageVersion = "20260617-2"
 
 export const siteConfig = {
     name: "28 gór",
@@ -22,7 +23,7 @@ export const siteConfig = {
     description: "28 gór zbiera plany, wejścia, zdjęcia, ręcznie rysowane pieczątki, edukację i górskie pamiątki w jednej dopracowanej aplikacji.",
     socialTitle: "28 gór - wszystko z gór w jednym pięknym miejscu",
     socialDescription: "Zbieraj wejścia, zdjęcia, notatki i pieczątki rysowane dla każdego szczytu. Zamawiaj pamiątki i odkrywaj edukacyjne treści z Ryskiem.",
-    socialImage: "/og-image.png?v=20260617",
+    socialImage: `/og-image-${siteSocialImageVersion}.png`,
     socialImageAlt: "28 gór - dopracowana aplikacja z ręcznie rysowanymi pieczątkami, zdjęciami, edukacją i pamiątkami z tras.",
 } as const
 
