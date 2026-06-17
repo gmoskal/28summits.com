@@ -33,6 +33,7 @@ type CardStackConfig = {
 type CardStackPreviewProps = {
     locale: SiteLocale
     variant?: "adventure" | "stats"
+    onDeckComplete?: () => void
 }
 
 type DepartingCard = {
@@ -329,9 +330,10 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
     }
 }
 
-export function CardStackPreview({ locale, variant = "adventure" }: CardStackPreviewProps) {
+export function CardStackPreview(p: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
     const shouldPlayDeckEntryAnimation = !prefersReducedMotion
+    const variant = p.variant ?? "adventure"
     const stackConfig: CardStackConfig = cardStackConfigs[variant]
     const [cardLayouts, setCardLayouts] = useState<CardStackTransform[]>(() => createFallbackCardStackLayout(stackConfig))
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
@@ -342,7 +344,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
         () => topVisibleCardIndex(stackConfig.cards.length, dismissedCards, departingCard?.index ?? null),
         [departingCard, dismissedCards, stackConfig.cards.length],
     )
-    const headlineLabel = stackConfig.headlineLabels?.[locale]
+    const headlineLabel = stackConfig.headlineLabels?.[p.locale]
     const cardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation
         ? deckEntry.cardDelaySeconds
         : 0
@@ -390,8 +392,14 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
             return
         }
 
+        const isCompletingDeck = dismissedCards.size + 1 === stackConfig.cards.length
+
         setDismissedCards((currentCards) => new Set(currentCards).add(index))
         setDepartingCard(null)
+
+        if (isCompletingDeck) {
+            p.onDeckComplete?.()
+        }
     }
 
     const frameClassName = headlineLabel
@@ -428,7 +436,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                 key={`${variant}-${deckResetKey}`}
                 className={deckClassName}
                 role="img"
-                aria-label={stackConfig.ariaLabels[locale]}
+                aria-label={stackConfig.ariaLabels[p.locale]}
             >
                 {stackConfig.cards.map((card, index) => {
                     if (dismissedCards.has(index)) {
@@ -543,7 +551,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                                             className="inline-block -translate-y-[5px] text-center text-[20px] leading-none font-normal text-[#171717] xl:text-[24px]"
                                             style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
                                         >
-                                            {card.labels[locale]}
+                                            {card.labels[p.locale]}
                                         </span>
                                     </div>
                                 </div>

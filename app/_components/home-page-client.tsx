@@ -269,6 +269,7 @@ export function HomePageClient() {
     const [statsFooterVisible, setStatsFooterVisible] = useState(false)
     const [brandAnimationCycle, setBrandAnimationCycle] = useState(0)
     const brandAnimationRunningRef = useRef(false)
+    const hasAutoScrolledToStoryRef = useRef(false)
 
     const handleBrandAnimationStart = useCallback(() => {
         brandAnimationRunningRef.current = true
@@ -285,6 +286,20 @@ export function HomePageClient() {
 
         brandAnimationRunningRef.current = true
         setBrandAnimationCycle((cycle) => cycle + 1)
+    }, [])
+
+    const scrollToStorySection = useCallback(() => {
+        const mainElement = mainRef.current
+        const storySectionElement = storySectionRef.current
+        if (!mainElement || !storySectionElement || hasAutoScrolledToStoryRef.current) {
+            return
+        }
+
+        hasAutoScrolledToStoryRef.current = true
+        storySectionElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        })
     }, [])
 
     const startStoryAnimation = useCallback(() => setStoryStarted(true), [])
@@ -361,7 +376,7 @@ export function HomePageClient() {
                     </div>
                 </div>
                 <div className="relative flex h-full w-full items-center justify-center">
-                    <CardStackPreview locale={locale} />
+                    <CardStackPreview locale={locale} onDeckComplete={scrollToStorySection} />
                 </div>
             </section>
 
