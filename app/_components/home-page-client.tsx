@@ -56,6 +56,7 @@ type SectionReentryOptions = {
     mainRef: RefObject<HTMLElement | null>
     sectionRef: RefObject<HTMLElement | null>
     isEnabled: boolean
+    onExit: () => void
     onReentry: () => void
 }
 
@@ -221,6 +222,10 @@ function useSectionReentry(p: SectionReentryOptions) {
                 p.onReentry()
             }
 
+            if (!isActive && wasActive) {
+                p.onExit()
+            }
+
             wasActive = isActive
         }
 
@@ -253,7 +258,7 @@ function useSectionReentry(p: SectionReentryOptions) {
                 window.cancelAnimationFrame(animationFrame)
             }
         }
-    }, [p.isEnabled, p.mainRef, p.onReentry, p.sectionRef])
+    }, [p.isEnabled, p.mainRef, p.onExit, p.onReentry, p.sectionRef])
 }
 
 export function HomePageClient() {
@@ -263,6 +268,7 @@ export function HomePageClient() {
     const storySectionRef = useRef<HTMLElement | null>(null)
     const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
+    const [storyLogoVisible, setStoryLogoVisible] = useState(false)
     const [storyCopyVisible, setStoryCopyVisible] = useState(false)
     const [storyActionVisible, setStoryActionVisible] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
@@ -279,14 +285,18 @@ export function HomePageClient() {
         brandAnimationRunningRef.current = false
     }, [])
 
+    const restartStoryLogo = useCallback(() => {
+        brandAnimationRunningRef.current = true
+        setBrandAnimationCycle((cycle) => cycle + 1)
+    }, [])
+
     const replayStoryLogo = useCallback(() => {
         if (brandAnimationRunningRef.current) {
             return
         }
 
-        brandAnimationRunningRef.current = true
-        setBrandAnimationCycle((cycle) => cycle + 1)
-    }, [])
+        restartStoryLogo()
+    }, [restartStoryLogo])
 
     const scrollToStorySection = useCallback(() => {
         const mainElement = mainRef.current
@@ -302,8 +312,16 @@ export function HomePageClient() {
         })
     }, [])
 
-    const startStoryAnimation = useCallback(() => setStoryStarted(true), [])
+    const startStoryAnimation = useCallback(() => {
+        setStoryStarted(true)
+        setStoryLogoVisible(true)
+    }, [])
     const startStatsAnimation = useCallback(() => setStatsStarted(true), [])
+    const hideStoryLogo = useCallback(() => setStoryLogoVisible(false), [])
+    const showAndRestartStoryLogo = useCallback(() => {
+        setStoryLogoVisible(true)
+        restartStoryLogo()
+    }, [restartStoryLogo])
 
     useSectionStart({
         mainRef,
@@ -316,7 +334,8 @@ export function HomePageClient() {
         mainRef,
         sectionRef: storySectionRef,
         isEnabled: storyStarted,
-        onReentry: replayStoryLogo,
+        onExit: hideStoryLogo,
+        onReentry: showAndRestartStoryLogo,
     })
 
     useSectionStart({
@@ -390,7 +409,9 @@ export function HomePageClient() {
                             <button
                                 type="button"
                                 aria-label={content.hero.replayLogoAnimationLabel}
-                                className="inline-flex touch-manipulation cursor-pointer appearance-none items-center justify-center rounded-[24px] border-0 bg-transparent p-0 text-inherit focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
+                                className={`inline-flex touch-manipulation cursor-pointer appearance-none items-center justify-center rounded-[24px] border-0 bg-transparent p-0 text-inherit transition duration-300 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] ${
+                                    storyLogoVisible ? "opacity-100 blur-0" : "pointer-events-none opacity-0 blur-[1px]"
+                                }`}
                                 onClick={replayStoryLogo}
                             >
                                 <GooeyBrandTitle
