@@ -2,13 +2,11 @@
 
 import { animate, useReducedMotion } from "motion/react"
 import { useEffect, useId, useLayoutEffect, useRef } from "react"
-import { type SiteThemeMode } from "../_lib/site-content"
 
 type GooeyBrandTitleProps = {
     onAnimationComplete?: () => void
     onAnimationStart?: () => void
     replayToken?: number
-    themeMode: SiteThemeMode
 }
 
 type Glyph = {
@@ -38,11 +36,6 @@ const thinnerScale = 0.7
 const thicknessBoost = 1.1
 const pointCountBoost = 1.1
 const useBrowserLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect
-const logoTextureImages = {
-    light: "/grad-black.jpg",
-    dark: "/grad8.jpg",
-} as const satisfies Record<SiteThemeMode, string>
-const logoTextureVisibleFrame = { x: -30, y: -80, width: 600, height: 337 } as const
 
 const glyphs = [
     {
@@ -126,13 +119,10 @@ function pointOnGlyph(path: SVGPathElement, glyph: Glyph, circleIndex: number) {
 
 const animationCompleteDelayMs = animationDurationMs()
 
-export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart, replayToken = 0, themeMode }: GooeyBrandTitleProps) {
+export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart, replayToken = 0 }: GooeyBrandTitleProps) {
     const prefersReducedMotion = useReducedMotion()
     const reactId = useId()
-    const svgIdPrefix = `gooey-brand-title-${reactId.replaceAll(":", "")}`
-    const filterId = `${svgIdPrefix}-filter`
-    const maskId = `${svgIdPrefix}-mask`
-    const logoTextureImage = logoTextureImages[themeMode]
+    const filterId = `gooey-brand-title-${reactId.replaceAll(":", "")}`
     const pathRefs = useRef<Array<SVGPathElement | null>>([])
     const circleRefs = useRef<Array<Array<SVGCircleElement | null>>>([])
 
@@ -212,42 +202,6 @@ export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart, replayT
                             values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -12"
                         />
                     </filter>
-                    <mask
-                        id={maskId}
-                        maskUnits="userSpaceOnUse"
-                        x={logoTextureVisibleFrame.x}
-                        y={logoTextureVisibleFrame.y}
-                        width={logoTextureVisibleFrame.width}
-                        height={logoTextureVisibleFrame.height}
-                    >
-                        <rect
-                            x={logoTextureVisibleFrame.x}
-                            y={logoTextureVisibleFrame.y}
-                            width={logoTextureVisibleFrame.width}
-                            height={logoTextureVisibleFrame.height}
-                            fill="#000"
-                        />
-                        <g filter={`url(#${filterId})`}>
-                            {glyphs.map((glyph, glyphIndex) =>
-                                Array.from({ length: circleCountForGlyph(glyph) }, (_, circleIndex) => (
-                                    <circle
-                                        key={`${glyph.key}-${circleIndex}`}
-                                        ref={(node) => {
-                                            if (!circleRefs.current[glyphIndex]) {
-                                                circleRefs.current[glyphIndex] = []
-                                            }
-                                            circleRefs.current[glyphIndex][circleIndex] = node
-                                        }}
-                                        cx={startPoint.x}
-                                        cy={startPoint.y}
-                                        fill="#fff"
-                                        opacity="0"
-                                        r="0"
-                                    />
-                                )),
-                            )}
-                        </g>
-                    </mask>
                 </defs>
                 <g fill="none" opacity="0" pointerEvents="none" stroke="none">
                     {glyphs.map((glyph, index) => (
@@ -260,15 +214,26 @@ export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart, replayT
                         />
                     ))}
                 </g>
-                <image
-                    href={logoTextureImage}
-                    x={logoTextureVisibleFrame.x}
-                    y={logoTextureVisibleFrame.y}
-                    width={logoTextureVisibleFrame.width}
-                    height={logoTextureVisibleFrame.height}
-                    preserveAspectRatio="xMidYMid slice"
-                    mask={`url(#${maskId})`}
-                />
+                <g filter={`url(#${filterId})`}>
+                    {glyphs.map((glyph, glyphIndex) =>
+                        Array.from({ length: circleCountForGlyph(glyph) }, (_, circleIndex) => (
+                            <circle
+                                key={`${glyph.key}-${circleIndex}`}
+                                ref={(node) => {
+                                    if (!circleRefs.current[glyphIndex]) {
+                                        circleRefs.current[glyphIndex] = []
+                                    }
+                                    circleRefs.current[glyphIndex][circleIndex] = node
+                                }}
+                                cx={startPoint.x}
+                                cy={startPoint.y}
+                                fill="currentColor"
+                                opacity="0"
+                                r="0"
+                            />
+                        )),
+                    )}
+                </g>
             </svg>
         </span>
     )

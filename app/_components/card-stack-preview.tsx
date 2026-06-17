@@ -267,8 +267,8 @@ const cardStackConfigs = {
 const flick = {
     exitDistance: 980,
     exitDurationSeconds: 0.32,
-    offsetThreshold: 92,
-    velocityThreshold: 520,
+    dragStartThreshold: 6,
+    velocityStartThreshold: 80,
     resetDelayMs: 1000,
 } as const
 
@@ -372,10 +372,10 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     }, [dismissedCards, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
 
     function handleDragEnd(index: number, offset: { x: number; y: number }, velocity: { x: number; y: number }) {
-        const shouldDismiss =
-            Math.hypot(offset.x, offset.y) > flick.offsetThreshold
-            || Math.hypot(velocity.x, velocity.y) > flick.velocityThreshold
-        if (!shouldDismiss) {
+        const hasStartedCardMovement =
+            Math.hypot(offset.x, offset.y) > flick.dragStartThreshold
+            || Math.hypot(velocity.x, velocity.y) > flick.velocityStartThreshold
+        if (!hasStartedCardMovement) {
             return
         }
 
