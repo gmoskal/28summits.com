@@ -128,7 +128,7 @@ export const homeContent: Record<
                 "ręcznie rysowane pieczątki w aplikacji",
                 "pamiątki fizyczne na zamówienie",
                 `ceny w ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} tylko dla fizycznych produktów`,
+                `${siteConfig.paymentProcessorName} tylko dla fizycznych pamiątek`,
             ],
             contactLabel: "Kontakt",
             legalPolicies: "Dokumenty i zasady",
@@ -170,7 +170,7 @@ export const homeContent: Record<
                 "hand-drawn stamps in app",
                 "custom physical keepsakes",
                 `prices in ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} only for physical products`,
+                `${siteConfig.paymentProcessorName} only for physical keepsakes`,
             ],
             contactLabel: "Contact",
             legalPolicies: "Legal & Policies",
@@ -212,7 +212,7 @@ export const homeContent: Record<
                 "ručně kreslená razítka v aplikaci",
                 "fyzické památky na objednávku",
                 `ceny v ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} pouze pro fyzické produkty`,
+                `${siteConfig.paymentProcessorName} pouze pro fyzické památky`,
             ],
             contactLabel: "Kontakt",
             legalPolicies: "Právní dokumenty",
@@ -254,7 +254,7 @@ export const homeContent: Record<
                 "ručne kreslené pečiatky v aplikácii",
                 "fyzické pamiatky na objednávku",
                 `ceny v ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} iba pre fyzické produkty`,
+                `${siteConfig.paymentProcessorName} iba pre fyzické pamiatky`,
             ],
             contactLabel: "Kontakt",
             legalPolicies: "Právne dokumenty",
@@ -296,7 +296,7 @@ export const homeContent: Record<
                 "намальовані вручну штампи в застосунку",
                 "фізичні пам’ятки на замовлення",
                 `ціни в ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} лише для фізичних продуктів`,
+                `${siteConfig.paymentProcessorName} лише для фізичних пам’яток`,
             ],
             contactLabel: "Контакт",
             legalPolicies: "Правові документи",
@@ -352,7 +352,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                             "dane konta, np. identyfikator użytkownika, adres e-mail, nazwa profilu i ustawienia konta, jeżeli konto zostanie utworzone,",
                             "dane związane z korzystaniem z aplikacji, np. zaplanowane szczyty, status wejść, notatki, zdjęcia, podpisy, preferencje i ustawienia,",
                             "dane techniczne, np. adres IP, typ urządzenia, przeglądarka, system operacyjny, logi błędów, identyfikatory diagnostyczne i przybliżony region,",
-                            "informacje o statusie płatności albo zamówienia produktu fizycznego, jeżeli w przyszłości zostaną uruchomione piny kolekcjonerskie lub powiązany merch.",
+                            "informacje o statusie zamówienia lub płatności dotyczącej fizycznej pamiątki.",
                         ],
                     },
                 ],
@@ -403,15 +403,15 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 ],
             },
             {
-                heading: "Zamówienia produktów fizycznych",
+                heading: "Zamówienia fizycznych pamiątek",
                 body: [
                     {
                         type: "paragraph",
-                        text: `Jeżeli w aplikacji zostaną uruchomione fizyczne piny kolekcjonerskie lub powiązany merch, do obsługi zamówienia możemy przetwarzać imię i nazwisko, adres e-mail, adres dostawy, szczegóły zamówienia oraz status płatności.`,
+                        text: "Jeżeli w aplikacji zostaną uruchomione fizyczne pamiątki, do obsługi zamówienia możemy przetwarzać imię i nazwisko, adres e-mail, adres dostawy, szczegóły zamówienia oraz status płatności.",
                     },
                     {
                         type: "paragraph",
-                        text: `Płatności za fizyczne produkty obsługuje ${siteConfig.paymentProcessorName}. ${siteConfig.operatorName} nie przechowuje pełnych numerów kart płatniczych.`,
+                        text: `${siteConfig.paymentProcessorName} obsługuje płatności wyłącznie za fizyczne pamiątki. ${siteConfig.operatorName} nie przechowuje pełnych numerów kart płatniczych.`,
                     },
                 ],
             },
@@ -549,7 +549,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                     },
                     {
                         type: "paragraph",
-                        text: "W aplikacji 28 gór będzie można kupić limitowane piny kolekcjonerskie, pamiątki na zamówienie oraz powiązany merch jako fizyczne produkty wysyłane do klientów. Warunki zakupu będą prezentowane przed płatnością.",
+                        text: "W aplikacji 28 gór będzie można kupić fizyczne pamiątki wysyłane do klientów. Warunki zakupu będą prezentowane przed płatnością.",
                     },
                 ],
             },
@@ -616,15 +616,15 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 ],
             },
             {
-                heading: "Fizyczne produkty i płatności",
+                heading: "Fizyczne pamiątki i płatności",
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} obsługuje wyłącznie płatności za fizyczne produkty 28 gór wysyłane do klientów. 28 gór nie używa ${siteConfig.paymentProcessorName} do sprzedaży cyfrowych funkcji aplikacji, subskrypcji, kredytów, dostępu premium, odblokowań funkcji ani treści cyfrowych.`,
+                        text: `${siteConfig.paymentProcessorName} obsługuje wyłącznie płatności za fizyczne pamiątki 28 gór wysyłane do klientów. Inne płatności udostępnione w aplikacji będą opisane przed ich potwierdzeniem.`,
                     },
                     {
                         type: "paragraph",
-                        text: `Ceny produktów fizycznych będą widoczne w ${siteConfig.currencyCode} przed płatnością. Koszty wysyłki, podatki i dodatkowe opłaty, jeżeli wystąpią, będą pokazane przed potwierdzeniem płatności.`,
+                        text: `Ceny fizycznych pamiątek będą widoczne w ${siteConfig.currencyCode} przed płatnością. Koszty wysyłki, podatki i dodatkowe opłaty, jeżeli wystąpią, będą pokazane przed potwierdzeniem płatności.`,
                     },
                     {
                         type: "paragraph",
@@ -633,15 +633,15 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 ],
             },
             {
-                heading: "Wysyłka produktów fizycznych",
+                heading: "Wysyłka fizycznych pamiątek",
                 body: [
                     {
                         type: "paragraph",
-                        text: "Produkty fizyczne są wysyłane z Polski. Dostępne kraje dostawy, koszty wysyłki oraz szacowany czas dostawy będą pokazane przed płatnością.",
+                        text: "Fizyczne pamiątki są wysyłane z Polski. Dostępne kraje dostawy, koszty wysyłki oraz szacowany czas dostawy będą pokazane przed płatnością.",
                     },
                     {
                         type: "paragraph",
-                        text: "Niektóre produkty mogą być limitowane albo dostępne w przedsprzedaży. Jeżeli produkt wymaga czasu produkcji przed wysyłką, szacowany czas realizacji będzie pokazany przed zakupem.",
+                        text: "Niektóre pamiątki mogą być limitowane albo dostępne w przedsprzedaży. Jeżeli pamiątka wymaga czasu produkcji przed wysyłką, szacowany czas realizacji będzie pokazany przed zakupem.",
                     },
                 ],
             },
@@ -650,7 +650,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: `Zwrot produktu fizycznego można zgłosić przez kontakt na ${siteConfig.contactEmail}. Produkt powinien być nieużywany, nieuszkodzony i zwrócony w pierwotnym stanie, chyba że bezwzględnie obowiązujące przepisy prawa przewidują inaczej.`,
+                        text: `Zwrot fizycznej pamiątki można zgłosić przez kontakt na ${siteConfig.contactEmail}. Pamiątka powinna być nieużywana, nieuszkodzona i zwrócona w pierwotnym stanie, chyba że bezwzględnie obowiązujące przepisy prawa przewidują inaczej.`,
                     },
                     {
                         type: "paragraph",
@@ -659,11 +659,11 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 ],
             },
             {
-                heading: "Refundacje i reklamacje produktów",
+                heading: "Refundacje i reklamacje pamiątek",
                 body: [
                     {
                         type: "paragraph",
-                        text: `Zgłoszenia refundacji lub reklamacji można wysyłać na ${siteConfig.contactEmail}. Jeżeli produkt jest wadliwy, uszkodzony, niedostarczony albo istotnie różni się od opisu, zgłoszenie powinno zawierać numer zamówienia oraz opis problemu.`,
+                        text: `Zgłoszenia refundacji lub reklamacji można wysyłać na ${siteConfig.contactEmail}. Jeżeli pamiątka jest wadliwa, uszkodzona, niedostarczona albo istotnie różni się od opisu, zgłoszenie powinno zawierać numer zamówienia oraz opis problemu.`,
                     },
                     {
                         type: "paragraph",
@@ -676,20 +676,20 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: "Zamówienie produktu fizycznego można anulować przed rozpoczęciem realizacji. Jeżeli zamówienie zostało już wysłane, może być konieczne skorzystanie z procedury zwrotu.",
+                        text: "Zamówienie fizycznej pamiątki można anulować przed rozpoczęciem realizacji. Jeżeli zamówienie zostało już wysłane, może być konieczne skorzystanie z procedury zwrotu.",
                     },
                     {
                         type: "paragraph",
-                        text: "Dla produktów w przedsprzedaży warunki anulowania będą pokazane przed płatnością.",
+                        text: "Dla pamiątek w przedsprzedaży warunki anulowania będą pokazane przed płatnością.",
                     },
                 ],
             },
             {
-                heading: "QR i NFC w pinach",
+                heading: "QR i NFC w pamiątkach",
                 body: [
                     {
                         type: "paragraph",
-                        text: "Niektóre edycje pinów mogą zawierać QR lub NFC, które otwierają informacje o fizycznym produkcie albo pozwalają powiązać pin z istniejącym profilem 28 gór. QR ani NFC nie służą do płatnego odblokowywania cyfrowych funkcji aplikacji.",
+                        text: "Niektóre fizyczne pamiątki mogą zawierać QR lub NFC, które otwierają informacje o produkcie albo pozwalają powiązać pamiątkę z istniejącym profilem 28 gór. QR ani NFC nie są samodzielnym mechanizmem płatności.",
                     },
                 ],
             },
@@ -753,7 +753,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
         title: "Kontakt",
         effectiveDate: "Aktualizacja: 29 maja 2026 r.",
         intro: [
-            "Potrzebujesz pomocy z kontem, dostępem do danych, zamówieniem fizycznego produktu albo problemem technicznym? Napisz krótko, co się stało, na jakim urządzeniu i czego oczekiwałeś.",
+            "Potrzebujesz pomocy z kontem, dostępem do danych, zamówieniem fizycznej pamiątki albo problemem technicznym? Napisz krótko, co się stało, na jakim urządzeniu i czego oczekiwałeś.",
         ],
         sections: [
             {
@@ -802,7 +802,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                             "account data, such as a user identifier, email address, profile name, and account settings if an account is created,",
                             "app usage data, such as planned peaks, summit completion status, notes, photos, captions, preferences, and settings,",
                             "technical data, such as IP address, device type, browser, operating system, error logs, diagnostic identifiers, and approximate region,",
-                            "payment or physical order status information if collectible pins or related merch are launched in the future.",
+                            "physical keepsake order or payment status information.",
                         ],
                     },
                 ],
@@ -853,15 +853,15 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 ],
             },
             {
-                heading: "Physical product orders",
+                heading: "Physical keepsake orders",
                 body: [
                     {
                         type: "paragraph",
-                        text: "If physical collectible pins or related merch are launched in the app, we may process name, email address, delivery address, order details, and payment status to handle the order.",
+                        text: "If physical keepsakes are launched in the app, we may process name, email address, delivery address, order details, and payment status to handle the order.",
                     },
                     {
                         type: "paragraph",
-                        text: `Payments for physical products are handled by ${siteConfig.paymentProcessorName}. ${siteConfig.operatorName} does not store full payment card numbers.`,
+                        text: `${siteConfig.paymentProcessorName} handles payments only for physical keepsakes. ${siteConfig.operatorName} does not store full payment card numbers.`,
                     },
                 ],
             },
@@ -999,7 +999,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                     },
                     {
                         type: "paragraph",
-                        text: "The app may allow users to buy limited collectible pins, custom keepsakes, and related merch as physical products shipped to customers. Purchase terms will be shown before payment.",
+                        text: "The app may allow users to buy physical keepsakes shipped to customers. Purchase terms will be shown before payment.",
                     },
                 ],
             },
@@ -1066,15 +1066,15 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 ],
             },
             {
-                heading: "Physical products and payments",
+                heading: "Physical keepsakes and payments",
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} handles payments only for physical 28 gór products shipped to customers. 28 gór does not use ${siteConfig.paymentProcessorName} to sell digital app features, subscriptions, credits, premium access, feature unlocks, or digital content.`,
+                        text: `${siteConfig.paymentProcessorName} handles payments only for physical 28 gór keepsakes shipped to customers. Any other payments made available in the app will be described before confirmation.`,
                     },
                     {
                         type: "paragraph",
-                        text: `Prices for physical products will be shown in ${siteConfig.currencyCode} before payment. Shipping costs, taxes, and additional charges, if any, will be shown before payment confirmation.`,
+                        text: `Prices for physical keepsakes will be shown in ${siteConfig.currencyCode} before payment. Shipping costs, taxes, and additional charges, if any, will be shown before payment confirmation.`,
                     },
                     {
                         type: "paragraph",
@@ -1087,11 +1087,11 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "Physical products are shipped from Poland. Available delivery countries, shipping costs, and estimated delivery times will be shown before payment.",
+                        text: "Physical keepsakes are shipped from Poland. Available delivery countries, shipping costs, and estimated delivery times will be shown before payment.",
                     },
                     {
                         type: "paragraph",
-                        text: "Some products may be limited or available for preorder. If production time is required before shipping, the estimated fulfillment time will be shown before purchase.",
+                        text: "Some keepsakes may be limited or available for preorder. If production time is required before shipping, the estimated fulfillment time will be shown before purchase.",
                     },
                 ],
             },
@@ -1100,7 +1100,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: `Returns of physical products can be requested by contacting ${siteConfig.contactEmail}. The product should be unused, undamaged, and returned in its original condition unless mandatory law provides otherwise.`,
+                        text: `Returns of physical keepsakes can be requested by contacting ${siteConfig.contactEmail}. The keepsake should be unused, undamaged, and returned in its original condition unless mandatory law provides otherwise.`,
                     },
                     {
                         type: "paragraph",
@@ -1113,7 +1113,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: `Refund or complaint requests can be sent to ${siteConfig.contactEmail}. If a product is defective, damaged, not delivered, or materially different from the description, the request should include the order number and a description of the issue.`,
+                        text: `Refund or complaint requests can be sent to ${siteConfig.contactEmail}. If a keepsake is defective, damaged, not delivered, or materially different from the description, the request should include the order number and a description of the issue.`,
                     },
                     {
                         type: "paragraph",
@@ -1126,20 +1126,20 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: "A physical product order may be cancelled before fulfillment starts. If the order has already shipped, the return process may need to be used.",
+                        text: "A physical keepsake order may be cancelled before fulfillment starts. If the order has already shipped, the return process may need to be used.",
                     },
                     {
                         type: "paragraph",
-                        text: "For preorder products, cancellation terms will be shown before payment.",
+                        text: "For preorder keepsakes, cancellation terms will be shown before payment.",
                     },
                 ],
             },
             {
-                heading: "QR and NFC in pins",
+                heading: "QR and NFC in keepsakes",
                 body: [
                     {
                         type: "paragraph",
-                        text: "Some pin editions may include QR or NFC that opens information about the physical product or lets the user associate the pin with an existing 28 gór profile. QR and NFC are not used to unlock paid digital app features.",
+                        text: "Some physical keepsakes may include QR or NFC that opens product information or lets the user associate the keepsake with an existing 28 gór profile. QR and NFC are not a standalone payment mechanism.",
                     },
                 ],
             },
@@ -1203,7 +1203,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
         title: "Support",
         effectiveDate: "Updated: May 29, 2026",
         intro: [
-            "Need help with your account, data access, a physical product order, or a technical issue? Briefly describe what happened, what device you used, and what you expected.",
+            "Need help with your account, data access, a physical keepsake order, or a technical issue? Briefly describe what happened, what device you used, and what you expected.",
         ],
         sections: [
             {
@@ -1248,7 +1248,7 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                             "údaje účtu, pokud bude účet vytvořen, včetně e-mailu, názvu profilu a nastavení,",
                             "údaje z aplikace, například plánované vrcholy, výstupy, poznámky, fotky, popisky, preference a nastavení,",
                             "technické údaje, například IP adresa, typ zařízení, prohlížeč, operační systém, diagnostické údaje a přibližný region,",
-                            "údaje o objednávce fyzického produktu, pokud budou spuštěny piny, památky na objednávku nebo související merch.",
+                            "údaje o objednávce nebo platbě týkající se fyzické památky.",
                         ],
                     },
                 ],
@@ -1281,11 +1281,11 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                 ],
             },
             {
-                heading: "Fyzické produkty a platby",
+                heading: "Fyzické památky a platby",
                 body: [
                     {
                         type: "paragraph",
-                        text: `Pokud budou v aplikaci dostupné fyzické produkty, můžeme zpracovávat jméno, e-mail, doručovací adresu, údaje objednávky a stav platby. Platby zpracovává ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukládá úplná čísla platebních karet.`,
+                        text: `Pokud budou v aplikaci dostupné fyzické památky, můžeme zpracovávat jméno, e-mail, doručovací adresu, údaje objednávky a stav platby. Platby za fyzické památky zpracovává pouze ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukládá úplná čísla platebních karet.`,
                     },
                 ],
             },
@@ -1340,7 +1340,7 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                     },
                     {
                         type: "paragraph",
-                        text: "V aplikaci může být možné kupovat limitované piny, památky na objednávku a související merch jako fyzické produkty zasílané zákazníkům.",
+                        text: "V aplikaci může být možné kupovat fyzické památky zasílané zákazníkům.",
                     },
                 ],
             },
@@ -1367,15 +1367,15 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                 ],
             },
             {
-                heading: "Fyzické produkty a platby",
+                heading: "Fyzické památky a platby",
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} zpracovává pouze platby za fyzické produkty 28 gór. 28 gór nepoužívá ${siteConfig.paymentProcessorName} k prodeji digitálních funkcí aplikace, předplatného, kreditů ani digitálního obsahu.`,
+                        text: `${siteConfig.paymentProcessorName} zpracovává pouze platby za fyzické památky 28 gór zasílané zákazníkům. Jiné platby dostupné v aplikaci budou popsány před potvrzením.`,
                     },
                     {
                         type: "paragraph",
-                        text: `Ceny fyzických produktů budou uvedeny v ${siteConfig.currencyCode} před platbou. Podmínky doručení, vrácení, reklamací a zrušení objednávky budou zobrazeny před nákupem nebo zaslány podporou.`,
+                        text: `Ceny fyzických památek budou uvedeny v ${siteConfig.currencyCode} před platbou. Podmínky doručení, vrácení, reklamací a zrušení objednávky budou zobrazeny před nákupem nebo zaslány podporou.`,
                     },
                 ],
             },
@@ -1399,7 +1399,7 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
         title: "Podpora",
         effectiveDate: "Aktualizováno: 29. května 2026",
         intro: [
-            "Potřebujete pomoc s účtem, přístupem k údajům, objednávkou fyzického produktu nebo technickým problémem? Stručně popište, co se stalo, na jakém zařízení a co jste očekávali.",
+            "Potřebujete pomoc s účtem, přístupem k údajům, objednávkou fyzické památky nebo technickým problémem? Stručně popište, co se stalo, na jakém zařízení a co jste očekávali.",
         ],
         sections: [
             {
@@ -1444,7 +1444,7 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                             "údaje účtu, ak bude účet vytvorený, vrátane e-mailu, názvu profilu a nastavení,",
                             "údaje z aplikácie, napríklad plánované vrcholy, výstupy, poznámky, fotky, popisy, preferencie a nastavenia,",
                             "technické údaje, napríklad IP adresa, typ zariadenia, prehliadač, operačný systém, diagnostické údaje a približný región,",
-                            "údaje o objednávke fyzického produktu, ak budú spustené piny, pamiatky na objednávku alebo súvisiaci merch.",
+                            "údaje o objednávke alebo platbe týkajúcej sa fyzickej pamiatky.",
                         ],
                     },
                 ],
@@ -1477,11 +1477,11 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                 ],
             },
             {
-                heading: "Fyzické produkty a platby",
+                heading: "Fyzické pamiatky a platby",
                 body: [
                     {
                         type: "paragraph",
-                        text: `Ak budú v aplikácii dostupné fyzické produkty, môžeme spracúvať meno, e-mail, doručovaciu adresu, údaje objednávky a stav platby. Platby spracúva ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukladá úplné čísla platobných kariet.`,
+                        text: `Ak budú v aplikácii dostupné fyzické pamiatky, môžeme spracúvať meno, e-mail, doručovaciu adresu, údaje objednávky a stav platby. Platby za fyzické pamiatky spracúva iba ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukladá úplné čísla platobných kariet.`,
                     },
                 ],
             },
@@ -1536,7 +1536,7 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                     },
                     {
                         type: "paragraph",
-                        text: "V aplikácii môže byť možné kupovať limitované piny, pamiatky na objednávku a súvisiaci merch ako fyzické produkty zasielané zákazníkom.",
+                        text: "V aplikácii môže byť možné kupovať fyzické pamiatky zasielané zákazníkom.",
                     },
                 ],
             },
@@ -1563,15 +1563,15 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                 ],
             },
             {
-                heading: "Fyzické produkty a platby",
+                heading: "Fyzické pamiatky a platby",
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} spracúva iba platby za fyzické produkty 28 gór. 28 gór nepoužíva ${siteConfig.paymentProcessorName} na predaj digitálnych funkcií aplikácie, predplatného, kreditov ani digitálneho obsahu.`,
+                        text: `${siteConfig.paymentProcessorName} spracúva iba platby za fyzické pamiatky 28 gór zasielané zákazníkom. Iné platby dostupné v aplikácii budú opísané pred potvrdením.`,
                     },
                     {
                         type: "paragraph",
-                        text: `Ceny fyzických produktov budú uvedené v ${siteConfig.currencyCode} pred platbou. Podmienky doručenia, vrátenia, reklamácií a zrušenia objednávky budú zobrazené pred nákupom alebo zaslané podporou.`,
+                        text: `Ceny fyzických pamiatok budú uvedené v ${siteConfig.currencyCode} pred platbou. Podmienky doručenia, vrátenia, reklamácií a zrušenia objednávky budú zobrazené pred nákupom alebo zaslané podporou.`,
                     },
                 ],
             },
@@ -1595,7 +1595,7 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
         title: "Podpora",
         effectiveDate: "Aktualizované: 29. mája 2026",
         intro: [
-            "Potrebujete pomoc s účtom, prístupom k údajom, objednávkou fyzického produktu alebo technickým problémom? Stručne opíšte, čo sa stalo, na akom zariadení a čo ste očakávali.",
+            "Potrebujete pomoc s účtom, prístupom k údajom, objednávkou fyzickej pamiatky alebo technickým problémom? Stručne opíšte, čo sa stalo, na akom zariadení a čo ste očakávali.",
         ],
         sections: [
             {
@@ -1640,7 +1640,7 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                             "дані акаунта, якщо акаунт буде створено, зокрема e-mail, назва профілю та налаштування,",
                             "дані застосунку, наприклад заплановані вершини, сходження, нотатки, фото, підписи, вподобання та налаштування,",
                             "технічні дані, наприклад IP-адреса, тип пристрою, браузер, операційна система, діагностичні дані та приблизний регіон,",
-                            "дані замовлення фізичного продукту, якщо будуть запущені піни, пам’ятки на замовлення або пов’язаний мерч.",
+                            "дані замовлення або платежу щодо фізичної пам’ятки.",
                         ],
                     },
                 ],
@@ -1673,11 +1673,11 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                 ],
             },
             {
-                heading: "Фізичні продукти та платежі",
+                heading: "Фізичні пам’ятки та платежі",
                 body: [
                     {
                         type: "paragraph",
-                        text: `Якщо в застосунку будуть доступні фізичні продукти, ми можемо обробляти ім’я, e-mail, адресу доставки, дані замовлення та статус платежу. Платежі обробляє ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} не зберігає повні номери платіжних карток.`,
+                        text: `Якщо в застосунку будуть доступні фізичні пам’ятки, ми можемо обробляти ім’я, e-mail, адресу доставки, дані замовлення та статус платежу. Платежі за фізичні пам’ятки обробляє лише ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} не зберігає повні номери платіжних карток.`,
                     },
                 ],
             },
@@ -1732,7 +1732,7 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                     },
                     {
                         type: "paragraph",
-                        text: "У застосунку може бути можливість купувати лімітовані піни, пам’ятки на замовлення та пов’язаний мерч як фізичні продукти з доставкою клієнтам.",
+                        text: "У застосунку може бути можливість купувати фізичні пам’ятки з доставкою клієнтам.",
                     },
                 ],
             },
@@ -1759,15 +1759,15 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                 ],
             },
             {
-                heading: "Фізичні продукти та платежі",
+                heading: "Фізичні пам’ятки та платежі",
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} обробляє лише платежі за фізичні продукти 28 gór. 28 gór не використовує ${siteConfig.paymentProcessorName} для продажу цифрових функцій застосунку, підписок, кредитів або цифрового контенту.`,
+                        text: `${siteConfig.paymentProcessorName} обробляє лише платежі за фізичні пам’ятки 28 gór з доставкою клієнтам. Інші платежі, доступні в застосунку, будуть описані перед підтвердженням.`,
                     },
                     {
                         type: "paragraph",
-                        text: `Ціни фізичних продуктів будуть показані в ${siteConfig.currencyCode} перед оплатою. Умови доставки, повернення, рекламацій і скасування замовлення будуть показані перед купівлею або надіслані підтримкою.`,
+                        text: `Ціни фізичних пам’яток будуть показані в ${siteConfig.currencyCode} перед оплатою. Умови доставки, повернення, рекламацій і скасування замовлення будуть показані перед купівлею або надіслані підтримкою.`,
                     },
                 ],
             },
@@ -1791,7 +1791,7 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
         title: "Підтримка",
         effectiveDate: "Оновлено: 29 травня 2026 р.",
         intro: [
-            "Потрібна допомога з акаунтом, доступом до даних, замовленням фізичного продукту або технічною проблемою? Коротко опишіть, що сталося, на якому пристрої та чого ви очікували.",
+            "Потрібна допомога з акаунтом, доступом до даних, замовленням фізичної пам’ятки або технічною проблемою? Коротко опишіть, що сталося, на якому пристрої та чого ви очікували.",
         ],
         sections: [
             {
