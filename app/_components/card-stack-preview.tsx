@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { SiteLocale } from "../_lib/site-content"
 
 type CardStackCard = {
@@ -11,10 +11,27 @@ type CardStackCard = {
     badgeRotation: number
 }
 
-type CardStackCardLayout = CardStackCard & {
+type CardStackTransform = {
     x: number
     y: number
     rotation: number
+}
+
+type CardStackConfig = {
+    cards: readonly CardStackCard[]
+    ariaLabels: Record<SiteLocale, string>
+    badge: {
+        src: string
+        size: number
+        inset: number
+    }
+    fallbackLayout: readonly CardStackTransform[]
+}
+
+type CardStackPreviewProps = {
+    locale: SiteLocale
+    variant?: "adventure" | "stats"
+    onInitialEntryComplete?: () => void
 }
 
 type DepartingCard = {
@@ -23,7 +40,7 @@ type DepartingCard = {
     directionY: number
 }
 
-const cardStackCards = [
+const adventureCards = [
     {
         src: "/card-stack/walking2.jpeg",
         labels: {
@@ -114,7 +131,7 @@ const cardStackCards = [
     },
 ] as const satisfies readonly CardStackCard[]
 
-const cardStackAriaLabels: Record<SiteLocale, string> = {
+const adventureAriaLabels: Record<SiteLocale, string> = {
     pl: "Stos zdjęć Ryska z aplikacji 28 gór.",
     en: "A stack of Rysek photos from the 28 gór app.",
     cs: "Stoh fotek Ryska z aplikace 28 gór.",
@@ -122,8 +139,91 @@ const cardStackAriaLabels: Record<SiteLocale, string> = {
     uk: "Стос фото Ryska із застосунку 28 gór.",
 }
 
-const appBadge = {
+const statsCards = [
+    {
+        src: "/misc/stats.jpeg",
+        labels: {
+            pl: "Wymyśla nową grę",
+            en: "Invents a new game",
+            cs: "Vymýšlí novou hru",
+            sk: "Vymýšľa novú hru",
+            uk: "Вигадує нову гру",
+        },
+        badgeRotation: -8,
+    },
+    {
+        src: "/misc/stats2.jpeg",
+        labels: {
+            pl: "Zabezpiecza dane",
+            en: "Keeps the data safe",
+            cs: "Hlídá data",
+            sk: "Chráni dáta",
+            uk: "Береже дані",
+        },
+        badgeRotation: 7,
+    },
+    {
+        src: "/misc/stats3.jpeg",
+        labels: {
+            pl: "Liczy szczyty na palcach",
+            en: "Counts peaks on fingers",
+            cs: "Počítá vrcholy na prstech",
+            sk: "Počíta vrcholy na prstoch",
+            uk: "Рахує вершини на пальцях",
+        },
+        badgeRotation: 10,
+    },
+    {
+        src: "/misc/stats4.jpeg",
+        labels: {
+            pl: "Testuje wykresy w schronisku",
+            en: "Tests charts at basecamp",
+            cs: "Testuje grafy na chatě",
+            sk: "Testuje grafy na chate",
+            uk: "Тестує графіки в хатині",
+        },
+        badgeRotation: -6,
+    },
+    {
+        src: "/misc/stats5.jpeg",
+        labels: {
+            pl: "Udaje, że to praca",
+            en: "Pretends this is work",
+            cs: "Tváří se, že pracuje",
+            sk: "Tvári sa, že pracuje",
+            uk: "Робить вигляд, що працює",
+        },
+        badgeRotation: 5,
+    },
+    {
+        src: "/misc/stats6-ai.jpeg",
+        labels: {
+            pl: "Robi backup przygody",
+            en: "Backs up the adventure",
+            cs: "Zálohuje dobrodružství",
+            sk: "Zálohuje dobrodružstvo",
+            uk: "Робить бекап пригоди",
+        },
+        badgeRotation: -10,
+    },
+] as const satisfies readonly CardStackCard[]
+
+const statsAriaLabels: Record<SiteLocale, string> = {
+    pl: "Stos zdjęć z aplikacji 28 gór.",
+    en: "A stack of 28 gór app photos.",
+    cs: "Stoh fotek z aplikace 28 gór.",
+    sk: "Stoh fotiek z aplikácie 28 gór.",
+    uk: "Стос фото із застосунку 28 gór.",
+}
+
+const adventureBadge = {
     src: "/app-icon.png",
+    size: 44,
+    inset: 15,
+} as const
+
+const statsBadge = {
+    src: "/misc/stats-app-icon.png",
     size: 44,
     inset: 15,
 } as const
@@ -140,6 +240,30 @@ const fallbackCardLayout = [
     { x: -4, y: -42, rotation: -2 },
     { x: 30, y: -20, rotation: 8 },
 ] as const
+
+const fallbackStatsLayout = [
+    { x: -35, y: 18, rotation: -11 },
+    { x: 22, y: -12, rotation: 9 },
+    { x: -8, y: 24, rotation: -4 },
+    { x: 38, y: -28, rotation: 13 },
+    { x: -28, y: -34, rotation: -8 },
+    { x: 14, y: 12, rotation: 5 },
+] as const
+
+const cardStackConfigs = {
+    adventure: {
+        cards: adventureCards,
+        ariaLabels: adventureAriaLabels,
+        badge: adventureBadge,
+        fallbackLayout: fallbackCardLayout,
+    },
+    stats: {
+        cards: statsCards,
+        ariaLabels: statsAriaLabels,
+        badge: statsBadge,
+        fallbackLayout: fallbackStatsLayout,
+    },
+} as const satisfies Record<NonNullable<CardStackPreviewProps["variant"]>, CardStackConfig>
 
 const flick = {
     exitDistance: 980,
@@ -161,15 +285,17 @@ function randomBetween(min: number, max: number) {
     return min + Math.random() * (max - min)
 }
 
-function createFallbackCardStackLayout(): CardStackCardLayout[] {
-    return cardStackCards.map((card, index) => ({ ...card, ...fallbackCardLayout[index] }))
+function createFallbackCardStackLayout(config: CardStackConfig): CardStackTransform[] {
+    return config.cards.map((_, index) => {
+        const transform = config.fallbackLayout[index] ?? fallbackCardLayout[index % fallbackCardLayout.length]
+        return { ...transform }
+    })
 }
 
-function createRandomCardStackLayout(): CardStackCardLayout[] {
-    return cardStackCards.map((card, index) => {
-        const depthBias = index / (cardStackCards.length - 1)
+function createRandomCardStackLayout(cardCount: number): CardStackTransform[] {
+    return Array.from({ length: cardCount }, (_, index) => {
+        const depthBias = cardCount > 1 ? index / (cardCount - 1) : 0
         return {
-            ...card,
             x: randomBetween(-42, 42) * (0.78 + depthBias * 0.24),
             y: randomBetween(-52, 28),
             rotation: randomBetween(-14, 14),
@@ -177,8 +303,8 @@ function createRandomCardStackLayout(): CardStackCardLayout[] {
     })
 }
 
-function topVisibleCardIndex(dismissedCards: Set<number>, departingCardIndex: number | null) {
-    for (let index = 0; index < cardStackCards.length; index += 1) {
+function topVisibleCardIndex(cardCount: number, dismissedCards: Set<number>, departingCardIndex: number | null) {
+    for (let index = 0; index < cardCount; index += 1) {
         if (!dismissedCards.has(index) && index !== departingCardIndex) {
             return index
         }
@@ -203,34 +329,48 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
     }
 }
 
-export function CardStackPreview({ locale }: { locale: SiteLocale }) {
+export function CardStackPreview({ locale, variant = "adventure", onInitialEntryComplete }: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
-    const [cardLayouts, setCardLayouts] = useState<CardStackCardLayout[]>(createFallbackCardStackLayout)
+    const stackConfig = cardStackConfigs[variant]
+    const [cardLayouts, setCardLayouts] = useState<CardStackTransform[]>(() => createFallbackCardStackLayout(stackConfig))
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
     const [deckResetKey, setDeckResetKey] = useState(0)
+    const initialEntryReportedRef = useRef(false)
     const activeCardIndex = useMemo(
-        () => topVisibleCardIndex(dismissedCards, departingCard?.index ?? null),
-        [departingCard, dismissedCards],
+        () => topVisibleCardIndex(stackConfig.cards.length, dismissedCards, departingCard?.index ?? null),
+        [departingCard, dismissedCards, stackConfig.cards.length],
     )
+    const shouldPlayDeckEntryAnimation = !prefersReducedMotion
 
     useEffect(() => {
-        setCardLayouts(createRandomCardStackLayout())
-    }, [])
+        setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
+        setDismissedCards(new Set())
+        setDepartingCard(null)
+    }, [stackConfig.cards.length])
 
     useEffect(() => {
-        if (dismissedCards.size !== cardStackCards.length) {
+        if (shouldPlayDeckEntryAnimation || !onInitialEntryComplete || initialEntryReportedRef.current) {
+            return
+        }
+
+        initialEntryReportedRef.current = true
+        onInitialEntryComplete()
+    }, [onInitialEntryComplete, shouldPlayDeckEntryAnimation])
+
+    useEffect(() => {
+        if (dismissedCards.size !== stackConfig.cards.length) {
             return
         }
 
         const resetTimer = window.setTimeout(() => {
-            setCardLayouts(createRandomCardStackLayout())
+            setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
             setDismissedCards(new Set())
             setDeckResetKey((currentKey) => currentKey + 1)
         }, flick.resetDelayMs)
 
         return () => window.clearTimeout(resetTimer)
-    }, [dismissedCards])
+    }, [dismissedCards, stackConfig.cards.length])
 
     function handleDragEnd(index: number, offset: { x: number; y: number }, velocity: { x: number; y: number }) {
         const shouldDismiss =
@@ -244,6 +384,17 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
     }
 
     function handleAnimationComplete(index: number) {
+        if (
+            onInitialEntryComplete
+            && !initialEntryReportedRef.current
+            && dismissedCards.size === 0
+            && departingCard === null
+            && index === 0
+        ) {
+            initialEntryReportedRef.current = true
+            onInitialEntryComplete()
+        }
+
         if (departingCard?.index !== index) {
             return
         }
@@ -258,7 +409,6 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
         "relative h-[310px] w-full max-w-[320px] touch-none select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
     const cardClassName =
         "absolute left-1/2 top-1/2 w-[236px] xl:w-[min(30vw,360px)] xl:max-w-[360px]"
-    const shouldPlayDeckEntryAnimation = !prefersReducedMotion
 
     return (
         <div className={frameClassName}>
@@ -268,28 +418,29 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                 style={{ backgroundColor: "var(--shadow-ground)" }}
             />
             <div
-                key={deckResetKey}
+                key={`${variant}-${deckResetKey}`}
                 className={deckClassName}
                 role="img"
-                aria-label={cardStackAriaLabels[locale]}
+                aria-label={stackConfig.ariaLabels[locale]}
             >
-                {cardLayouts.map((card, index) => {
+                {stackConfig.cards.map((card, index) => {
                     if (dismissedCards.has(index)) {
                         return null
                     }
 
+                    const cardTransform = cardLayouts[index] ?? stackConfig.fallbackLayout[index] ?? fallbackCardLayout[index % fallbackCardLayout.length]
                     const isTopCard = index === activeCardIndex
                     const isDeparting = departingCard?.index === index
                     const canDragCard = isTopCard && !isDeparting
                     const stackDepth = Math.max(index - activeCardIndex, 0)
                     const scale = isTopCard ? 1 : Math.max(0.9, 1 - stackDepth * 0.018)
-                    const y = card.y
-                    const x = isDeparting ? departingCard.directionX * flick.exitDistance : card.x
+                    const y = cardTransform.y
+                    const x = isDeparting ? departingCard.directionX * flick.exitDistance : cardTransform.x
                     const exitY = isDeparting ? y + departingCard.directionY * flick.exitDistance : y
-                    const rotation = isDeparting ? card.rotation + departingCard.directionX * 28 : card.rotation
+                    const rotation = isDeparting ? cardTransform.rotation + departingCard.directionX * 28 : cardTransform.rotation
                     const animationDelay =
                         dismissedCards.size === 0 && departingCard === null && shouldPlayDeckEntryAnimation
-                            ? deckEntry.logoDelaySeconds + (cardStackCards.length - 1 - index) * deckEntry.cardStaggerSeconds
+                            ? deckEntry.logoDelaySeconds + (stackConfig.cards.length - 1 - index) * deckEntry.cardStaggerSeconds
                             : 0
 
                     return (
@@ -298,7 +449,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                             className={`${cardClassName} -translate-x-1/2 -translate-y-1/2`}
                             style={{
                                 pointerEvents: canDragCard ? "auto" : "none",
-                                zIndex: cardStackCards.length - index,
+                                zIndex: stackConfig.cards.length - index,
                             }}
                         >
                             <motion.div
@@ -308,7 +459,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                 initial={
                                     shouldPlayDeckEntryAnimation
                                         ? { opacity: 0, x: 0, y: -620, rotate: 0, scale: 1.16 }
-                                        : { opacity: 1, x, y, rotate: card.rotation, scale }
+                                        : { opacity: 1, x, y, rotate: cardTransform.rotation, scale }
                                 }
                                 animate={{
                                     opacity: isDeparting ? 0 : 1,
@@ -361,15 +512,15 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                             onDragStart={(event) => event.preventDefault()}
                                         />
                                         <Image
-                                            src={appBadge.src}
+                                            src={stackConfig.badge.src}
                                             alt=""
-                                            width={appBadge.size}
-                                            height={appBadge.size}
+                                            width={stackConfig.badge.size}
+                                            height={stackConfig.badge.size}
                                             draggable={false}
                                             className="pointer-events-none absolute select-none rounded-[10px] shadow-[0_8px_20px_rgba(0,0,0,0.22)]"
                                             style={{
-                                                right: appBadge.inset,
-                                                top: appBadge.inset,
+                                                right: stackConfig.badge.inset,
+                                                top: stackConfig.badge.inset,
                                                 transform: `rotate(${card.badgeRotation}deg)`,
                                             }}
                                             onDragStart={(event) => event.preventDefault()}

@@ -45,16 +45,20 @@ type ComplianceNoticeProps = {
     content: (typeof homeContent)[SiteLocale]["compliance"]
 }
 
+const legalAccentStyle = { color: "var(--accent)" }
+const legalNavLinkClassName = "text-[15px] leading-[20px] font-semibold transition-[color,filter] hover:brightness-95"
+const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
+
 function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
     return (
-        <nav className={`flex items-center gap-4 ${className}`} aria-label="Legal">
-            <SmoothLink className="text-[15px] leading-[20px] font-semibold text-[var(--text-muted)]" href="/privacy">
+        <nav className={`flex items-center gap-4 ${className}`} style={legalAccentStyle} aria-label="Legal">
+            <SmoothLink className={legalNavLinkClassName} href="/privacy">
                 {labels.privacy}
             </SmoothLink>
-            <SmoothLink className="text-[15px] leading-[20px] font-semibold text-[var(--text-muted)]" href="/terms">
+            <SmoothLink className={legalNavLinkClassName} href="/terms">
                 {labels.terms}
             </SmoothLink>
-            <SmoothLink className="text-[15px] leading-[20px] font-semibold text-[var(--text-muted)]" href="/support">
+            <SmoothLink className={legalNavLinkClassName} href="/support">
                 {labels.support}
             </SmoothLink>
         </nav>
@@ -72,11 +76,11 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
             ))}
             <span aria-hidden> · </span>
             <span>{content.contactLabel}: </span>
-            <a href={`mailto:${siteConfig.contactEmail}`} className="underline decoration-transparent underline-offset-4 hover:decoration-current">
+            <a href={`mailto:${siteConfig.contactEmail}`} className={legalInlineLinkClassName} style={legalAccentStyle}>
                 {siteConfig.contactEmail}
             </a>
             <span aria-hidden> · </span>
-            <SmoothLink href="/terms" className="underline decoration-transparent underline-offset-4 hover:decoration-current">
+            <SmoothLink href="/terms" className={legalInlineLinkClassName} style={legalAccentStyle}>
                 {content.legalPolicies}
             </SmoothLink>
         </p>
@@ -86,7 +90,6 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
 const storyRevealTiming = {
     copyDelayMs: 2200,
     actionDelayMs: 2620,
-    footerDelayMs: 3050,
 } as const
 
 const topChromeClassName = "mx-auto flex max-w-[var(--layout-max-width)] items-start gap-4 px-5 pt-6 lg:px-[28px] lg:pt-[34px] xl:px-[32px]"
@@ -95,10 +98,12 @@ export function HomePageClient() {
     const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
     const content = homeContent[locale]
     const storySectionRef = useRef<HTMLElement | null>(null)
+    const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
     const [storyCopyVisible, setStoryCopyVisible] = useState(false)
     const [storyActionVisible, setStoryActionVisible] = useState(false)
-    const [storyFooterVisible, setStoryFooterVisible] = useState(false)
+    const [statsStarted, setStatsStarted] = useState(false)
+    const [statsFooterVisible, setStatsFooterVisible] = useState(false)
     const [brandAnimationCycle, setBrandAnimationCycle] = useState(0)
     const brandAnimationRunningRef = useRef(false)
 
@@ -117,6 +122,10 @@ export function HomePageClient() {
 
         brandAnimationRunningRef.current = true
         setBrandAnimationCycle((cycle) => cycle + 1)
+    }, [])
+
+    const handleStatsStackEntryComplete = useCallback(() => {
+        setStatsFooterVisible(true)
     }, [])
 
     useEffect(() => {
@@ -149,14 +158,35 @@ export function HomePageClient() {
 
         const copyTimer = window.setTimeout(() => setStoryCopyVisible(true), storyRevealTiming.copyDelayMs)
         const actionTimer = window.setTimeout(() => setStoryActionVisible(true), storyRevealTiming.actionDelayMs)
-        const footerTimer = window.setTimeout(() => setStoryFooterVisible(true), storyRevealTiming.footerDelayMs)
 
         return () => {
             window.clearTimeout(copyTimer)
             window.clearTimeout(actionTimer)
-            window.clearTimeout(footerTimer)
         }
     }, [storyStarted])
+
+    useEffect(() => {
+        const statsSection = statsSectionRef.current
+        if (!statsSection || statsStarted) {
+            return
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry?.isIntersecting) {
+                    return
+                }
+
+                setStatsStarted(true)
+                observer.disconnect()
+            },
+            { threshold: 0.18 },
+        )
+
+        observer.observe(statsSection)
+
+        return () => observer.disconnect()
+    }, [statsStarted])
 
     return (
         <main className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]">
@@ -231,15 +261,30 @@ export function HomePageClient() {
                 </article>
             </section>
 
-            <section className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center justify-center px-5 pt-[96px] pb-[2em] text-center lg:px-[28px] xl:px-[32px]">
-                <footer
-                    className={`flex flex-col items-center gap-3 transition duration-700 ease-out ${
-                        storyFooterVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
-                    }`}
-                >
-                    <LocalizedLegalNav labels={content.nav} />
-                    <ComplianceNotice content={content.compliance} />
-                </footer>
+            <section
+                ref={statsSectionRef}
+                className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center justify-center px-5 pt-[96px] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
+            >
+                <div className="flex w-full max-w-[760px] flex-col items-center justify-center gap-[clamp(3rem,7dvh,4rem)]">
+                    {statsStarted ? (
+                        <CardStackPreview
+                            locale={locale}
+                            variant="stats"
+                            onInitialEntryComplete={handleStatsStackEntryComplete}
+                        />
+                    ) : (
+                        <div className="h-[338px] w-full xl:h-[min(66dvh,640px)] xl:min-h-[500px]" aria-hidden />
+                    )}
+                    <footer
+                        aria-hidden={!statsFooterVisible}
+                        className={`flex flex-col items-center gap-3 transition duration-700 ease-out ${
+                            statsFooterVisible ? "translate-y-0 opacity-100 blur-0" : "pointer-events-none translate-y-5 opacity-0 blur-[2px]"
+                        }`}
+                    >
+                        <LocalizedLegalNav labels={content.nav} />
+                        <ComplianceNotice content={content.compliance} />
+                    </footer>
+                </div>
             </section>
         </main>
     )
