@@ -159,7 +159,7 @@ export function HomePageClient() {
     }, [storyStarted])
 
     return (
-        <main className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]">
+        <main className="page-transition-shell h-[100dvh] overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)] xl:snap-y xl:snap-mandatory">
             <div className="sticky top-0 z-30 h-0 overflow-visible">
                 <div className={`pointer-events-none justify-start ${topChromeClassName}`}>
                     <div className="pointer-events-auto">
@@ -168,7 +168,7 @@ export function HomePageClient() {
                 </div>
             </div>
 
-            <section className="relative flex h-[100dvh] snap-start snap-always items-center justify-center overflow-hidden px-0 pt-[84px] pb-8 lg:pt-[120px]">
+            <section className="relative flex h-[100dvh] items-center justify-center overflow-hidden px-0 pt-[84px] pb-8 lg:pt-[120px] xl:snap-start xl:snap-always">
                 <div className={`pointer-events-none absolute inset-x-0 top-0 z-20 justify-end ${topChromeClassName}`}>
                     <div className="pointer-events-auto">
                         <SiteControls
@@ -187,7 +187,7 @@ export function HomePageClient() {
 
             <section
                 ref={storySectionRef}
-                className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
+                className="relative flex min-h-[100dvh] flex-col items-center px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:snap-start xl:snap-always xl:px-[32px]"
             >
                 <article className="flex w-full max-w-[720px] flex-col items-center">
                     <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
