@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
-import { LegalDocument, siteConfig, siteLanguages } from "../_lib/site-content"
+import {
+    LegalDocument,
+    siteConfig,
+    siteLanguages,
+    siteSocialImage,
+    siteSocialTwitterImage,
+} from "../_lib/site-content"
 import { LegalPageClient } from "./legal-page-client"
 
 export function buildLegalMetadata(document: LegalDocument): Metadata {
     const description = document.intro.join(" ")
     const url = `${siteConfig.siteUrl}/${document.slug}`
-    const image = {
-        url: siteConfig.socialImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.socialImageAlt,
-    } as const
 
     return {
         title: document.title,
@@ -26,13 +26,13 @@ export function buildLegalMetadata(document: LegalDocument): Metadata {
             alternateLocale: siteLanguages
                 .filter((language) => language.ogLocale !== "pl_PL")
                 .map((language) => language.ogLocale),
-            images: [image],
+            images: [siteSocialImage],
         },
         twitter: {
             card: "summary_large_image",
             title: `${document.title} | ${siteConfig.name}`,
             description,
-            images: [siteConfig.socialImage],
+            images: [siteSocialTwitterImage],
         },
     }
 }

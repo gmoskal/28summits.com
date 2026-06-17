@@ -19,8 +19,22 @@ export const siteConfig = {
     description: "28 gór zbiera plany, wejścia, zdjęcia, ręcznie rysowane pieczątki, edukację i górskie pamiątki w jednej dopracowanej aplikacji.",
     socialTitle: "28 gór - wszystko z gór w jednym pięknym miejscu",
     socialDescription: "Zbieraj wejścia, zdjęcia, notatki i pieczątki rysowane dla każdego szczytu. Zamawiaj pamiątki i odkrywaj edukacyjne treści z Ryskiem.",
-    socialImage: "/og-image.png",
+    socialImage: "/og-image.png?v=20260617",
     socialImageAlt: "28 gór - dopracowana aplikacja z ręcznie rysowanymi pieczątkami, zdjęciami, edukacją i pamiątkami z tras.",
+} as const
+
+export const siteSocialImage = {
+    url: siteConfig.socialImage,
+    secureUrl: `${siteConfig.siteUrl}${siteConfig.socialImage}`,
+    width: 1200,
+    height: 630,
+    type: "image/png",
+    alt: siteConfig.socialImageAlt,
+} as const
+
+export const siteSocialTwitterImage = {
+    url: siteConfig.socialImage,
+    alt: siteConfig.socialImageAlt,
 } as const
 
 export const siteLanguages = [

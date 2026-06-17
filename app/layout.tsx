@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Caveat } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
-import { siteConfig, siteLanguages } from "./_lib/site-content"
+import { siteConfig, siteLanguages, siteSocialImage, siteSocialTwitterImage } from "./_lib/site-content"
 
 const inter = localFont({
     src: "./fonts/InterVariable.woff2",
@@ -17,13 +17,6 @@ const caveat = Caveat({
     display: "swap",
     weight: ["400", "500", "600", "700"],
 })
-
-const socialImage = {
-    url: siteConfig.socialImage,
-    width: 1200,
-    height: 630,
-    alt: siteConfig.socialImageAlt,
-} as const
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteConfig.siteUrl),
@@ -54,13 +47,13 @@ export const metadata: Metadata = {
         alternateLocale: siteLanguages
             .filter((language) => language.ogLocale !== "pl_PL")
             .map((language) => language.ogLocale),
-        images: [socialImage],
+        images: [siteSocialImage],
     },
     twitter: {
         card: "summary_large_image",
         title: siteConfig.socialTitle,
         description: siteConfig.socialDescription,
-        images: [siteConfig.socialImage],
+        images: [siteSocialTwitterImage],
     },
 }
 
