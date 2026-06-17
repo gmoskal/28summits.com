@@ -23,10 +23,10 @@ export function BrandMark({ compact = false, showName = true }: BrandMarkProps) 
             <Image
                 src={siteConfig.appIconHeader}
                 alt=""
-                width={80}
-                height={80}
+                width={160}
+                height={160}
+                quality={100}
                 priority={!compact}
-                unoptimized
                 sizes="80px"
                 className="h-20 w-20 rounded-[15px] shadow-[0_16px_38px_rgba(0,0,0,0.08)]"
             />

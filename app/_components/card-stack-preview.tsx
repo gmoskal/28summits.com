@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { SiteLocale } from "../_lib/site-content"
 
 type CardStackCard = {
@@ -22,8 +22,9 @@ type CardStackConfig = {
     ariaLabels: Record<SiteLocale, string>
     badge: {
         src: string
-        size: number
+        displaySize: number
         inset: number
+        sourceSize: number
     }
     fallbackLayout: readonly CardStackTransform[]
 }
@@ -31,7 +32,6 @@ type CardStackConfig = {
 type CardStackPreviewProps = {
     locale: SiteLocale
     variant?: "adventure" | "stats"
-    onInitialEntryComplete?: () => void
 }
 
 type DepartingCard = {
@@ -144,7 +144,7 @@ const statsCards = [
         src: "/misc/stats.jpeg",
         labels: {
             pl: "Wymyśla nową grę",
-            en: "Invents a new game",
+            en: "Dreams up a new game",
             cs: "Vymýšlí novou hru",
             sk: "Vymýšľa novú hru",
             uk: "Вигадує нову гру",
@@ -154,55 +154,55 @@ const statsCards = [
     {
         src: "/misc/stats2.jpeg",
         labels: {
-            pl: "Zabezpiecza dane",
-            en: "Keeps the data safe",
-            cs: "Hlídá data",
-            sk: "Chráni dáta",
-            uk: "Береже дані",
+            pl: "Pilnuje danych jak skarbów",
+            en: "Guards data like treasure",
+            cs: "Hlídá data jako poklad",
+            sk: "Stráži dáta ako poklad",
+            uk: "Пильнує дані як скарб",
         },
         badgeRotation: 7,
     },
     {
         src: "/misc/stats3.jpeg",
         labels: {
-            pl: "Liczy szczyty na palcach",
-            en: "Counts peaks on fingers",
-            cs: "Počítá vrcholy na prstech",
-            sk: "Počíta vrcholy na prstoch",
-            uk: "Рахує вершини на пальцях",
+            pl: "Liczy szczyty po cichutku",
+            en: "Counts peaks very quietly",
+            cs: "Počítá vrcholy potichu",
+            sk: "Počíta vrcholy potichu",
+            uk: "Рахує вершини тихенько",
         },
         badgeRotation: 10,
     },
     {
         src: "/misc/stats4.jpeg",
         labels: {
-            pl: "Testuje wykresy w schronisku",
-            en: "Tests charts at basecamp",
-            cs: "Testuje grafy na chatě",
-            sk: "Testuje grafy na chate",
-            uk: "Тестує графіки в хатині",
+            pl: "Układa wykresy do snu",
+            en: "Tucks charts in for sleep",
+            cs: "Ukládá grafy ke spánku",
+            sk: "Ukladá grafy na spánok",
+            uk: "Вкладає графіки спати",
         },
         badgeRotation: -6,
     },
     {
         src: "/misc/stats5.jpeg",
         labels: {
-            pl: "Udaje, że to praca",
-            en: "Pretends this is work",
-            cs: "Tváří se, že pracuje",
-            sk: "Tvári sa, že pracuje",
-            uk: "Робить вигляд, що працює",
+            pl: "Szykuje małe niespodzianki",
+            en: "Preps tiny surprises",
+            cs: "Chystá malá překvapení",
+            sk: "Chystá malé prekvapenia",
+            uk: "Готує маленькі сюрпризи",
         },
         badgeRotation: 5,
     },
     {
         src: "/misc/stats6-ai.jpeg",
         labels: {
-            pl: "Robi backup przygody",
-            en: "Backs up the adventure",
-            cs: "Zálohuje dobrodružství",
-            sk: "Zálohuje dobrodružstvo",
-            uk: "Робить бекап пригоди",
+            pl: "Pakuje wspomnienia do plecaka",
+            en: "Packs memories into a backpack",
+            cs: "Balí vzpomínky do batohu",
+            sk: "Balí spomienky do batohu",
+            uk: "Пакує спогади в рюкзак",
         },
         badgeRotation: -10,
     },
@@ -218,14 +218,16 @@ const statsAriaLabels: Record<SiteLocale, string> = {
 
 const adventureBadge = {
     src: "/app-icon.png",
-    size: 44,
+    displaySize: 44,
     inset: 15,
+    sourceSize: 88,
 } as const
 
 const statsBadge = {
     src: "/misc/stats-app-icon.png",
-    size: 44,
+    displaySize: 44,
     inset: 15,
+    sourceSize: 88,
 } as const
 
 const cardPhotoSize = 720
@@ -329,14 +331,13 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
     }
 }
 
-export function CardStackPreview({ locale, variant = "adventure", onInitialEntryComplete }: CardStackPreviewProps) {
+export function CardStackPreview({ locale, variant = "adventure" }: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
     const stackConfig = cardStackConfigs[variant]
     const [cardLayouts, setCardLayouts] = useState<CardStackTransform[]>(() => createFallbackCardStackLayout(stackConfig))
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
     const [deckResetKey, setDeckResetKey] = useState(0)
-    const initialEntryReportedRef = useRef(false)
     const activeCardIndex = useMemo(
         () => topVisibleCardIndex(stackConfig.cards.length, dismissedCards, departingCard?.index ?? null),
         [departingCard, dismissedCards, stackConfig.cards.length],
@@ -348,15 +349,6 @@ export function CardStackPreview({ locale, variant = "adventure", onInitialEntry
         setDismissedCards(new Set())
         setDepartingCard(null)
     }, [stackConfig.cards.length])
-
-    useEffect(() => {
-        if (shouldPlayDeckEntryAnimation || !onInitialEntryComplete || initialEntryReportedRef.current) {
-            return
-        }
-
-        initialEntryReportedRef.current = true
-        onInitialEntryComplete()
-    }, [onInitialEntryComplete, shouldPlayDeckEntryAnimation])
 
     useEffect(() => {
         if (dismissedCards.size !== stackConfig.cards.length) {
@@ -384,17 +376,6 @@ export function CardStackPreview({ locale, variant = "adventure", onInitialEntry
     }
 
     function handleAnimationComplete(index: number) {
-        if (
-            onInitialEntryComplete
-            && !initialEntryReportedRef.current
-            && dismissedCards.size === 0
-            && departingCard === null
-            && index === 0
-        ) {
-            initialEntryReportedRef.current = true
-            onInitialEntryComplete()
-        }
-
         if (departingCard?.index !== index) {
             return
         }
@@ -414,7 +395,7 @@ export function CardStackPreview({ locale, variant = "adventure", onInitialEntry
         <div className={frameClassName}>
             <div
                 aria-hidden
-                className="absolute bottom-[9%] left-1/2 h-24 w-[72%] -translate-x-1/2 rounded-full blur-3xl"
+                className="absolute bottom-[9%] left-1/2 h-24 w-[72%] -translate-x-1/2 rounded-full blur-3xl xl:hidden"
                 style={{ backgroundColor: "var(--shadow-ground)" }}
             />
             <div
@@ -496,7 +477,7 @@ export function CardStackPreview({ locale, variant = "adventure", onInitialEntry
                                 onAnimationComplete={() => handleAnimationComplete(index)}
                             >
                                 <div
-                                    className="relative flex h-full w-full flex-col rounded-[7px] bg-white p-[10px] pb-[22px] shadow-[0_28px_80px_rgba(31,29,24,0.22)] xl:p-3 xl:pb-[30px]"
+                                    className="relative flex h-full w-full flex-col rounded-[7px] bg-white p-[10px] pb-[22px] shadow-[0_28px_80px_rgba(31,29,24,0.22)] xl:p-3 xl:pb-[30px] xl:shadow-[0_18px_36px_rgba(31,29,24,0.12)]"
                                 >
                                     <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-[3px] bg-neutral-100">
                                         <Image
@@ -514,11 +495,14 @@ export function CardStackPreview({ locale, variant = "adventure", onInitialEntry
                                         <Image
                                             src={stackConfig.badge.src}
                                             alt=""
-                                            width={stackConfig.badge.size}
-                                            height={stackConfig.badge.size}
+                                            width={stackConfig.badge.sourceSize}
+                                            height={stackConfig.badge.sourceSize}
+                                            quality={100}
                                             draggable={false}
                                             className="pointer-events-none absolute select-none rounded-[10px] shadow-[0_8px_20px_rgba(0,0,0,0.22)]"
                                             style={{
+                                                width: stackConfig.badge.displaySize,
+                                                height: stackConfig.badge.displaySize,
                                                 right: stackConfig.badge.inset,
                                                 top: stackConfig.badge.inset,
                                                 transform: `rotate(${card.badgeRotation}deg)`,

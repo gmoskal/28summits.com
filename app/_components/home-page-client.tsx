@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
@@ -45,9 +45,20 @@ type ComplianceNoticeProps = {
     content: (typeof homeContent)[SiteLocale]["compliance"]
 }
 
-const legalAccentStyle = { color: "var(--accent)" }
+type SnapSectionStartOptions = {
+    mainRef: RefObject<HTMLElement | null>
+    sectionRef: RefObject<HTMLElement | null>
+    hasStarted: boolean
+    onStart: () => void
+}
+
+const legalAccentStyle = { color: "#e67621" }
 const legalNavLinkClassName = "text-[15px] leading-[20px] font-semibold transition-[color,filter] hover:brightness-95"
 const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
+const snapStart = {
+    idleDelayMs: 150,
+    tolerancePx: 3,
+} as const
 
 function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
     return (
@@ -67,7 +78,7 @@ function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
 
 function ComplianceNotice({ content }: ComplianceNoticeProps) {
     return (
-        <p className="max-w-[760px] text-center text-[12px] leading-[18px] font-semibold text-[var(--text-muted)] xl:text-left">
+        <p className="max-w-[760px] text-center text-[16px] leading-[23px] font-semibold text-[var(--text-secondary)] xl:text-[20px] xl:leading-[29px]">
             {content.summaryParts.map((part, index) => (
                 <span key={part}>
                     {index > 0 ? <span aria-hidden> · </span> : null}
@@ -88,15 +99,96 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
 }
 
 const storyRevealTiming = {
-    copyDelayMs: 2200,
-    actionDelayMs: 2620,
+    copyDelayMs: 320,
+    actionDelayMs: 860,
+} as const
+
+const statsRevealTiming = {
+    footerDelayMs: 420,
 } as const
 
 const topChromeClassName = "mx-auto flex max-w-[var(--layout-max-width)] items-start gap-4 px-5 pt-6 lg:px-[28px] lg:pt-[34px] xl:px-[32px]"
 
+function isSectionSnapped(mainElement: HTMLElement, sectionElement: HTMLElement) {
+    const mainTop = mainElement.getBoundingClientRect().top
+    const sectionTop = sectionElement.getBoundingClientRect().top
+
+    return Math.abs(sectionTop - mainTop) <= snapStart.tolerancePx
+}
+
+function useSnappedSectionStart(p: SnapSectionStartOptions) {
+    useEffect(() => {
+        const mainElement = p.mainRef.current
+        const sectionElement = p.sectionRef.current
+        if (!mainElement || !sectionElement || p.hasStarted) {
+            return
+        }
+
+        const scrollRoot = mainElement
+        const snapSection = sectionElement
+        let animationFrame = 0
+        let idleTimer = 0
+
+        function clearIdleTimer() {
+            if (idleTimer === 0) {
+                return
+            }
+
+            window.clearTimeout(idleTimer)
+            idleTimer = 0
+        }
+
+        function checkSnapState() {
+            if (!isSectionSnapped(scrollRoot, snapSection)) {
+                clearIdleTimer()
+                return
+            }
+
+            clearIdleTimer()
+            idleTimer = window.setTimeout(() => {
+                if (isSectionSnapped(scrollRoot, snapSection)) {
+                    p.onStart()
+                }
+            }, snapStart.idleDelayMs)
+        }
+
+        function scheduleCheck() {
+            if (animationFrame !== 0) {
+                window.cancelAnimationFrame(animationFrame)
+            }
+
+            animationFrame = window.requestAnimationFrame(() => {
+                animationFrame = 0
+                checkSnapState()
+            })
+        }
+
+        const observer = new IntersectionObserver(scheduleCheck, {
+            root: scrollRoot,
+            threshold: [0, 0.5, 0.9, 1],
+        })
+
+        observer.observe(snapSection)
+        scrollRoot.addEventListener("scroll", scheduleCheck, { passive: true })
+        window.addEventListener("resize", scheduleCheck)
+        scheduleCheck()
+
+        return () => {
+            observer.disconnect()
+            scrollRoot.removeEventListener("scroll", scheduleCheck)
+            window.removeEventListener("resize", scheduleCheck)
+            clearIdleTimer()
+            if (animationFrame !== 0) {
+                window.cancelAnimationFrame(animationFrame)
+            }
+        }
+    }, [p.hasStarted, p.mainRef, p.onStart, p.sectionRef])
+}
+
 export function HomePageClient() {
     const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
     const content = homeContent[locale]
+    const mainRef = useRef<HTMLElement | null>(null)
     const storySectionRef = useRef<HTMLElement | null>(null)
     const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
@@ -124,32 +216,22 @@ export function HomePageClient() {
         setBrandAnimationCycle((cycle) => cycle + 1)
     }, [])
 
-    const handleStatsStackEntryComplete = useCallback(() => {
-        setStatsFooterVisible(true)
-    }, [])
+    const startStoryAnimation = useCallback(() => setStoryStarted(true), [])
+    const startStatsAnimation = useCallback(() => setStatsStarted(true), [])
 
-    useEffect(() => {
-        const storySection = storySectionRef.current
-        if (!storySection || storyStarted) {
-            return
-        }
+    useSnappedSectionStart({
+        mainRef,
+        sectionRef: storySectionRef,
+        hasStarted: storyStarted,
+        onStart: startStoryAnimation,
+    })
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry?.isIntersecting) {
-                    return
-                }
-
-                setStoryStarted(true)
-                observer.disconnect()
-            },
-            { threshold: 0.12 },
-        )
-
-        observer.observe(storySection)
-
-        return () => observer.disconnect()
-    }, [storyStarted])
+    useSnappedSectionStart({
+        mainRef,
+        sectionRef: statsSectionRef,
+        hasStarted: statsStarted,
+        onStart: startStatsAnimation,
+    })
 
     useEffect(() => {
         if (!storyStarted) {
@@ -166,30 +248,20 @@ export function HomePageClient() {
     }, [storyStarted])
 
     useEffect(() => {
-        const statsSection = statsSectionRef.current
-        if (!statsSection || statsStarted) {
+        if (!statsStarted) {
             return
         }
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry?.isIntersecting) {
-                    return
-                }
+        const footerTimer = window.setTimeout(() => setStatsFooterVisible(true), statsRevealTiming.footerDelayMs)
 
-                setStatsStarted(true)
-                observer.disconnect()
-            },
-            { threshold: 0.18 },
-        )
-
-        observer.observe(statsSection)
-
-        return () => observer.disconnect()
+        return () => window.clearTimeout(footerTimer)
     }, [statsStarted])
 
     return (
-        <main className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]">
+        <main
+            ref={mainRef}
+            className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]"
+        >
             <div className="sticky top-0 z-30 h-0 overflow-visible">
                 <div className={`pointer-events-none justify-start ${topChromeClassName}`}>
                     <div className="pointer-events-auto">
@@ -217,7 +289,7 @@ export function HomePageClient() {
 
             <section
                 ref={storySectionRef}
-                className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
+                className="relative flex h-[100dvh] snap-start snap-always flex-col items-center overflow-hidden px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
             >
                 <article className="flex w-full max-w-[720px] flex-col items-center">
                     <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
@@ -263,15 +335,11 @@ export function HomePageClient() {
 
             <section
                 ref={statsSectionRef}
-                className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center justify-center px-5 pt-[96px] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
+                className="relative flex h-[100dvh] snap-start snap-always flex-col items-center justify-center overflow-hidden px-5 pt-[84px] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
             >
-                <div className="flex w-full max-w-[760px] flex-col items-center justify-center gap-[clamp(3rem,7dvh,4rem)]">
+                <div className="flex w-full max-w-[760px] flex-col items-center justify-center gap-[clamp(1.5rem,4dvh,3rem)]">
                     {statsStarted ? (
-                        <CardStackPreview
-                            locale={locale}
-                            variant="stats"
-                            onInitialEntryComplete={handleStatsStackEntryComplete}
-                        />
+                        <CardStackPreview locale={locale} variant="stats" />
                     ) : (
                         <div className="h-[338px] w-full xl:h-[min(66dvh,640px)] xl:min-h-[500px]" aria-hidden />
                     )}

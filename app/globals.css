@@ -26,7 +26,7 @@
     --shadow-mascot: rgba(31, 29, 24, 0.18);
     --shadow-ground: rgba(31, 29, 24, 0.1);
     --selection-bg: #e4d8c8;
-    --accent: #9b5f3e;
+    --accent: #e67621;
     --ambient-gradient-a: rgba(228, 150, 84, 0.56);
     --ambient-gradient-b: rgba(132, 150, 102, 0.42);
     --ambient-gradient-c: rgba(199, 96, 66, 0.34);
@@ -63,7 +63,7 @@
         --shadow-mascot: rgba(0, 0, 0, 0.42);
         --shadow-ground: rgba(0, 0, 0, 0.28);
         --selection-bg: #3b2c22;
-        --accent: #d9a071;
+        --accent: #e67621;
         --ambient-gradient-a: rgba(217, 160, 113, 0.36);
         --ambient-gradient-b: rgba(91, 124, 78, 0.38);
         --ambient-gradient-c: rgba(122, 64, 44, 0.36);
@@ -100,7 +100,7 @@
     --shadow-mascot: rgba(31, 29, 24, 0.18);
     --shadow-ground: rgba(31, 29, 24, 0.1);
     --selection-bg: #e4d8c8;
-    --accent: #9b5f3e;
+    --accent: #e67621;
     --ambient-gradient-a: rgba(228, 150, 84, 0.56);
     --ambient-gradient-b: rgba(132, 150, 102, 0.42);
     --ambient-gradient-c: rgba(199, 96, 66, 0.34);
@@ -136,7 +136,7 @@
     --shadow-mascot: rgba(0, 0, 0, 0.42);
     --shadow-ground: rgba(0, 0, 0, 0.28);
     --selection-bg: #3b2c22;
-    --accent: #d9a071;
+    --accent: #e67621;
     --ambient-gradient-a: rgba(217, 160, 113, 0.36);
     --ambient-gradient-b: rgba(91, 124, 78, 0.38);
     --ambient-gradient-c: rgba(122, 64, 44, 0.36);
