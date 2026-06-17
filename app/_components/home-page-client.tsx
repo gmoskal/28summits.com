@@ -199,9 +199,9 @@ export function HomePageClient() {
                                 onClick={handleStoryLogoClick}
                             >
                                 <GooeyBrandTitle
-                                    key={`story-logo-${brandAnimationCycle}`}
                                     onAnimationComplete={handleBrandAnimationComplete}
                                     onAnimationStart={handleBrandAnimationStart}
+                                    replayToken={brandAnimationCycle}
                                 />
                             </button>
                         ) : null}

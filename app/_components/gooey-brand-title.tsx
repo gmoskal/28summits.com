@@ -1,11 +1,12 @@
 "use client"
 
 import { animate, useReducedMotion } from "motion/react"
-import { useEffect, useId, useRef } from "react"
+import { useEffect, useId, useLayoutEffect, useRef } from "react"
 
 type GooeyBrandTitleProps = {
     onAnimationComplete?: () => void
     onAnimationStart?: () => void
+    replayToken?: number
 }
 
 type Glyph = {
@@ -34,6 +35,7 @@ const wordThickness = 2.4
 const thinnerScale = 0.7
 const thicknessBoost = 1.1
 const pointCountBoost = 1.1
+const useBrowserLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect
 
 const glyphs = [
     {
@@ -74,6 +76,21 @@ function circleCountForGlyph(glyph: Glyph) {
     return Math.round((glyph.circleCount ?? defaultCircleCount) * pointCountBoost)
 }
 
+function resetCircle(circle: SVGCircleElement | null) {
+    if (!circle) {
+        return
+    }
+
+    circle.setAttribute("cx", String(startPoint.x))
+    circle.setAttribute("cy", String(startPoint.y))
+    circle.setAttribute("r", "0")
+    circle.setAttribute("opacity", "0")
+}
+
+function resetCircles(circleGroups: Array<Array<SVGCircleElement | null>>) {
+    circleGroups.forEach((circles) => circles.forEach(resetCircle))
+}
+
 function animationDurationMs() {
     const durationSeconds = Math.max(
         ...glyphs.map((glyph, glyphIndex) => {
@@ -102,14 +119,15 @@ function pointOnGlyph(path: SVGPathElement, glyph: Glyph, circleIndex: number) {
 
 const animationCompleteDelayMs = animationDurationMs()
 
-export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart }: GooeyBrandTitleProps) {
+export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart, replayToken = 0 }: GooeyBrandTitleProps) {
     const prefersReducedMotion = useReducedMotion()
     const reactId = useId()
     const filterId = `gooey-brand-title-${reactId.replaceAll(":", "")}`
     const pathRefs = useRef<Array<SVGPathElement | null>>([])
     const circleRefs = useRef<Array<Array<SVGCircleElement | null>>>([])
 
-    useEffect(() => {
+    useBrowserLayoutEffect(() => {
+        resetCircles(circleRefs.current)
         onAnimationStart?.()
 
         const animations = glyphs.flatMap((glyph, glyphIndex) => {
@@ -126,11 +144,6 @@ export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart }: Gooey
 
                 const point = pointOnGlyph(path, glyph, circleIndex)
                 const radius = (glyph.radius ?? defaultCircleRadius) * thicknessBoost
-
-                circle.setAttribute("cx", String(startPoint.x))
-                circle.setAttribute("cy", String(startPoint.y))
-                circle.setAttribute("r", "0")
-                circle.setAttribute("opacity", "0")
 
                 if (prefersReducedMotion) {
                     circle.setAttribute("cx", String(point.x))
@@ -164,8 +177,9 @@ export function GooeyBrandTitle({ onAnimationComplete, onAnimationStart }: Gooey
         return () => {
             window.clearTimeout(completeTimer)
             animations.forEach((animation) => animation.stop())
+            resetCircles(circleRefs.current)
         }
-    }, [onAnimationComplete, onAnimationStart, prefersReducedMotion])
+    }, [onAnimationComplete, onAnimationStart, prefersReducedMotion, replayToken])
 
     return (
         <span
