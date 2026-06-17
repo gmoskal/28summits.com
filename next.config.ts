@@ -5,6 +5,9 @@ const redirectedHosts = ["www.28gor.app"] as const;
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  images: {
+    qualities: [75, 100],
+  },
   async redirects() {
     return redirectedHosts.map((host) => ({
       source: "/:path*",
