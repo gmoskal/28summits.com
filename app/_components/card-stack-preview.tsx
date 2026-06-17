@@ -20,6 +20,7 @@ type CardStackTransform = {
 type CardStackConfig = {
     cards: readonly CardStackCard[]
     ariaLabels: Record<SiteLocale, string>
+    headlineLabels?: Record<SiteLocale, string>
     badge: {
         src: string
         displaySize: number
@@ -139,70 +140,78 @@ const adventureAriaLabels: Record<SiteLocale, string> = {
     uk: "Стос фото Ryska із застосунку 28 gór.",
 }
 
+const adventureHeadlineLabels: Record<SiteLocale, string> = {
+    pl: "Gotowi na 28 przygód?",
+    en: "Ready for 28 adventures?",
+    cs: "Připraveni na 28 dobrodružství?",
+    sk: "Pripravení na 28 dobrodružstiev?",
+    uk: "Готові до 28 пригод?",
+}
+
 const statsCards = [
     {
         src: "/misc/stats.jpeg",
         labels: {
-            pl: "Chwila skupienia",
-            en: "A focused moment",
-            cs: "Chvilka soustředění",
-            sk: "Chvíľa sústredenia",
-            uk: "Мить зосередження",
+            pl: "Plan na dziś",
+            en: "Today's plan",
+            cs: "Plán na dnes",
+            sk: "Plán na dnes",
+            uk: "План на сьогодні",
         },
         badgeRotation: -8,
     },
     {
         src: "/misc/stats2.jpeg",
         labels: {
-            pl: "Zabezpieczmy dane",
-            en: "Let's secure the data",
-            cs: "Zabezpečme data",
-            sk: "Zabezpečme dáta",
-            uk: "Захистімо дані",
+            pl: "Statystyki przy ogniu",
+            en: "Stats by the fire",
+            cs: "Statistiky u ohně",
+            sk: "Štatistiky pri ohni",
+            uk: "Статистика біля вогню",
         },
         badgeRotation: 7,
     },
     {
         src: "/misc/stats3.jpeg",
         labels: {
-            pl: "Będzie bezpiecznie",
-            en: "It will be safe",
-            cs: "Bude to bezpečné",
-            sk: "Bude to bezpečné",
-            uk: "Буде безпечно",
+            pl: "Dane pod kluczem",
+            en: "Data under lock",
+            cs: "Data pod zámkem",
+            sk: "Dáta pod zámkom",
+            uk: "Дані під замком",
         },
         badgeRotation: 10,
     },
     {
         src: "/misc/stats4.jpeg",
         labels: {
-            pl: "Kto tu chodził?",
-            en: "Who walked here?",
-            cs: "Kdo tudy šel?",
-            sk: "Kto tadiaľ išiel?",
-            uk: "Хто тут ходив?",
+            pl: "Kto wszedł na szlak?",
+            en: "Who entered the trail?",
+            cs: "Kdo šel na trasu?",
+            sk: "Kto išiel na trasu?",
+            uk: "Хто вийшов на маршрут?",
         },
         badgeRotation: -6,
     },
     {
         src: "/misc/stats5.jpeg",
         labels: {
-            pl: "Tego nie znam",
-            en: "I don't know this one",
-            cs: "Tohle neznám",
-            sk: "Toto nepoznám",
-            uk: "Цього не знаю",
+            pl: "Rejestr wypraw",
+            en: "Trip log",
+            cs: "Deník výprav",
+            sk: "Denník výprav",
+            uk: "Журнал походів",
         },
         badgeRotation: 5,
     },
     {
         src: "/misc/stats6-ai.jpeg",
         labels: {
-            pl: "Czy Rysy rosną?",
-            en: "Are Rysy growing?",
-            cs: "Rostou Rysy?",
-            sk: "Rastú Rysy?",
-            uk: "Риси ростуть?",
+            pl: "AI sprawdza trasę",
+            en: "AI checks the route",
+            cs: "AI kontroluje trasu",
+            sk: "AI kontroluje trasu",
+            uk: "ШІ перевіряє маршрут",
         },
         badgeRotation: -10,
     },
@@ -256,6 +265,7 @@ const cardStackConfigs = {
     adventure: {
         cards: adventureCards,
         ariaLabels: adventureAriaLabels,
+        headlineLabels: adventureHeadlineLabels,
         badge: adventureBadge,
         fallbackLayout: fallbackCardLayout,
     },
@@ -277,6 +287,8 @@ const flick = {
 
 const deckEntry = {
     logoDelaySeconds: 0,
+    headlineCardDelaySeconds: 0.5,
+    headlineDurationSeconds: 0.45,
     cardStaggerSeconds: 0.055,
     stiffness: 215,
     damping: 28,
@@ -333,7 +345,7 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
 
 export function CardStackPreview({ locale, variant = "adventure" }: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
-    const stackConfig = cardStackConfigs[variant]
+    const stackConfig: CardStackConfig = cardStackConfigs[variant]
     const [cardLayouts, setCardLayouts] = useState<CardStackTransform[]>(() => createFallbackCardStackLayout(stackConfig))
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
@@ -343,6 +355,10 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
         [departingCard, dismissedCards, stackConfig.cards.length],
     )
     const shouldPlayDeckEntryAnimation = !prefersReducedMotion
+    const headlineLabel = stackConfig.headlineLabels?.[locale]
+    const headlineCardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation
+        ? deckEntry.headlineCardDelaySeconds
+        : 0
 
     useEffect(() => {
         setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
@@ -384,8 +400,9 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
         setDepartingCard(null)
     }
 
-    const frameClassName =
-        "relative flex w-full touch-none select-none items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
+    const frameClassName = headlineLabel
+        ? "relative flex w-full touch-none select-none flex-col items-center justify-center gap-[4rem] overflow-visible px-5 pt-1 pb-1 sm:gap-[4.5rem] xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:gap-8 xl:px-14 xl:py-12"
+        : "relative flex w-full touch-none select-none items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
     const deckClassName =
         "relative h-[310px] w-full max-w-[320px] touch-none select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px] xl:w-[min(39vw,430px)] xl:max-w-[430px]"
     const cardClassName =
@@ -393,6 +410,20 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
 
     return (
         <div className={frameClassName}>
+            {headlineLabel ? (
+                <motion.h2
+                    className="pointer-events-none max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
+                    initial={shouldPlayDeckEntryAnimation ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                        duration: prefersReducedMotion ? 0.01 : deckEntry.headlineDurationSeconds,
+                        ease: "easeOut",
+                    }}
+                    style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
+                >
+                    {headlineLabel}
+                </motion.h2>
+            ) : null}
             <div
                 aria-hidden
                 className="absolute bottom-[9%] left-1/2 h-24 w-[72%] -translate-x-1/2 rounded-full blur-3xl xl:hidden"
@@ -421,7 +452,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                     const rotation = isDeparting ? cardTransform.rotation + departingCard.directionX * 28 : cardTransform.rotation
                     const animationDelay =
                         dismissedCards.size === 0 && departingCard === null && shouldPlayDeckEntryAnimation
-                            ? deckEntry.logoDelaySeconds + (stackConfig.cards.length - 1 - index) * deckEntry.cardStaggerSeconds
+                            ? headlineCardDelaySeconds + deckEntry.logoDelaySeconds + (stackConfig.cards.length - 1 - index) * deckEntry.cardStaggerSeconds
                             : 0
 
                     return (
@@ -512,7 +543,7 @@ export function CardStackPreview({ locale, variant = "adventure" }: CardStackPre
                                     </div>
                                     <div className="flex min-h-0 flex-1 items-center justify-center p-[2em]">
                                         <span
-                                            className="text-center text-[20px] leading-none font-normal text-[#171717] xl:text-[24px]"
+                                            className="inline-block -translate-y-[5px] text-center text-[20px] leading-none font-normal text-[#171717] xl:text-[24px]"
                                             style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
                                         >
                                             {card.labels[locale]}

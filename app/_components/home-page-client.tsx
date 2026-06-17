@@ -52,7 +52,7 @@ type SnapSectionStartOptions = {
     onStart: () => void
 }
 
-const legalAccentStyle = { color: "#e67621" }
+const legalAccentStyle = { color: "#666666" }
 const legalNavLinkClassName = "text-[15px] leading-[20px] font-semibold transition-[color,filter] hover:brightness-95"
 const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
 const snapStart = {

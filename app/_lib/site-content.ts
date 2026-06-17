@@ -14,7 +14,7 @@ export const siteConfig = {
     launchUpdatesUrl: "mailto:support@async.studio?subject=28%20g%C3%B3r%20launch%20updates",
     siteUrl: "https://28gor.app",
     appIcon: `/app-icon.png?v=${siteIconVersion}`,
-    appIconHeader: "/misc/stats-app-icon.png",
+    appIconHeader: "/app-icon.png",
     appleTouchIcon: "/apple-touch-icon.png",
     faviconIconIco: `/favicon.ico?v=${siteIconVersion}`,
     faviconIcon16: `/favicon-16x16.png?v=${siteIconVersion}`,
