@@ -219,11 +219,14 @@ export function HomePageClient() {
                     </div>
 
                     <div
-                        className={`pt-[2em] transition duration-700 ease-out ${
+                        className={`flex flex-col items-center pt-[2em] transition duration-700 ease-out ${
                             storyActionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
                     >
                         <AppStoreButton badge={content.hero.appStoreBadge} />
+                        <p className="mt-[1em] max-w-[320px] text-[12px] leading-[17px] font-semibold text-[var(--text-muted)] xl:text-[13px] xl:leading-[18px]">
+                            {content.hero.caption}
+                        </p>
                     </div>
 
                     <footer
@@ -231,9 +234,6 @@ export function HomePageClient() {
                             storyFooterVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
                     >
-                        <p className="text-[14px] leading-[20px] font-semibold text-[var(--text-muted)] xl:text-[15px] xl:leading-[21px]">
-                            {content.hero.caption}
-                        </p>
                         <LocalizedLegalNav labels={content.nav} />
                         <ComplianceNotice content={content.compliance} />
                     </footer>
