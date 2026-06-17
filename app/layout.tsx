@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Caveat } from "next/font/google"
+import { Gloria_Hallelujah } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
 import { siteConfig, siteLanguages, siteSocialImage, siteSocialTwitterImage } from "./_lib/site-content"
@@ -11,11 +11,11 @@ const inter = localFont({
     weight: "100 900",
 })
 
-const caveat = Caveat({
+const gloriaHallelujah = Gloria_Hallelujah({
     subsets: ["latin", "latin-ext"],
-    variable: "--font-caveat",
+    variable: "--font-gloria",
     display: "swap",
-    weight: ["400", "500", "600", "700"],
+    weight: "400",
 })
 
 export const metadata: Metadata = {
@@ -30,6 +30,7 @@ export const metadata: Metadata = {
         canonical: siteConfig.siteUrl,
     },
     icons: {
+        shortcut: [{ url: siteConfig.faviconIconIco, type: "image/x-icon" }],
         icon: [
             { url: siteConfig.faviconIcon16, sizes: "16x16", type: "image/png" },
             { url: siteConfig.faviconIcon32, sizes: "32x32", type: "image/png" },
@@ -66,7 +67,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
+        <html lang="en" className={`${inter.variable} ${gloriaHallelujah.variable}`}>
             <body>{children}</body>
         </html>
     )

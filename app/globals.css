@@ -16,6 +16,7 @@
     --app-store-badge-filter: none;
     --mascot-bg: #f6efe6;
     --ink: #171717;
+    --gooey-title-color: #000000;
     --text-primary: #171717;
     --text-secondary: #66635a;
     --text-muted: #7e7a70;
@@ -52,6 +53,7 @@
         --app-store-badge-filter: invert(1);
         --mascot-bg: #201d18;
         --ink: #fff2df;
+        --gooey-title-color: #ffffff;
         --text-primary: #fff2df;
         --text-secondary: #d6cabb;
         --text-muted: #a89d90;
@@ -88,6 +90,7 @@
     --app-store-badge-filter: none;
     --mascot-bg: #f6efe6;
     --ink: #171717;
+    --gooey-title-color: #000000;
     --text-primary: #171717;
     --text-secondary: #66635a;
     --text-muted: #7e7a70;
@@ -123,6 +126,7 @@
     --app-store-badge-filter: invert(1);
     --mascot-bg: #201d18;
     --ink: #fff2df;
+    --gooey-title-color: #ffffff;
     --text-primary: #fff2df;
     --text-secondary: #d6cabb;
     --text-muted: #a89d90;

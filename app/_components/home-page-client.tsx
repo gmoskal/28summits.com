@@ -1,9 +1,11 @@
 "use client"
 
 import Image from "next/image"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
+import { GooeyBrandTitle } from "./gooey-brand-title"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
 import { SmoothLink } from "./smooth-navigation"
@@ -31,26 +33,6 @@ function AppStoreButton({ badge }: AppStoreButtonProps) {
                 style={{ filter: "var(--app-store-badge-filter)" }}
             />
         </a>
-    )
-}
-
-function FeatureLabels({ labels }: { labels: string[] }) {
-    return (
-        <div className="flex flex-wrap gap-2">
-            {labels.map((label) => (
-                <span
-                    key={label}
-                    className="rounded-full px-3 py-1.5 text-[13px] leading-[18px] font-semibold backdrop-blur"
-                    style={{
-                        backgroundColor: "var(--chip-bg)",
-                        border: "1px solid var(--border-muted)",
-                        color: "var(--text-muted)",
-                    }}
-                >
-                    {label}
-                </span>
-            ))}
-        </div>
     )
 }
 
@@ -101,16 +83,94 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
     )
 }
 
+const storyRevealTiming = {
+    copyDelayMs: 2200,
+    actionDelayMs: 2620,
+    footerDelayMs: 3050,
+} as const
+
+const topChromeClassName = "mx-auto flex max-w-[var(--layout-max-width)] items-start gap-4 px-5 pt-6 lg:px-[28px] lg:pt-[34px] xl:px-[32px]"
+
 export function HomePageClient() {
     const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
     const content = homeContent[locale]
+    const storySectionRef = useRef<HTMLElement | null>(null)
+    const [storyStarted, setStoryStarted] = useState(false)
+    const [storyCopyVisible, setStoryCopyVisible] = useState(false)
+    const [storyActionVisible, setStoryActionVisible] = useState(false)
+    const [storyFooterVisible, setStoryFooterVisible] = useState(false)
+    const [brandAnimationCycle, setBrandAnimationCycle] = useState(0)
+    const brandAnimationRunningRef = useRef(false)
+
+    const handleBrandAnimationStart = useCallback(() => {
+        brandAnimationRunningRef.current = true
+    }, [])
+
+    const handleBrandAnimationComplete = useCallback(() => {
+        brandAnimationRunningRef.current = false
+    }, [])
+
+    const handleStoryLogoClick = useCallback(() => {
+        if (brandAnimationRunningRef.current) {
+            return
+        }
+
+        brandAnimationRunningRef.current = true
+        setBrandAnimationCycle((cycle) => cycle + 1)
+    }, [])
+
+    useEffect(() => {
+        const storySection = storySectionRef.current
+        if (!storySection || storyStarted) {
+            return
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry?.isIntersecting) {
+                    return
+                }
+
+                setStoryStarted(true)
+                observer.disconnect()
+            },
+            { threshold: 0.12 },
+        )
+
+        observer.observe(storySection)
+
+        return () => observer.disconnect()
+    }, [storyStarted])
+
+    useEffect(() => {
+        if (!storyStarted) {
+            return
+        }
+
+        const copyTimer = window.setTimeout(() => setStoryCopyVisible(true), storyRevealTiming.copyDelayMs)
+        const actionTimer = window.setTimeout(() => setStoryActionVisible(true), storyRevealTiming.actionDelayMs)
+        const footerTimer = window.setTimeout(() => setStoryFooterVisible(true), storyRevealTiming.footerDelayMs)
+
+        return () => {
+            window.clearTimeout(copyTimer)
+            window.clearTimeout(actionTimer)
+            window.clearTimeout(footerTimer)
+        }
+    }, [storyStarted])
 
     return (
-        <main className="page-transition-shell bg-[var(--page-bg)] text-[var(--text-primary)]">
-            <section className="relative min-h-screen">
-                <div className="relative mx-auto flex min-h-screen max-w-[var(--layout-max-width)] flex-col px-5 pt-6 pb-8 lg:px-[28px] lg:py-[34px] xl:px-[32px]">
-                    <header className="z-10 flex items-start justify-between gap-4">
+        <main className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]">
+            <div className="sticky top-0 z-30 h-0 overflow-visible">
+                <div className={`pointer-events-none justify-start ${topChromeClassName}`}>
+                    <div className="pointer-events-auto">
                         <BrandMark compact showName={false} />
+                    </div>
+                </div>
+            </div>
+
+            <section className="relative flex h-[100dvh] snap-start snap-always items-center justify-center overflow-hidden px-0 pt-[84px] pb-8 lg:pt-[120px]">
+                <div className={`pointer-events-none absolute inset-x-0 top-0 z-20 justify-end ${topChromeClassName}`}>
+                    <div className="pointer-events-auto">
                         <SiteControls
                             content={content.controls}
                             locale={locale}
@@ -118,62 +178,66 @@ export function HomePageClient() {
                             onLocaleChange={setLocale}
                             onThemeModeChange={setThemeMode}
                         />
-                    </header>
+                    </div>
+                </div>
+                <div className="relative flex h-full w-full items-center justify-center">
+                    <CardStackPreview locale={locale} />
+                </div>
+            </section>
 
-                    <div className="grid gap-0 pt-2 pb-8 xl:flex-1 xl:-translate-y-[8vh] xl:grid-cols-[minmax(340px,0.9fr)_minmax(360px,0.86fr)] xl:items-center xl:gap-6 xl:pt-0 xl:pb-0 2xl:-translate-y-[11vh]">
-                        <article className="order-2 mx-auto flex w-full max-w-[618px] flex-col items-center gap-3 text-center xl:order-1 xl:mx-0 xl:items-start xl:gap-[38px] xl:text-left">
-                            <div className="flex flex-col items-center gap-3 xl:items-start xl:gap-[20px]">
-                                <span
-                                    className="w-fit rounded-full px-4 py-2 text-[13px] leading-[18px] font-bold tracking-normal shadow-[0_12px_28px_var(--shadow-soft)] backdrop-blur xl:text-[14px]"
-                                    style={{
-                                        backgroundColor: "var(--chip-bg)",
-                                        border: "1px solid var(--border-muted)",
-                                        color: "var(--text-muted)",
-                                    }}
-                                >
-                                    {content.hero.eyebrow}
-                                </span>
-                                <h1
-                                    className="text-[76px] leading-[0.88] tracking-normal text-[var(--text-primary)] xl:text-[clamp(76px,7vw,116px)]"
-                                    style={{
-                                        fontFamily: 'Caveat, "Caveat Fallback"',
-                                        fontFeatureSettings: "'liga' 0",
-                                        fontWeight: 900,
-                                    }}
-                                >
-                                    {content.hero.headline}
-                                </h1>
-                                <div
-                                    className="flex max-w-[350px] flex-col gap-2 text-[15px] leading-[21px] font-semibold text-[var(--text-secondary)] xl:max-w-[588px] xl:gap-3 xl:text-[19px] xl:leading-[27px]"
-                                    style={{ fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
-                                >
-                                    {content.hero.body.map((paragraph) => (
-                                        <p key={paragraph}>{paragraph}</p>
-                                    ))}
-                                </div>
-                                <FeatureLabels labels={content.hero.featureLabels} />
-                            </div>
+            <section
+                ref={storySectionRef}
+                className="relative flex min-h-[100dvh] snap-start snap-always flex-col items-center px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
+            >
+                <article className="flex w-full max-w-[720px] flex-col items-center">
+                    <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
+                        {storyStarted ? (
+                            <button
+                                type="button"
+                                aria-label={content.hero.replayLogoAnimationLabel}
+                                className="inline-flex touch-manipulation cursor-pointer appearance-none items-center justify-center rounded-[24px] border-0 bg-transparent p-0 text-inherit focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
+                                onClick={handleStoryLogoClick}
+                            >
+                                <GooeyBrandTitle
+                                    key={`story-logo-${brandAnimationCycle}`}
+                                    onAnimationComplete={handleBrandAnimationComplete}
+                                    onAnimationStart={handleBrandAnimationStart}
+                                />
+                            </button>
+                        ) : null}
+                    </h1>
 
-                            <div className="flex w-full flex-col items-center gap-3 xl:items-start">
-                                <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
-                                    <AppStoreButton badge={content.hero.appStoreBadge} />
-                                </div>
-                                <p className="text-[14px] leading-[20px] font-semibold text-[var(--text-muted)] xl:pl-[6px] xl:text-[15px] xl:leading-[21px]">
-                                    {content.hero.caption}
-                                </p>
-                            </div>
-                        </article>
-
-                        <div className="relative order-1 flex items-center justify-center xl:order-2">
-                            <CardStackPreview locale={locale} />
-                        </div>
+                    <div
+                        className={`mt-[5em] mb-[2em] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-semibold text-[var(--text-secondary)] transition duration-700 ease-out xl:text-[20px] xl:leading-[29px] ${
+                            storyCopyVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
+                        }`}
+                        style={{ fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
+                    >
+                        {content.hero.body.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                        ))}
                     </div>
 
-                    <footer className="z-10 mt-auto flex flex-col items-center gap-3 xl:mt-0 xl:items-start">
+                    <div
+                        className={`pt-[2em] transition duration-700 ease-out ${
+                            storyActionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
+                        }`}
+                    >
+                        <AppStoreButton badge={content.hero.appStoreBadge} />
+                    </div>
+
+                    <footer
+                        className={`mt-[10em] flex flex-col items-center gap-3 transition duration-700 ease-out ${
+                            storyFooterVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
+                        }`}
+                    >
+                        <p className="text-[14px] leading-[20px] font-semibold text-[var(--text-muted)] xl:text-[15px] xl:leading-[21px]">
+                            {content.hero.caption}
+                        </p>
                         <LocalizedLegalNav labels={content.nav} />
                         <ComplianceNotice content={content.compliance} />
                     </footer>
-                </div>
+                </article>
             </section>
         </main>
     )

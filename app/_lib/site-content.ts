@@ -1,3 +1,5 @@
+const siteIconVersion = "20260617-1"
+
 export const siteConfig = {
     name: "28 gór",
     productName: "28 gór",
@@ -11,11 +13,12 @@ export const siteConfig = {
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.28summits.app",
     launchUpdatesUrl: "mailto:support@async.studio?subject=28%20g%C3%B3r%20launch%20updates",
     siteUrl: "https://28gor.app",
-    appIcon: "/app-icon.png",
+    appIcon: `/app-icon.png?v=${siteIconVersion}`,
     appIconHeader: "/app-icon-header.png",
     appleTouchIcon: "/apple-touch-icon.png",
-    faviconIcon16: "/favicon-16x16.png",
-    faviconIcon32: "/favicon-32x32.png",
+    faviconIconIco: `/favicon.ico?v=${siteIconVersion}`,
+    faviconIcon16: `/favicon-16x16.png?v=${siteIconVersion}`,
+    faviconIcon32: `/favicon-32x32.png?v=${siteIconVersion}`,
     description: "28 gór zbiera plany, wejścia, zdjęcia, ręcznie rysowane pieczątki, edukację i górskie pamiątki w jednej dopracowanej aplikacji.",
     socialTitle: "28 gór - wszystko z gór w jednym pięknym miejscu",
     socialDescription: "Zbieraj wejścia, zdjęcia, notatki i pieczątki rysowane dla każdego szczytu. Zamawiaj pamiątki i odkrywaj edukacyjne treści z Ryskiem.",
@@ -73,6 +76,7 @@ export const homeContent: Record<
         hero: {
             eyebrow: string
             headline: string
+            replayLogoAnimationLabel: string
             body: string[]
             appStoreBadge: {
                 actionLabel: string
@@ -106,6 +110,7 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Wszystko z gór w jednym miejscu",
             headline: "28 gór",
+            replayLogoAnimationLabel: "Odtwórz animację logo 28 gór",
             body: [
                 "28 gór to nowa aplikacja w App Store, która zbiera wejścia, zdjęcia i ślady z trasy w jednym pięknym miejscu. Każdy szczyt dostaje własną, ręcznie rysowaną pieczątkę.",
                 "Rysek już zabiera ją w góry. W środku czekają małe odkrycia: informacje o szczytach, edukacyjne tropy i pamiątki, które można zamówić po prawdziwej wyprawie.",
@@ -147,6 +152,7 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Every mountain memory in one place",
             headline: "28 gór",
+            replayLogoAnimationLabel: "Replay the 28 gór logo animation",
             body: [
                 "28 gór is a new App Store app that keeps climbs, photos, and trail traces in one beautifully made place. Every peak gets its own hand-drawn stamp.",
                 "Rysek is already taking it into the mountains. Inside are small discoveries: peak notes, learning moments, and keepsakes you can order after a real trip.",
@@ -188,6 +194,7 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Všechno z hor na jednom místě",
             headline: "28 gór",
+            replayLogoAnimationLabel: "Přehrát animaci loga 28 gór",
             body: [
                 "28 gór je nová aplikace v App Storu, která ukládá výstupy, fotky a stopy z trasy na jednom krásně vytvořeném místě. Každý vrchol dostane vlastní ručně kreslené razítko.",
                 "Rysek ji už bere do hor. Uvnitř čekají malá objevení: informace o vrcholech, vzdělávací zastavení a památky, které si můžeš objednat po skutečné cestě.",
@@ -229,6 +236,7 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Všetko z hôr na jednom mieste",
             headline: "28 gór",
+            replayLogoAnimationLabel: "Prehrať animáciu loga 28 gór",
             body: [
                 "28 gór je nová aplikácia v App Store, ktorá ukladá výstupy, fotky a stopy z trasy na jednom krásne vytvorenom mieste. Každý vrchol dostane vlastnú ručne kreslenú pečiatku.",
                 "Rysek ju už berie do hôr. Vo vnútri čakajú malé objavy: informácie o vrcholoch, vzdelávacie zastavenia a pamiatky, ktoré si môžeš objednať po skutočnej trase.",
@@ -270,6 +278,7 @@ export const homeContent: Record<
         hero: {
             eyebrow: "Усе з гір в одному місці",
             headline: "28 gór",
+            replayLogoAnimationLabel: "Повторити анімацію логотипа 28 gór",
             body: [
                 "28 gór - це новий застосунок в App Store, що збирає сходження, фото й сліди маршруту в одному красиво зробленому місці. Кожна вершина має власний намальований вручну штамп.",
                 "Rysek уже бере його в гори. Усередині чекають маленькі відкриття: нотатки про вершини, освітні моменти й пам’ятки, які можна замовити після справжньої мандрівки.",

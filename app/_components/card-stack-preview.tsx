@@ -149,6 +149,14 @@ const flick = {
     resetDelayMs: 40,
 } as const
 
+const deckEntry = {
+    logoDelaySeconds: 0,
+    cardStaggerSeconds: 0.055,
+    stiffness: 215,
+    damping: 28,
+    mass: 0.82,
+} as const
+
 function randomBetween(min: number, max: number) {
     return min + Math.random() * (max - min)
 }
@@ -281,7 +289,7 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                     const rotation = isDeparting ? card.rotation + departingCard.directionX * 28 : card.rotation
                     const animationDelay =
                         dismissedCards.size === 0 && departingCard === null && shouldPlayDeckEntryAnimation
-                            ? (cardStackCards.length - 1 - index) * 0.055
+                            ? deckEntry.logoDelaySeconds + (cardStackCards.length - 1 - index) * deckEntry.cardStaggerSeconds
                             : 0
 
                     return (
@@ -318,9 +326,9 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                             ? 0.01
                                             : undefined,
                                     ease: isDeparting ? "easeOut" : undefined,
-                                    stiffness: isDeparting ? 170 : 360,
-                                    damping: isDeparting ? 22 : 32,
-                                    mass: 0.82,
+                                    stiffness: isDeparting ? 170 : deckEntry.stiffness,
+                                    damping: isDeparting ? 22 : deckEntry.damping,
+                                    mass: deckEntry.mass,
                                 }}
                                 style={{
                                     backfaceVisibility: "hidden",
@@ -367,10 +375,10 @@ export function CardStackPreview({ locale }: { locale: SiteLocale }) {
                                             onDragStart={(event) => event.preventDefault()}
                                         />
                                     </div>
-                                    <div className="flex min-h-0 flex-1 items-center justify-center px-2 pt-2 xl:pt-3">
+                                    <div className="flex min-h-0 flex-1 items-center justify-center p-[2em]">
                                         <span
-                                            className="text-center text-[28px] leading-none font-semibold text-[#171717] xl:text-[34px]"
-                                            style={{ fontFamily: "var(--font-caveat)" }}
+                                            className="text-center text-[20px] leading-none font-normal text-[#171717] xl:text-[24px]"
+                                            style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
                                         >
                                             {card.labels[locale]}
                                         </span>
