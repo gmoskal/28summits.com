@@ -11,7 +11,9 @@ const imageSize = {
 }
 
 const imageLayout = {
-    titleGapPx: 42,
+    photoTopPx: 32,
+    photoHeightPx: 566,
+    iconTitleGapPx: 42,
 }
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
@@ -174,19 +176,18 @@ function htmlForLocale(locale) {
 
         .left-stack {
             position: absolute;
-            top: 0;
-            bottom: 0;
+            top: ${imageLayout.photoTopPx}px;
             left: 68px;
             width: 612px;
+            height: ${imageLayout.photoHeightPx}px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            justify-content: center;
         }
 
         .title {
             font-family: ${titleFontFamily(locale)};
-            margin: ${imageLayout.titleGapPx}px 0 ${imageLayout.titleGapPx}px;
+            margin: ${imageLayout.iconTitleGapPx}px 0 0;
             font-size: ${titleSize}px;
             line-height: 1.02;
             font-weight: 400;
@@ -196,7 +197,7 @@ function htmlForLocale(locale) {
         }
 
         .teaser {
-            margin: 0;
+            margin: auto 0 0;
             max-width: 580px;
             font-size: ${teaserSize}px;
             line-height: calc(${teaserSize}px + 12px);
@@ -208,10 +209,10 @@ function htmlForLocale(locale) {
 
         .photo {
             position: absolute;
-            top: 32px;
+            top: ${imageLayout.photoTopPx}px;
             left: 720px;
             width: 420px;
-            height: 566px;
+            height: ${imageLayout.photoHeightPx}px;
             object-fit: cover;
             object-position: 50% 50%;
             border-radius: 18px;
