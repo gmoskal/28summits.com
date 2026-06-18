@@ -13,7 +13,6 @@ const imageSize = {
 const imageLayout = {
     photoTopPx: 32,
     photoHeightPx: 566,
-    iconTitleGapPx: 42,
 }
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
@@ -183,11 +182,12 @@ function htmlForLocale(locale) {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            justify-content: space-between;
         }
 
         .title {
             font-family: ${titleFontFamily(locale)};
-            margin: ${imageLayout.iconTitleGapPx}px 0 0;
+            margin: 0;
             font-size: ${titleSize}px;
             line-height: 1.02;
             font-weight: 400;
@@ -197,7 +197,7 @@ function htmlForLocale(locale) {
         }
 
         .teaser {
-            margin: auto 0 0;
+            margin: 0;
             max-width: 580px;
             font-size: ${teaserSize}px;
             line-height: calc(${teaserSize}px + 12px);
