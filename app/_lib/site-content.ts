@@ -129,7 +129,7 @@ export const homeContent: Record<
                 "ręcznie rysowane pieczątki w aplikacji",
                 "pamiątki fizyczne na zamówienie",
                 `ceny w ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} tylko dla fizycznych pamiątek`,
+                `${siteConfig.paymentProcessorName} dla płatności w aplikacji`,
             ],
             contactLabel: "Kontakt",
             legalPolicies: "Dokumenty i zasady",
@@ -171,7 +171,7 @@ export const homeContent: Record<
                 "hand-drawn stamps in app",
                 "custom physical keepsakes",
                 `prices in ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} only for physical keepsakes`,
+                `${siteConfig.paymentProcessorName} for in-app payments`,
             ],
             contactLabel: "Contact",
             legalPolicies: "Legal & Policies",
@@ -213,7 +213,7 @@ export const homeContent: Record<
                 "ručně kreslená razítka v aplikaci",
                 "fyzické památky na objednávku",
                 `ceny v ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} pouze pro fyzické památky`,
+                `${siteConfig.paymentProcessorName} pro platby v aplikaci`,
             ],
             contactLabel: "Kontakt",
             legalPolicies: "Právní dokumenty",
@@ -255,7 +255,7 @@ export const homeContent: Record<
                 "ručne kreslené pečiatky v aplikácii",
                 "fyzické pamiatky na objednávku",
                 `ceny v ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} iba pre fyzické pamiatky`,
+                `${siteConfig.paymentProcessorName} pre platby v aplikácii`,
             ],
             contactLabel: "Kontakt",
             legalPolicies: "Právne dokumenty",
@@ -297,7 +297,7 @@ export const homeContent: Record<
                 "намальовані вручну штампи в застосунку",
                 "фізичні пам’ятки на замовлення",
                 `ціни в ${siteConfig.currencyCode}`,
-                `${siteConfig.paymentProcessorName} лише для фізичних пам’яток`,
+                `${siteConfig.paymentProcessorName} для платежів у застосунку`,
             ],
             contactLabel: "Контакт",
             legalPolicies: "Правові документи",
@@ -353,7 +353,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                             "dane konta, np. identyfikator użytkownika, adres e-mail, nazwa profilu i ustawienia konta, jeżeli konto zostanie utworzone,",
                             "dane związane z korzystaniem z aplikacji, np. zaplanowane szczyty, status wejść, notatki, zdjęcia, podpisy, preferencje i ustawienia,",
                             "dane techniczne, np. adres IP, typ urządzenia, przeglądarka, system operacyjny, logi błędów, identyfikatory diagnostyczne i przybliżony region,",
-                            "informacje o statusie zamówienia lub płatności dotyczącej fizycznej pamiątki.",
+                            "informacje o statusie zamówienia lub płatności.",
                         ],
                     },
                 ],
@@ -412,7 +412,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                     },
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} obsługuje płatności wyłącznie za fizyczne pamiątki. ${siteConfig.operatorName} nie przechowuje pełnych numerów kart płatniczych.`,
+                        text: `Płatności w aplikacji mogą być obsługiwane przez ${siteConfig.paymentProcessorName}. ${siteConfig.operatorName} nie przechowuje pełnych numerów kart płatniczych.`,
                     },
                 ],
             },
@@ -621,7 +621,7 @@ export const legalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} obsługuje wyłącznie płatności za fizyczne pamiątki 28 gór wysyłane do klientów. Inne płatności udostępnione w aplikacji będą opisane przed ich potwierdzeniem.`,
+                        text: `${siteConfig.paymentProcessorName} może obsługiwać płatności dostępne w aplikacji. Warunki każdej płatności będą pokazane przed jej potwierdzeniem.`,
                     },
                     {
                         type: "paragraph",
@@ -803,7 +803,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                             "account data, such as a user identifier, email address, profile name, and account settings if an account is created,",
                             "app usage data, such as planned peaks, summit completion status, notes, photos, captions, preferences, and settings,",
                             "technical data, such as IP address, device type, browser, operating system, error logs, diagnostic identifiers, and approximate region,",
-                            "physical keepsake order or payment status information.",
+                            "order or payment status information.",
                         ],
                     },
                 ],
@@ -862,7 +862,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                     },
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} handles payments only for physical keepsakes. ${siteConfig.operatorName} does not store full payment card numbers.`,
+                        text: `Payments in the app may be handled by ${siteConfig.paymentProcessorName}. ${siteConfig.operatorName} does not store full payment card numbers.`,
                     },
                 ],
             },
@@ -1071,7 +1071,7 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} handles payments only for physical 28 gór keepsakes shipped to customers. Any other payments made available in the app will be described before confirmation.`,
+                        text: `${siteConfig.paymentProcessorName} may handle payments made available in the app. The terms of each payment will be shown before confirmation.`,
                     },
                     {
                         type: "paragraph",
@@ -1249,7 +1249,7 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                             "údaje účtu, pokud bude účet vytvořen, včetně e-mailu, názvu profilu a nastavení,",
                             "údaje z aplikace, například plánované vrcholy, výstupy, poznámky, fotky, popisky, preference a nastavení,",
                             "technické údaje, například IP adresa, typ zařízení, prohlížeč, operační systém, diagnostické údaje a přibližný region,",
-                            "údaje o objednávce nebo platbě týkající se fyzické památky.",
+                            "údaje o objednávce nebo platbě.",
                         ],
                     },
                 ],
@@ -1286,7 +1286,7 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                 body: [
                     {
                         type: "paragraph",
-                        text: `Pokud budou v aplikaci dostupné fyzické památky, můžeme zpracovávat jméno, e-mail, doručovací adresu, údaje objednávky a stav platby. Platby za fyzické památky zpracovává pouze ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukládá úplná čísla platebních karet.`,
+                        text: `Pokud budou v aplikaci dostupné fyzické památky, můžeme zpracovávat jméno, e-mail, doručovací adresu, údaje objednávky a stav platby. Platby v aplikaci může zpracovávat ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukládá úplná čísla platebních karet.`,
                     },
                 ],
             },
@@ -1372,7 +1372,7 @@ export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> =
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} zpracovává pouze platby za fyzické památky 28 gór zasílané zákazníkům. Jiné platby dostupné v aplikaci budou popsány před potvrzením.`,
+                        text: `${siteConfig.paymentProcessorName} může zpracovávat platby dostupné v aplikaci. Podmínky každé platby budou zobrazeny před potvrzením.`,
                     },
                     {
                         type: "paragraph",
@@ -1445,7 +1445,7 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                             "údaje účtu, ak bude účet vytvorený, vrátane e-mailu, názvu profilu a nastavení,",
                             "údaje z aplikácie, napríklad plánované vrcholy, výstupy, poznámky, fotky, popisy, preferencie a nastavenia,",
                             "technické údaje, napríklad IP adresa, typ zariadenia, prehliadač, operačný systém, diagnostické údaje a približný región,",
-                            "údaje o objednávke alebo platbe týkajúcej sa fyzickej pamiatky.",
+                            "údaje o objednávke alebo platbe.",
                         ],
                     },
                 ],
@@ -1482,7 +1482,7 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                 body: [
                     {
                         type: "paragraph",
-                        text: `Ak budú v aplikácii dostupné fyzické pamiatky, môžeme spracúvať meno, e-mail, doručovaciu adresu, údaje objednávky a stav platby. Platby za fyzické pamiatky spracúva iba ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukladá úplné čísla platobných kariet.`,
+                        text: `Ak budú v aplikácii dostupné fyzické pamiatky, môžeme spracúvať meno, e-mail, doručovaciu adresu, údaje objednávky a stav platby. Platby v aplikácii môže spracúvať ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukladá úplné čísla platobných kariet.`,
                     },
                 ],
             },
@@ -1568,7 +1568,7 @@ export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> 
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} spracúva iba platby za fyzické pamiatky 28 gór zasielané zákazníkom. Iné platby dostupné v aplikácii budú opísané pred potvrdením.`,
+                        text: `${siteConfig.paymentProcessorName} môže spracúvať platby dostupné v aplikácii. Podmienky každej platby budú zobrazené pred potvrdením.`,
                     },
                     {
                         type: "paragraph",
@@ -1641,7 +1641,7 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                             "дані акаунта, якщо акаунт буде створено, зокрема e-mail, назва профілю та налаштування,",
                             "дані застосунку, наприклад заплановані вершини, сходження, нотатки, фото, підписи, вподобання та налаштування,",
                             "технічні дані, наприклад IP-адреса, тип пристрою, браузер, операційна система, діагностичні дані та приблизний регіон,",
-                            "дані замовлення або платежу щодо фізичної пам’ятки.",
+                            "дані замовлення або платежу.",
                         ],
                     },
                 ],
@@ -1678,7 +1678,7 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                 body: [
                     {
                         type: "paragraph",
-                        text: `Якщо в застосунку будуть доступні фізичні пам’ятки, ми можемо обробляти ім’я, e-mail, адресу доставки, дані замовлення та статус платежу. Платежі за фізичні пам’ятки обробляє лише ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} не зберігає повні номери платіжних карток.`,
+                        text: `Якщо в застосунку будуть доступні фізичні пам’ятки, ми можемо обробляти ім’я, e-mail, адресу доставки, дані замовлення та статус платежу. Платежі в застосунку може обробляти ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} не зберігає повні номери платіжних карток.`,
                     },
                 ],
             },
@@ -1764,7 +1764,7 @@ export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocumen
                 body: [
                     {
                         type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} обробляє лише платежі за фізичні пам’ятки 28 gór з доставкою клієнтам. Інші платежі, доступні в застосунку, будуть описані перед підтвердженням.`,
+                        text: `${siteConfig.paymentProcessorName} може обробляти платежі, доступні в застосунку. Умови кожного платежу будуть показані перед підтвердженням.`,
                     },
                     {
                         type: "paragraph",

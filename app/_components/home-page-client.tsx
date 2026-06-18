@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { animated, useSpring } from "@react-spring/web"
 import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
@@ -14,25 +15,84 @@ type AppStoreButtonProps = {
     badge: (typeof homeContent)[SiteLocale]["hero"]["appStoreBadge"]
 }
 
+type AppStoreBadgeTransform = {
+    scale: number
+}
+
+const appStoreBadgeMotion: {
+    config: {
+        friction: number
+        mass: number
+        tension: number
+    }
+    hover: AppStoreBadgeTransform
+    press: AppStoreBadgeTransform
+    rest: AppStoreBadgeTransform
+} = {
+    config: {
+        mass: 1,
+        tension: 520,
+        friction: 30,
+    },
+    hover: {
+        scale: 1.1,
+    },
+    press: {
+        scale: 1.06,
+    },
+    rest: {
+        scale: 1,
+    },
+}
+
 function AppStoreButton({ badge }: AppStoreButtonProps) {
+    const isHoveringRef = useRef(false)
+    const [badgeSpring, badgeApi] = useSpring<AppStoreBadgeTransform>(() => ({
+        ...appStoreBadgeMotion.rest,
+        config: appStoreBadgeMotion.config,
+    }))
+    const handlePointerEnter = () => {
+        isHoveringRef.current = true
+        badgeApi.start(appStoreBadgeMotion.hover)
+    }
+    const handlePointerLeave = () => {
+        isHoveringRef.current = false
+        badgeApi.start(appStoreBadgeMotion.rest)
+    }
+    const handlePointerDown = () => badgeApi.start(appStoreBadgeMotion.press)
+    const handlePointerUp = () => badgeApi.start(isHoveringRef.current ? appStoreBadgeMotion.hover : appStoreBadgeMotion.rest)
+
     return (
-        <a
+        <animated.a
             href={siteConfig.launchUpdatesUrl}
             aria-label={badge.actionLabel}
             title={badge.actionLabel}
-            className="inline-flex h-[54px] w-[182px] items-center justify-center transition-[filter,transform] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
+            className="inline-grid touch-manipulation select-none place-items-center overflow-visible rounded-[11px] bg-[var(--app-store-button-bg)] px-[1.5em] py-[0.5em] shadow-[0_10px_30px_rgba(0,0,0,0.2)] focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
+            onPointerCancel={handlePointerLeave}
+            onPointerDown={handlePointerDown}
+            onPointerEnter={handlePointerEnter}
+            onPointerLeave={handlePointerLeave}
+            onPointerUp={handlePointerUp}
+            style={{
+                scale: badgeSpring.scale,
+            }}
         >
-            <Image
-                src={siteConfig.appStoreBadgeImage}
-                alt=""
-                width={135}
-                height={40}
-                unoptimized
-                draggable={false}
-                className="h-full w-full select-none"
-                style={{ filter: "var(--app-store-badge-filter)" }}
-            />
-        </a>
+            <span className="grid h-[54px] w-[182px] cursor-grab items-center justify-items-center active:cursor-grabbing">
+                <Image
+                    src={siteConfig.appStoreBadgeImage}
+                    alt=""
+                    width={135}
+                    height={40}
+                    unoptimized
+                    draggable={false}
+                    className="h-full w-full select-none object-contain"
+                    style={{
+                        clipPath: "inset(6px round 7px)",
+                        filter: "var(--app-store-badge-filter)",
+                    }}
+                />
+            </span>
+        </animated.a>
     )
 }
 
@@ -61,7 +121,7 @@ type SectionReentryOptions = {
 }
 
 const legalAccentStyle = { color: "#666666" }
-const legalNavLinkClassName = "text-[15px] leading-[20px] font-semibold transition-[color,filter] hover:brightness-95"
+const legalNavLinkClassName = "text-[16px] leading-[23px] font-semibold transition-[color,filter] hover:brightness-95 xl:text-[20px] xl:leading-[29px]"
 const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
 const sectionStart = {
     tolerancePx: 3,
