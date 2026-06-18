@@ -1,22 +1,27 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { SiteLocale, SiteThemeMode, siteLanguageByLocale, siteLocales, siteThemeModes } from "./site-content"
+import {
+    SiteLocale,
+    SiteThemeMode,
+    defaultSiteLocale,
+    siteLanguageByLocale,
+    siteLocaleFromInput,
+    siteThemeModes,
+} from "./site-content"
 
 const sitePreferenceStorageKeys = {
-    locale: "28gor.www.locale",
+    legacyLocale: "28gor.www.locale",
+    manualLocale: "28gor.www.manual-locale",
     themeMode: "28gor.www.theme-mode",
 } as const
 
-const defaultLocale: SiteLocale = "en"
+const urlLocaleParamName = "lang"
+const legacyUrlLocaleParamName = "locale"
 
-function parseSiteLocale(localeInput: string | null | undefined): SiteLocale | null {
-    if (!localeInput) {
-        return null
-    }
-
-    const languageCode = localeInput.toLowerCase().split("-")[0]
-    return siteLocales.find((locale) => locale === languageCode) ?? null
+type LocalePreference = {
+    locale: SiteLocale
+    source: "browser" | "manual"
 }
 
 function parseSiteThemeMode(themeModeInput: string | null | undefined): SiteThemeMode | null {
@@ -26,13 +31,13 @@ function parseSiteThemeMode(themeModeInput: string | null | undefined): SiteThem
 function browserLocale(): SiteLocale {
     const browserLanguages = typeof navigator === "undefined" ? [] : navigator.languages
     for (const language of browserLanguages) {
-        const locale = parseSiteLocale(language)
+        const locale = siteLocaleFromInput(language)
         if (locale) {
             return locale
         }
     }
 
-    return parseSiteLocale(typeof navigator === "undefined" ? null : navigator.language) ?? defaultLocale
+    return siteLocaleFromInput(typeof navigator === "undefined" ? null : navigator.language) ?? defaultSiteLocale
 }
 
 function browserTheme(): SiteThemeMode {
@@ -51,9 +56,33 @@ function queryPreferences(): { locale: SiteLocale | null; themeMode: SiteThemeMo
     const params = new URLSearchParams(window.location.search)
 
     return {
-        locale: parseSiteLocale(params.get("locale") ?? params.get("lang")),
+        locale: siteLocaleFromInput(params.get(legacyUrlLocaleParamName) ?? params.get(urlLocaleParamName)),
         themeMode: parseSiteThemeMode(params.get("theme") ?? params.get("themeMode") ?? params.get("mode")),
     }
+}
+
+function urlHasLocaleParam() {
+    if (typeof window === "undefined") {
+        return false
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    return params.has(urlLocaleParamName) || params.has(legacyUrlLocaleParamName)
+}
+
+function updateUrlLocale(locale: SiteLocale) {
+    if (typeof window === "undefined") {
+        return
+    }
+
+    const url = new URL(window.location.href)
+    if (locale === defaultSiteLocale) {
+        url.searchParams.delete(urlLocaleParamName)
+    } else {
+        url.searchParams.set(urlLocaleParamName, locale)
+    }
+    url.searchParams.delete(legacyUrlLocaleParamName)
+    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`)
 }
 
 function updateDocumentTheme(theme: SiteThemeMode) {
@@ -65,18 +94,25 @@ function updateDocumentTheme(theme: SiteThemeMode) {
 }
 
 export function useSitePreferences() {
-    const [locale, setLocaleState] = useState<SiteLocale>(defaultLocale)
+    const [localePreference, setLocalePreference] = useState<LocalePreference>({
+        locale: defaultSiteLocale,
+        source: "browser",
+    })
     const [themeMode, setThemeModeState] = useState<SiteThemeMode>("light")
     const [activeTheme, setActiveTheme] = useState<SiteThemeMode>("light")
+    const [shouldSyncLocaleUrl, setShouldSyncLocaleUrl] = useState(false)
 
     useEffect(() => {
         const query = queryPreferences()
+        const manualLocale = siteLocaleFromInput(localStorage.getItem(sitePreferenceStorageKeys.manualLocale))
+        const nextLocale = manualLocale ?? browserLocale()
 
-        setLocaleState(
-            query.locale
-                ?? parseSiteLocale(localStorage.getItem(sitePreferenceStorageKeys.locale))
-                ?? browserLocale(),
-        )
+        localStorage.removeItem(sitePreferenceStorageKeys.legacyLocale)
+        setLocalePreference({
+            locale: nextLocale,
+            source: manualLocale ? "manual" : "browser",
+        })
+        setShouldSyncLocaleUrl(Boolean(manualLocale) || Boolean(query.locale) || urlHasLocaleParam())
         setThemeModeState(
             query.themeMode
                 ?? parseSiteThemeMode(localStorage.getItem(sitePreferenceStorageKeys.themeMode))
@@ -85,9 +121,16 @@ export function useSitePreferences() {
     }, [])
 
     useEffect(() => {
+        const locale = localePreference.locale
         document.documentElement.lang = siteLanguageByLocale[locale].htmlLang
-        localStorage.setItem(sitePreferenceStorageKeys.locale, locale)
-    }, [locale])
+        if (shouldSyncLocaleUrl) {
+            updateUrlLocale(locale)
+        }
+
+        if (localePreference.source === "manual") {
+            localStorage.setItem(sitePreferenceStorageKeys.manualLocale, locale)
+        }
+    }, [localePreference, shouldSyncLocaleUrl])
 
     useEffect(() => {
         setActiveTheme(themeMode)
@@ -95,11 +138,14 @@ export function useSitePreferences() {
         localStorage.setItem(sitePreferenceStorageKeys.themeMode, themeMode)
     }, [themeMode])
 
-    const setLocale = useCallback((nextLocale: SiteLocale) => setLocaleState(nextLocale), [])
+    const setLocale = useCallback((nextLocale: SiteLocale) => {
+        setShouldSyncLocaleUrl(true)
+        setLocalePreference({ locale: nextLocale, source: "manual" })
+    }, [])
     const setThemeMode = useCallback((nextThemeMode: SiteThemeMode) => setThemeModeState(nextThemeMode), [])
 
     return {
-        locale,
+        locale: localePreference.locale,
         themeMode,
         activeTheme,
         setLocale,

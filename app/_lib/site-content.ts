@@ -1,18 +1,18 @@
 const siteIconVersion = "20260617-2"
-const siteSocialImageVersion = "20260617-2"
+export const siteSocialImageVersion = "20260618-23"
 
 export const siteConfig = {
     name: "28 gór",
     productName: "28 gór",
     operatorName: "async.studio",
-    contactEmail: "support@async.studio",
+    contactEmail: "rysek@28gor.app",
     siteHost: "28gor.app",
     currencyCode: "PLN",
     paymentProcessorName: "Stripe",
     appStoreUrl: "https://apps.apple.com/app/28-summits/id0000000000",
     appStoreBadgeImage: "/download-on-the-app-store-badge.svg",
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.28summits.app",
-    launchUpdatesUrl: "mailto:support@async.studio?subject=28%20g%C3%B3r%20launch%20updates",
+    launchUpdatesUrl: "mailto:rysek@28gor.app?subject=28%20g%C3%B3r%20launch%20updates",
     siteUrl: "https://28gor.app",
     appIcon: `/app-icon.png?v=${siteIconVersion}`,
     appIconHeader: "/app-icon.png",
@@ -21,29 +21,15 @@ export const siteConfig = {
     faviconIcon16: `/favicon-16x16.png?v=${siteIconVersion}`,
     faviconIcon32: `/favicon-32x32.png?v=${siteIconVersion}`,
     description: "28 gór zbiera plany, wejścia, zdjęcia, ręcznie rysowane pieczątki, edukację i górskie pamiątki w jednej dopracowanej aplikacji.",
-    socialTitle: "28 gór - wszystko z gór w jednym pięknym miejscu",
-    socialDescription: "Zbieraj wejścia, zdjęcia, notatki i pieczątki rysowane dla każdego szczytu. Zamawiaj pamiątki i odkrywaj edukacyjne treści z Ryskiem.",
-    socialImage: `/og-image-${siteSocialImageVersion}.png`,
-    socialImageAlt: "28 gór - dopracowana aplikacja z ręcznie rysowanymi pieczątkami, zdjęciami, edukacją i pamiątkami z tras.",
-} as const
-
-export const siteSocialImage = {
-    url: siteConfig.socialImage,
-    secureUrl: `${siteConfig.siteUrl}${siteConfig.socialImage}`,
-    width: 1200,
-    height: 630,
-    type: "image/png",
-    alt: siteConfig.socialImageAlt,
-} as const
-
-export const siteSocialTwitterImage = {
-    url: siteConfig.socialImage,
-    alt: siteConfig.socialImageAlt,
 } as const
 
 export const siteLanguages = [
     { locale: "pl", flag: "🇵🇱", name: "Polski", htmlLang: "pl", ogLocale: "pl_PL" },
     { locale: "en", flag: "🇬🇧", name: "English", htmlLang: "en", ogLocale: "en_US" },
+    { locale: "es", flag: "🇪🇸", name: "Español", htmlLang: "es", ogLocale: "es_ES" },
+    { locale: "de", flag: "🇩🇪", name: "Deutsch", htmlLang: "de", ogLocale: "de_DE" },
+    { locale: "fr", flag: "🇫🇷", name: "Français", htmlLang: "fr", ogLocale: "fr_FR" },
+    { locale: "nb", flag: "🇳🇴", name: "Norsk", htmlLang: "nb", ogLocale: "nb_NO" },
     { locale: "cs", flag: "🇨🇿", name: "Čeština", htmlLang: "cs", ogLocale: "cs_CZ" },
     { locale: "sk", flag: "🇸🇰", name: "Slovenčina", htmlLang: "sk", ogLocale: "sk_SK" },
     { locale: "uk", flag: "🇺🇦", name: "Українська", htmlLang: "uk", ogLocale: "uk_UA" },
@@ -56,6 +42,128 @@ export const siteLocales = siteLanguages.map((language) => language.locale)
 export const siteLanguageByLocale = Object.fromEntries(
     siteLanguages.map((language) => [language.locale, language]),
 ) as Record<SiteLocale, SiteLanguage>
+
+export const defaultSiteLocale: SiteLocale = "pl"
+
+const siteLocaleAliases: Partial<Record<string, SiteLocale>> = {
+    no: "nb",
+} as const
+
+export type SiteSocialContent = {
+    locale: SiteLocale
+    title: string
+    description: string
+    image: string
+    imageAlt: string
+}
+
+export function siteLocaleFromInput(localeInput: string | null | undefined): SiteLocale | null {
+    if (!localeInput) {
+        return null
+    }
+
+    const languageCode = localeInput.toLowerCase().split("-")[0]
+    const aliasedLocale = siteLocaleAliases[languageCode]
+
+    if (aliasedLocale) {
+        return aliasedLocale
+    }
+
+    return siteLocales.find((locale) => locale === languageCode) ?? null
+}
+
+function socialImagePath(locale: SiteLocale) {
+    return `/og-image-${siteSocialImageVersion}-${locale}.png`
+}
+
+const socialCopyByLocale: Record<SiteLocale, Omit<SiteSocialContent, "locale" | "image">> = {
+    pl: {
+        title: "Gotowi na 28 przygód?",
+        description: "Zbieraj pieczątki z najwyższych gór w Polsce. Kolekcjonuj zdjęcia i pamiątki, odkrywaj gry edukacyjne, a przede wszystkim poznaj Ryska.",
+        imageAlt: "Rysek pokazuje ekran pluszowych pieczątek w aplikacji 28 gór.",
+    },
+    en: {
+        title: "Ready for 28 adventures?",
+        description: "Collect stamps from Poland's highest mountains. Save photos and keepsakes, discover educational games, and most of all, meet Rysek.",
+        imageAlt: "Rysek points at the plush stamp screen in the 28 gór app.",
+    },
+    es: {
+        title: "¿Todo listo para 28 aventuras?",
+        description: "Colecciona sellos de las montañas más altas de Polonia. Guarda fotos y recuerdos, descubre juegos educativos y, sobre todo, conoce a Rysek.",
+        imageAlt: "Rysek señala la pantalla de sellos de peluche en la app 28 gór.",
+    },
+    de: {
+        title: "Bereit für 28 Abenteuer?",
+        description: "Sammle Stempel der höchsten Berge Polens. Bewahre Fotos und Andenken, entdecke Lernspiele und lerne vor allem Rysek kennen.",
+        imageAlt: "Rysek zeigt auf den Bildschirm mit Plüschstempeln in der 28 gór App.",
+    },
+    fr: {
+        title: "Cap sur 28 aventures ?",
+        description: "Collectionne les tampons des plus hauts sommets de Pologne. Garde tes photos et souvenirs, découvre des jeux éducatifs et, surtout, rencontre Rysek.",
+        imageAlt: "Rysek montre l'écran des tampons en peluche dans l'app 28 gór.",
+    },
+    nb: {
+        title: "Klar for 28 eventyr?",
+        description: "Samle stempler fra Polens høyeste fjell. Ta vare på bilder og minner, oppdag lærerike spill og, viktigst av alt, bli kjent med Rysek.",
+        imageAlt: "Rysek peker på skjermen med plysjstempler i 28 gór-appen.",
+    },
+    cs: {
+        title: "Připraveni na 28 dobrodružství?",
+        description: "Sbírej razítka z nejvyšších hor Polska. Uchovávej fotografie a památky, objevuj vzdělávací hry a hlavně poznej Ryska.",
+        imageAlt: "Rysek ukazuje na obrazovku s plyšovými razítky v aplikaci 28 gór.",
+    },
+    sk: {
+        title: "Pripravení na 28 dobrodružstiev?",
+        description: "Zbieraj pečiatky z najvyšších hôr Poľska. Ukladaj fotografie a pamiatky, objavuj vzdelávacie hry a hlavne spoznaj Ryska.",
+        imageAlt: "Rysek ukazuje na obrazovku s plyšovými pečiatkami v aplikácii 28 gór.",
+    },
+    uk: {
+        title: "Готові до 28 пригод?",
+        description: "Збирай штампи з найвищих гір Польщі. Зберігай фото й пам'ятки, відкривай освітні ігри, а головне - познайомся з Рисеком.",
+        imageAlt: "Рисек показує екран плюшевих штампів у застосунку 28 gór.",
+    },
+} as const
+
+export const socialContent = Object.fromEntries(
+    siteLocales.map((locale) => [
+        locale,
+        {
+            locale,
+            ...socialCopyByLocale[locale],
+            image: socialImagePath(locale),
+        },
+    ]),
+) as Record<SiteLocale, SiteSocialContent>
+
+export function socialContentForLocale(localeInput: string | null | undefined): SiteSocialContent {
+    return socialContent[siteLocaleFromInput(localeInput) ?? defaultSiteLocale]
+}
+
+export function siteSocialImageForLocale(localeInput: string | null | undefined = defaultSiteLocale) {
+    const content = socialContentForLocale(localeInput)
+
+    return {
+        url: content.image,
+        secureUrl: `${siteConfig.siteUrl}${content.image}`,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: content.imageAlt,
+    } as const
+}
+
+export function siteSocialTwitterImageForLocale(localeInput: string | null | undefined = defaultSiteLocale) {
+    const content = socialContentForLocale(localeInput)
+
+    return {
+        url: content.image,
+        alt: content.imageAlt,
+    } as const
+}
+
+export const siteSocialContent = socialContent[defaultSiteLocale]
+export const siteSocialImage = siteSocialImageForLocale(defaultSiteLocale)
+export const siteSocialTwitterImage = siteSocialTwitterImageForLocale(defaultSiteLocale)
 
 export const siteThemeModes = ["light", "dark"] as const
 export type SiteThemeMode = (typeof siteThemeModes)[number]
@@ -175,6 +283,174 @@ export const homeContent: Record<
             ],
             contactLabel: "Contact",
             legalPolicies: "Legal & Policies",
+        },
+    },
+    es: {
+        controls: {
+            languageLabel: "Idioma",
+            themeLabel: "Tema",
+            themeModes: {
+                light: "Claro",
+                dark: "Oscuro",
+            },
+        },
+        nav: {
+            privacy: "Privacidad",
+            terms: "Términos",
+            support: "Contacto",
+            back: "Volver",
+        },
+        hero: {
+            eyebrow: "Todos los recuerdos de montaña en un solo lugar",
+            headline: "28 gór",
+            replayLogoAnimationLabel: "Reproducir la animación del logotipo de 28 gór",
+            body: [
+                "28 gór es una nueva app para App Store que reúne ascensos, fotos y huellas de ruta en un lugar bonito y cuidado. Cada cima tiene su propio sello dibujado a mano.",
+                "Rysek ya se la lleva a la montaña. Dentro te esperan pequeños descubrimientos: notas sobre cimas, pistas educativas y recuerdos que puedes pedir después de una excursión real.",
+            ],
+            appStoreBadge: {
+                actionLabel: "Avísame cuando 28 gór esté disponible en App Store",
+            },
+            caption: "Toca el distintivo de App Store y prepararemos un mensaje para avisarte del lanzamiento.",
+            featureLabels: ["Sellos dibujados a mano", "Recuerdos a medida", "Centro educativo", "Información de montaña"],
+            mascotBadge: "Junio de 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór es un producto de ${siteConfig.operatorName}`,
+                "sellos dibujados a mano en la app",
+                "recuerdos físicos a medida",
+                `precios en ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} para pagos en la app`,
+            ],
+            contactLabel: "Contacto",
+            legalPolicies: "Legal y políticas",
+        },
+    },
+    de: {
+        controls: {
+            languageLabel: "Sprache",
+            themeLabel: "Design",
+            themeModes: {
+                light: "Hell",
+                dark: "Dunkel",
+            },
+        },
+        nav: {
+            privacy: "Datenschutz",
+            terms: "Bedingungen",
+            support: "Kontakt",
+            back: "Zurück",
+        },
+        hero: {
+            eyebrow: "Alle Bergmomente an einem Ort",
+            headline: "28 gór",
+            replayLogoAnimationLabel: "Animation des 28 gór Logos erneut abspielen",
+            body: [
+                "28 gór ist eine neue App für den App Store, die Aufstiege, Fotos und Spuren deiner Touren an einem schön gestalteten Ort sammelt. Jeder Gipfel bekommt seinen eigenen handgezeichneten Stempel.",
+                "Rysek nimmt sie schon mit in die Berge. In der App warten kleine Entdeckungen: Gipfelnotizen, Lernmomente und Andenken, die du nach einer echten Tour bestellen kannst.",
+            ],
+            appStoreBadge: {
+                actionLabel: "Benachrichtige mich, wenn 28 gór im App Store verfügbar ist",
+            },
+            caption: "Tippe auf das App-Store-Badge und wir bereiten eine Nachricht zum Start vor.",
+            featureLabels: ["Handgezeichnete Stempel", "Andenken nach Maß", "Lernbereich", "Berginformationen"],
+            mascotBadge: "Juni 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór ist ein Produkt von ${siteConfig.operatorName}`,
+                "handgezeichnete Stempel in der App",
+                "physische Andenken nach Maß",
+                `Preise in ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} für Zahlungen in der App`,
+            ],
+            contactLabel: "Kontakt",
+            legalPolicies: "Rechtliches",
+        },
+    },
+    fr: {
+        controls: {
+            languageLabel: "Langue",
+            themeLabel: "Thème",
+            themeModes: {
+                light: "Clair",
+                dark: "Sombre",
+            },
+        },
+        nav: {
+            privacy: "Confidentialité",
+            terms: "Conditions",
+            support: "Contact",
+            back: "Retour",
+        },
+        hero: {
+            eyebrow: "Tous les souvenirs de montagne au même endroit",
+            headline: "28 gór",
+            replayLogoAnimationLabel: "Rejouer l'animation du logo 28 gór",
+            body: [
+                "28 gór est une nouvelle app pour l'App Store qui rassemble ascensions, photos et traces de parcours dans un espace soigné. Chaque sommet reçoit son propre tampon dessiné à la main.",
+                "Rysek l'emmène déjà en montagne. À l'intérieur, de petites découvertes t'attendent : notes sur les sommets, pistes éducatives et souvenirs à commander après une vraie sortie.",
+            ],
+            appStoreBadge: {
+                actionLabel: "Prévenez-moi quand 28 gór sera disponible sur l'App Store",
+            },
+            caption: "Touchez le badge App Store et nous préparerons un message pour vous prévenir du lancement.",
+            featureLabels: ["Tampons dessinés à la main", "Souvenirs sur mesure", "Centre éducatif", "Infos montagne"],
+            mascotBadge: "Juin 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór est un produit de ${siteConfig.operatorName}`,
+                "tampons dessinés à la main dans l'app",
+                "souvenirs physiques sur mesure",
+                `prix en ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} pour les paiements dans l'app`,
+            ],
+            contactLabel: "Contact",
+            legalPolicies: "Mentions légales",
+        },
+    },
+    nb: {
+        controls: {
+            languageLabel: "Språk",
+            themeLabel: "Tema",
+            themeModes: {
+                light: "Lyst",
+                dark: "Mørkt",
+            },
+        },
+        nav: {
+            privacy: "Personvern",
+            terms: "Vilkår",
+            support: "Kontakt",
+            back: "Tilbake",
+        },
+        hero: {
+            eyebrow: "Alle fjellminner på ett sted",
+            headline: "28 gór",
+            replayLogoAnimationLabel: "Spill av 28 gór-logoanimasjonen på nytt",
+            body: [
+                "28 gór er en ny app for App Store som samler turer, bilder og spor fra ruta på ett vakkert sted. Hver topp får sitt eget håndtegnede stempel.",
+                "Rysek tar den allerede med på fjellet. Inne i appen venter små oppdagelser: toppnotater, læringsspor og minner du kan bestille etter en ekte tur.",
+            ],
+            appStoreBadge: {
+                actionLabel: "Gi meg beskjed når 28 gór er tilgjengelig i App Store",
+            },
+            caption: "Trykk på App Store-merket, så lager vi en melding som varsler deg ved lansering.",
+            featureLabels: ["Håndtegnede stempler", "Skreddersydde minner", "Læringssenter", "Fjellinformasjon"],
+            mascotBadge: "Juni 2026",
+        },
+        compliance: {
+            summaryParts: [
+                `28 gór er et produkt fra ${siteConfig.operatorName}`,
+                "håndtegnede stempler i appen",
+                "fysiske minner på bestilling",
+                `priser i ${siteConfig.currencyCode}`,
+                `${siteConfig.paymentProcessorName} for betalinger i appen`,
+            ],
+            contactLabel: "Kontakt",
+            legalPolicies: "Juridisk",
         },
     },
     cs: {
@@ -1220,598 +1496,78 @@ export const englishLegalDocuments: Record<LegalDocument["slug"], LegalDocument>
     },
 }
 
-export const czechLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
-    privacy: {
-        slug: "privacy",
-        title: "Zásady ochrany soukromí",
-        effectiveDate: "Platné od 29. května 2026",
-        intro: [
-            `Tyto zásady popisují, jak ${siteConfig.operatorName}, provozovatel produktu 28 gór, zpracovává osobní údaje uživatelů webu ${siteConfig.siteHost} a připravované mobilní aplikace.`,
-            "28 gór má být spuštěno v červnu 2026. Dokument se týká webu, kontaktu s uživateli a plánovaných funkcí aplikace, jako je účet, deník výstupů, fotky, preference a synchronizace dat.",
-        ],
-        sections: [
-            {
-                heading: "Správce a kontakt",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Správcem osobních údajů je ${siteConfig.operatorName}, provozovatel produktu 28 gór. Ve věcech soukromí, osobních údajů a podpory pište na ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Jaké údaje zpracováváme",
-                body: [
-                    {
-                        type: "list",
-                        items: [
-                            "kontaktní údaje, například e-mail zadaný pro informace o spuštění nebo podporu,",
-                            "údaje účtu, pokud bude účet vytvořen, včetně e-mailu, názvu profilu a nastavení,",
-                            "údaje z aplikace, například plánované vrcholy, výstupy, poznámky, fotky, popisky, preference a nastavení,",
-                            "technické údaje, například IP adresa, typ zařízení, prohlížeč, operační systém, diagnostické údaje a přibližný region,",
-                            "údaje o objednávce nebo platbě.",
-                        ],
-                    },
-                ],
-            },
-            {
-                heading: "Účely zpracování",
-                body: [
-                    {
-                        type: "list",
-                        items: [
-                            "poskytování služby, vedení účtu, synchronizace dat a funkce aplikace,",
-                            "odpovědi na dotazy, podporu a zprávy o spuštění produktu,",
-                            "bezpečnost, diagnostika chyb, prevence zneužití a zlepšování kvality služby,",
-                            "splnění právních, účetních nebo daňových povinností, pokud se použijí.",
-                        ],
-                    },
-                ],
-            },
-            {
-                heading: "Oprávnění zařízení a cookies",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Aplikace může požádat o přístup k poloze, fotoaparátu, knihovně fotek nebo oznámením pouze tehdy, když je to potřeba pro konkrétní funkci. Oprávnění lze změnit v nastavení systému.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "Web může používat nezbytné cookies, localStorage nebo podobné technologie k zapamatování jazyka, motivu a základních nastavení rozhraní.",
-                    },
-                ],
-            },
-            {
-                heading: "Fyzické památky a platby",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Pokud budou v aplikaci dostupné fyzické památky, můžeme zpracovávat jméno, e-mail, doručovací adresu, údaje objednávky a stav platby. Platby v aplikaci může zpracovávat ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukládá úplná čísla platebních karet.`,
-                    },
-                ],
-            },
-            {
-                heading: "Příjemci, uchování a práva",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Údaje můžeme předávat poskytovatelům hostingu, databází, e-mailu, podpory, diagnostiky, plateb a logistiky pouze v rozsahu potřebném pro provoz služby. Údaje neprodáváme.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Údaje uchováváme po dobu potřebnou pro daný účel nebo zákonné povinnosti. Žádosti o přístup, opravu, výmaz, omezení zpracování, přenositelnost nebo námitku můžete posílat na ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Děti, bezpečnost a změny",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Služba není určena dětem mladším 13 let. Nezletilí by ji měli používat se souhlasem a dohledem zákonného zástupce. Tyto zásady mohou být aktualizovány podle vývoje produktu nebo právních požadavků.",
-                    },
-                ],
-            },
-        ],
-    },
-    terms: {
-        slug: "terms",
-        title: "Podmínky služby",
-        effectiveDate: "Platné od 29. května 2026",
-        intro: [
-            `Tyto podmínky upravují používání webu ${siteConfig.siteHost} a aplikace 28 gór. Produkt vyvíjí ${siteConfig.operatorName} a spuštění aplikace je plánováno na červen 2026.`,
-            "28 gór pomáhá plánovat a dokumentovat výstupy na 28 vrcholů. Nenahrazuje mapy, hlášení horské služby, předpověď počasí, značení v terénu ani vlastní úsudek.",
-        ],
-        sections: [
-            {
-                heading: "Provozovatel a kontakt",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Provozovatelem služby je ${siteConfig.operatorName}. Ve věcech podmínek, služby nebo podpory pište na ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Rozsah služby",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Po spuštění může aplikace obsahovat plánování vrcholů, historii výstupů, ukládání fotek, ručně kreslená razítka pro jednotlivé vrcholy, vzdělávací centrum, synchronizaci účtu a další funkce pro dokumentování tras.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "V aplikaci může být možné kupovat fyzické památky zasílané zákazníkům.",
-                    },
-                ],
-            },
-            {
-                heading: "Účet a obsah uživatele",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Uživatel odpovídá za správnost údajů účtu a ochranu přihlašovacích údajů. Práva k fotkám, poznámkám a dalšímu vlastnímu obsahu zůstávají uživateli.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "Přidáním obsahu uděluje uživatel provozovateli technickou licenci potřebnou k uložení, synchronizaci, zobrazení, zálohování a podpoře obsahu.",
-                    },
-                ],
-            },
-            {
-                heading: "Bezpečnost v horách",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Za rozhodnutí v terénu, volbu trasy, počasí, vybavení a reakci na místní podmínky odpovídá uživatel. Před cestou je nutné ověřit aktuální zprávy, uzávěry tras, varování a doporučení záchranných složek.",
-                    },
-                ],
-            },
-            {
-                heading: "Fyzické památky a platby",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} může zpracovávat platby dostupné v aplikaci. Podmínky každé platby budou zobrazeny před potvrzením.`,
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Ceny fyzických památek budou uvedeny v ${siteConfig.currencyCode} před platbou. Podmínky doručení, vrácení, reklamací a zrušení objednávky budou zobrazeny před nákupem nebo zaslány podporou.`,
-                    },
-                ],
-            },
-            {
-                heading: "Dostupnost, změny a práva",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Služba se může vyvíjet, měnit, být dočasně nedostupná nebo být v některých funkcích ukončena. Název 28 gór, vzhled aplikace, texty, grafika a prvky produktu jsou chráněny právy provozovatele nebo oprávněných držitelů.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Pravidla zpracování osobních údajů popisují Zásady ochrany soukromí dostupné na ${siteConfig.siteHost}/privacy.`,
-                    },
-                ],
-            },
-        ],
-    },
-    support: {
-        slug: "support",
-        title: "Podpora",
-        effectiveDate: "Aktualizováno: 29. května 2026",
-        intro: [
-            "Potřebujete pomoc s účtem, přístupem k údajům, objednávkou fyzické památky nebo technickým problémem? Stručně popište, co se stalo, na jakém zařízení a co jste očekávali.",
-        ],
-        sections: [
-            {
-                heading: "E-mailová podpora",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Napište na ${siteConfig.contactEmail}. Pokud to pomůže, přiložte snímek obrazovky, verzi aplikace, model zařízení, číslo objednávky nebo adresu stránky, kde problém nastal. Obvykle odpovídáme do 2 pracovních dnů.`,
-                    },
-                ],
-            },
-        ],
-    },
+export const legalDocumentLocales = ["pl", "en"] as const
+export type LegalDocumentLocale = (typeof legalDocumentLocales)[number]
+
+export function legalDocumentLocaleForSiteLocale(locale: SiteLocale): LegalDocumentLocale {
+    return locale === "pl" ? "pl" : "en"
 }
 
-export const slovakLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
-    privacy: {
-        slug: "privacy",
-        title: "Zásady ochrany súkromia",
-        effectiveDate: "Platné od 29. mája 2026",
-        intro: [
-            `Tieto zásady opisujú, ako ${siteConfig.operatorName}, prevádzkovateľ produktu 28 gór, spracúva osobné údaje používateľov webu ${siteConfig.siteHost} a pripravovanej mobilnej aplikácie.`,
-            "28 gór má byť spustené v júni 2026. Dokument sa týka webu, kontaktu s používateľmi a plánovaných funkcií aplikácie, ako je účet, denník výstupov, fotky, preferencie a synchronizácia údajov.",
-        ],
-        sections: [
-            {
-                heading: "Prevádzkovateľ a kontakt",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Prevádzkovateľom osobných údajov je ${siteConfig.operatorName}, prevádzkovateľ produktu 28 gór. Vo veciach súkromia, osobných údajov a podpory píšte na ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Aké údaje spracúvame",
-                body: [
-                    {
-                        type: "list",
-                        items: [
-                            "kontaktné údaje, napríklad e-mail zadaný pre informácie o spustení alebo podporu,",
-                            "údaje účtu, ak bude účet vytvorený, vrátane e-mailu, názvu profilu a nastavení,",
-                            "údaje z aplikácie, napríklad plánované vrcholy, výstupy, poznámky, fotky, popisy, preferencie a nastavenia,",
-                            "technické údaje, napríklad IP adresa, typ zariadenia, prehliadač, operačný systém, diagnostické údaje a približný región,",
-                            "údaje o objednávke alebo platbe.",
-                        ],
-                    },
-                ],
-            },
-            {
-                heading: "Účely spracúvania",
-                body: [
-                    {
-                        type: "list",
-                        items: [
-                            "poskytovanie služby, vedenie účtu, synchronizácia údajov a funkcie aplikácie,",
-                            "odpovede na otázky, podporu a správy o spustení produktu,",
-                            "bezpečnosť, diagnostika chýb, prevencia zneužitia a zlepšovanie kvality služby,",
-                            "splnenie právnych, účtovných alebo daňových povinností, ak sa použijú.",
-                        ],
-                    },
-                ],
-            },
-            {
-                heading: "Oprávnenia zariadenia a cookies",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Aplikácia môže požiadať o prístup k polohe, fotoaparátu, knižnici fotiek alebo oznámeniam iba vtedy, keď je to potrebné pre konkrétnu funkciu. Oprávnenia možno zmeniť v nastaveniach systému.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "Web môže používať nevyhnutné cookies, localStorage alebo podobné technológie na zapamätanie jazyka, motívu a základných nastavení rozhrania.",
-                    },
-                ],
-            },
-            {
-                heading: "Fyzické pamiatky a platby",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Ak budú v aplikácii dostupné fyzické pamiatky, môžeme spracúvať meno, e-mail, doručovaciu adresu, údaje objednávky a stav platby. Platby v aplikácii môže spracúvať ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} neukladá úplné čísla platobných kariet.`,
-                    },
-                ],
-            },
-            {
-                heading: "Príjemcovia, uchovanie a práva",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Údaje môžeme poskytovať dodávateľom hostingu, databáz, e-mailu, podpory, diagnostiky, platieb a logistiky iba v rozsahu potrebnom na prevádzku služby. Údaje nepredávame.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Údaje uchovávame počas obdobia potrebného pre daný účel alebo zákonné povinnosti. Žiadosti o prístup, opravu, vymazanie, obmedzenie spracúvania, prenosnosť alebo námietku môžete posielať na ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Deti, bezpečnosť a zmeny",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Služba nie je určená deťom mladším ako 13 rokov. Maloletí by ju mali používať so súhlasom a dohľadom zákonného zástupcu. Tieto zásady môžu byť aktualizované podľa vývoja produktu alebo právnych požiadaviek.",
-                    },
-                ],
-            },
-        ],
-    },
-    terms: {
-        slug: "terms",
-        title: "Podmienky služby",
-        effectiveDate: "Platné od 29. mája 2026",
-        intro: [
-            `Tieto podmienky upravujú používanie webu ${siteConfig.siteHost} a aplikácie 28 gór. Produkt vyvíja ${siteConfig.operatorName} a spustenie aplikácie je plánované na jún 2026.`,
-            "28 gór pomáha plánovať a dokumentovať výstupy na 28 vrcholov. Nenahrádza mapy, hlásenia horskej služby, predpoveď počasia, značenie v teréne ani vlastný úsudok.",
-        ],
-        sections: [
-            {
-                heading: "Prevádzkovateľ a kontakt",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Prevádzkovateľom služby je ${siteConfig.operatorName}. Vo veciach podmienok, služby alebo podpory píšte na ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Rozsah služby",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Po spustení môže aplikácia obsahovať plánovanie vrcholov, históriu výstupov, ukladanie fotiek, ručne kreslené pečiatky pre jednotlivé vrcholy, vzdelávacie centrum, synchronizáciu účtu a ďalšie funkcie na dokumentovanie trás.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "V aplikácii môže byť možné kupovať fyzické pamiatky zasielané zákazníkom.",
-                    },
-                ],
-            },
-            {
-                heading: "Účet a obsah používateľa",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Používateľ zodpovedá za správnosť údajov účtu a ochranu prihlasovacích údajov. Práva k fotkám, poznámkam a ďalšiemu vlastnému obsahu zostávajú používateľovi.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "Pridaním obsahu používateľ udeľuje prevádzkovateľovi technickú licenciu potrebnú na uloženie, synchronizáciu, zobrazenie, zálohovanie a podporu obsahu.",
-                    },
-                ],
-            },
-            {
-                heading: "Bezpečnosť v horách",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Za rozhodnutia v teréne, voľbu trasy, počasie, vybavenie a reakciu na miestne podmienky zodpovedá používateľ. Pred cestou je potrebné overiť aktuálne správy, uzávery trás, výstrahy a odporúčania záchranných zložiek.",
-                    },
-                ],
-            },
-            {
-                heading: "Fyzické pamiatky a platby",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} môže spracúvať platby dostupné v aplikácii. Podmienky každej platby budú zobrazené pred potvrdením.`,
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Ceny fyzických pamiatok budú uvedené v ${siteConfig.currencyCode} pred platbou. Podmienky doručenia, vrátenia, reklamácií a zrušenia objednávky budú zobrazené pred nákupom alebo zaslané podporou.`,
-                    },
-                ],
-            },
-            {
-                heading: "Dostupnosť, zmeny a práva",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Služba sa môže vyvíjať, meniť, byť dočasne nedostupná alebo byť v niektorých funkciách ukončená. Názov 28 gór, vzhľad aplikácie, texty, grafika a prvky produktu sú chránené právami prevádzkovateľa alebo oprávnených držiteľov.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Pravidlá spracúvania osobných údajov opisujú Zásady ochrany súkromia dostupné na ${siteConfig.siteHost}/privacy.`,
-                    },
-                ],
-            },
-        ],
-    },
-    support: {
-        slug: "support",
-        title: "Podpora",
-        effectiveDate: "Aktualizované: 29. mája 2026",
-        intro: [
-            "Potrebujete pomoc s účtom, prístupom k údajom, objednávkou fyzickej pamiatky alebo technickým problémom? Stručne opíšte, čo sa stalo, na akom zariadení a čo ste očakávali.",
-        ],
-        sections: [
-            {
-                heading: "E-mailová podpora",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Napíšte na ${siteConfig.contactEmail}. Ak to pomôže, priložte snímku obrazovky, verziu aplikácie, model zariadenia, číslo objednávky alebo adresu stránky, kde problém nastal. Zvyčajne odpovedáme do 2 pracovných dní.`,
-                    },
-                ],
-            },
-        ],
-    },
+export type LegalLanguageNotice = {
+    title: string
+    body: string
+    polishLabel: string
+    englishLabel: string
 }
 
-export const ukrainianLegalDocuments: Record<LegalDocument["slug"], LegalDocument> = {
-    privacy: {
-        slug: "privacy",
-        title: "Політика приватності",
-        effectiveDate: "Чинна з 29 травня 2026 р.",
-        intro: [
-            `Ця політика пояснює, як ${siteConfig.operatorName}, оператор продукту 28 gór, обробляє персональні дані користувачів сайту ${siteConfig.siteHost} і запланованого мобільного застосунку.`,
-            "Запуск 28 gór заплановано на червень 2026 року. Документ охоплює сайт, контакт із користувачами та заплановані функції застосунку: акаунт, журнал сходжень, фото, налаштування та синхронізацію даних.",
-        ],
-        sections: [
-            {
-                heading: "Контролер і контакт",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Контролером персональних даних є ${siteConfig.operatorName}, оператор продукту 28 gór. З питань приватності, персональних даних і підтримки пишіть на ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Які дані ми обробляємо",
-                body: [
-                    {
-                        type: "list",
-                        items: [
-                            "контактні дані, наприклад e-mail для повідомлень про запуск або звернення до підтримки,",
-                            "дані акаунта, якщо акаунт буде створено, зокрема e-mail, назва профілю та налаштування,",
-                            "дані застосунку, наприклад заплановані вершини, сходження, нотатки, фото, підписи, вподобання та налаштування,",
-                            "технічні дані, наприклад IP-адреса, тип пристрою, браузер, операційна система, діагностичні дані та приблизний регіон,",
-                            "дані замовлення або платежу.",
-                        ],
-                    },
-                ],
-            },
-            {
-                heading: "Мета обробки",
-                body: [
-                    {
-                        type: "list",
-                        items: [
-                            "надання сервісу, ведення акаунта, синхронізація даних і функції застосунку,",
-                            "відповіді на запити, підтримка та повідомлення про запуск продукту,",
-                            "безпека, діагностика помилок, запобігання зловживанням і покращення якості сервісу,",
-                            "виконання юридичних, бухгалтерських або податкових обов’язків, якщо вони застосовуються.",
-                        ],
-                    },
-                ],
-            },
-            {
-                heading: "Дозволи пристрою та cookies",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Застосунок може попросити доступ до геолокації, камери, бібліотеки фото або сповіщень лише тоді, коли це потрібно для конкретної функції. Дозволи можна змінити в налаштуваннях системи.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "Сайт може використовувати необхідні cookies, localStorage або подібні технології, щоб запам’ятати мову, тему та базові налаштування інтерфейсу.",
-                    },
-                ],
-            },
-            {
-                heading: "Фізичні пам’ятки та платежі",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Якщо в застосунку будуть доступні фізичні пам’ятки, ми можемо обробляти ім’я, e-mail, адресу доставки, дані замовлення та статус платежу. Платежі в застосунку може обробляти ${siteConfig.paymentProcessorName}; ${siteConfig.operatorName} не зберігає повні номери платіжних карток.`,
-                    },
-                ],
-            },
-            {
-                heading: "Одержувачі, зберігання та права",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Ми можемо передавати дані постачальникам хостингу, баз даних, e-mail, підтримки, діагностики, платежів і логістики лише в обсязі, потрібному для роботи сервісу. Ми не продаємо персональні дані.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Дані зберігаються протягом часу, потрібного для відповідної мети або юридичних обов’язків. Запити на доступ, виправлення, видалення, обмеження обробки, перенесення даних або заперечення можна надсилати на ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Діти, безпека та зміни",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Сервіс не призначений для дітей молодше 13 років. Неповнолітні мають користуватися ним за згодою та під наглядом опікуна. Ця політика може оновлюватися разом із розвитком продукту або зміною правових вимог.",
-                    },
-                ],
-            },
-        ],
+export const legalLanguageNoticeByLocale: Record<SiteLocale, LegalLanguageNotice> = {
+    pl: {
+        title: "Dokumenty prawne",
+        body: "Dokumenty prawne są dostępne po polsku i angielsku. W razie rozbieżności wiążąca jest wersja polska.",
+        polishLabel: "Polski",
+        englishLabel: "English",
     },
-    terms: {
-        slug: "terms",
-        title: "Умови користування",
-        effectiveDate: "Чинні з 29 травня 2026 р.",
-        intro: [
-            `Ці умови визначають правила користування сайтом ${siteConfig.siteHost} і застосунком 28 gór. Продукт розробляє ${siteConfig.operatorName}, запуск застосунку заплановано на червень 2026 року.`,
-            "28 gór допомагає планувати та документувати сходження на 28 вершин. Він не замінює карти, повідомлення рятувальних служб, прогноз погоди, маркування на маршруті або власну оцінку умов.",
-        ],
-        sections: [
-            {
-                heading: "Оператор і контакт",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Оператором сервісу є ${siteConfig.operatorName}. З питань умов, роботи сервісу або підтримки пишіть на ${siteConfig.contactEmail}.`,
-                    },
-                ],
-            },
-            {
-                heading: "Обсяг сервісу",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Після запуску застосунок може містити планування вершин, історію сходжень, зберігання фото, намальовані вручну штампи для кожної вершини, освітній центр, синхронізацію акаунта та інші функції для документування маршрутів.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "У застосунку може бути можливість купувати фізичні пам’ятки з доставкою клієнтам.",
-                    },
-                ],
-            },
-            {
-                heading: "Акаунт і контент користувача",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Користувач відповідає за точність даних акаунта та захист даних для входу. Права на фото, нотатки та інший власний контент залишаються за користувачем.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: "Додаючи контент, користувач надає оператору технічну ліцензію, потрібну для зберігання, синхронізації, показу, резервного копіювання та підтримки цього контенту.",
-                    },
-                ],
-            },
-            {
-                heading: "Безпека в горах",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "За рішення на маршруті, вибір дороги, погоду, спорядження та реакцію на місцеві умови відповідає користувач. Перед виходом у гори потрібно перевірити актуальні повідомлення, закриття маршрутів, попередження та рекомендації рятувальних служб.",
-                    },
-                ],
-            },
-            {
-                heading: "Фізичні пам’ятки та платежі",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `${siteConfig.paymentProcessorName} може обробляти платежі, доступні в застосунку. Умови кожного платежу будуть показані перед підтвердженням.`,
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Ціни фізичних пам’яток будуть показані в ${siteConfig.currencyCode} перед оплатою. Умови доставки, повернення, рекламацій і скасування замовлення будуть показані перед купівлею або надіслані підтримкою.`,
-                    },
-                ],
-            },
-            {
-                heading: "Доступність, зміни та права",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: "Сервіс може розвиватися, змінюватися, бути тимчасово недоступним або втратити частину функцій. Назва 28 gór, вигляд застосунку, тексти, графіка та елементи продукту захищені правами оператора або правовласників.",
-                    },
-                    {
-                        type: "paragraph",
-                        text: `Правила обробки персональних даних описані в Політиці приватності на ${siteConfig.siteHost}/privacy.`,
-                    },
-                ],
-            },
-        ],
+    en: {
+        title: "Legal documents",
+        body: "Legal documents are available in Polish and English. In case of differences, the Polish version is binding.",
+        polishLabel: "Polski",
+        englishLabel: "English",
     },
-    support: {
-        slug: "support",
-        title: "Підтримка",
-        effectiveDate: "Оновлено: 29 травня 2026 р.",
-        intro: [
-            "Потрібна допомога з акаунтом, доступом до даних, замовленням фізичної пам’ятки або технічною проблемою? Коротко опишіть, що сталося, на якому пристрої та чого ви очікували.",
-        ],
-        sections: [
-            {
-                heading: "Підтримка e-mail",
-                body: [
-                    {
-                        type: "paragraph",
-                        text: `Напишіть на ${siteConfig.contactEmail}. Якщо це допоможе, додайте знімок екрана, версію застосунку, модель пристрою, номер замовлення або адресу сторінки, де виникла проблема. Зазвичай ми відповідаємо протягом 2 робочих днів.`,
-                    },
-                ],
-            },
-        ],
+    es: {
+        title: "Documentos legales",
+        body: "Los documentos legales están disponibles en polaco e inglés. En caso de discrepancias, prevalece la versión polaca.",
+        polishLabel: "Polski",
+        englishLabel: "English",
+    },
+    de: {
+        title: "Rechtliche Dokumente",
+        body: "Rechtliche Dokumente sind auf Polnisch und Englisch verfügbar. Bei Abweichungen ist die polnische Version verbindlich.",
+        polishLabel: "Polski",
+        englishLabel: "English",
+    },
+    fr: {
+        title: "Documents juridiques",
+        body: "Les documents juridiques sont disponibles en polonais et en anglais. En cas de divergence, la version polonaise fait foi.",
+        polishLabel: "Polski",
+        englishLabel: "English",
+    },
+    nb: {
+        title: "Juridiske dokumenter",
+        body: "Juridiske dokumenter er tilgjengelige på polsk og engelsk. Ved avvik er den polske versjonen bindende.",
+        polishLabel: "Polski",
+        englishLabel: "English",
+    },
+    cs: {
+        title: "Právní dokumenty",
+        body: "Právní dokumenty jsou dostupné v polštině a angličtině. V případě rozdílů je závazná polská verze.",
+        polishLabel: "Polski",
+        englishLabel: "English",
+    },
+    sk: {
+        title: "Právne dokumenty",
+        body: "Právne dokumenty sú dostupné v poľštine a angličtine. V prípade rozdielov je záväzná poľská verzia.",
+        polishLabel: "Polski",
+        englishLabel: "English",
+    },
+    uk: {
+        title: "Правові документи",
+        body: "Правові документи доступні польською та англійською. У разі розбіжностей обов’язковою є польська версія.",
+        polishLabel: "Polski",
+        englishLabel: "English",
     },
 }
 
 export const legalDocumentsByLocale = {
     pl: legalDocuments,
     en: englishLegalDocuments,
-    cs: czechLegalDocuments,
-    sk: slovakLegalDocuments,
-    uk: ukrainianLegalDocuments,
-} satisfies Record<SiteLocale, Record<LegalDocument["slug"], LegalDocument>>
+} satisfies Record<LegalDocumentLocale, Record<LegalDocument["slug"], LegalDocument>>

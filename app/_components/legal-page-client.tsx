@@ -1,7 +1,14 @@
 "use client"
 
 import { useEffect } from "react"
-import { LegalDocument, homeContent, legalDocumentsByLocale, siteConfig } from "../_lib/site-content"
+import type { LegalDocument, LegalDocumentLocale, LegalLanguageNotice } from "../_lib/site-content"
+import {
+    homeContent,
+    legalDocumentLocaleForSiteLocale,
+    legalDocumentsByLocale,
+    legalLanguageNoticeByLocale,
+    siteConfig,
+} from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
@@ -9,7 +16,9 @@ import { SmoothBackButton, SmoothLink } from "./smooth-navigation"
 
 export function LegalPageClient({ slug }: { slug: LegalDocument["slug"] }) {
     const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
-    const legalDocument = legalDocumentsByLocale[locale][slug]
+    const legalDocumentLocale = legalDocumentLocaleForSiteLocale(locale)
+    const legalDocument = legalDocumentsByLocale[legalDocumentLocale][slug]
+    const legalLanguageNotice = legalDocumentLocale === locale ? null : legalLanguageNoticeByLocale[locale]
     const content = homeContent[locale]
     const backLabel = content.nav.back
 
@@ -46,7 +55,12 @@ export function LegalPageClient({ slug }: { slug: LegalDocument["slug"] }) {
                 </aside>
 
                 <div className="mt-9 lg:mt-0">
-                    <LegalBody document={legalDocument} labels={content.nav} />
+                    <LegalBody
+                        document={legalDocument}
+                        labels={content.nav}
+                        languageNotice={legalLanguageNotice}
+                        onLegalLocaleChange={setLocale}
+                    />
                 </div>
             </div>
         </main>
@@ -56,9 +70,13 @@ export function LegalPageClient({ slug }: { slug: LegalDocument["slug"] }) {
 function LegalBody({
     document,
     labels,
+    languageNotice,
+    onLegalLocaleChange,
 }: {
     document: LegalDocument
     labels: (typeof homeContent)[keyof typeof homeContent]["nav"]
+    languageNotice: LegalLanguageNotice | null
+    onLegalLocaleChange: (locale: LegalDocumentLocale) => void
 }) {
     return (
         <article className="mx-auto max-w-[720px] pb-16 lg:mx-0">
@@ -71,6 +89,35 @@ function LegalBody({
             <p className="mt-4 text-center text-[15px] leading-[22px] text-[var(--text-muted)] lg:text-left lg:text-[17px] lg:leading-[25px]">
                 {document.effectiveDate}
             </p>
+
+            {languageNotice ? (
+                <aside className="mt-7 border-l-2 border-[#e67621] py-1 pl-5 text-left">
+                    <h2 className="text-[17px] leading-[24px] font-semibold text-[var(--text-primary)]">
+                        {languageNotice.title}
+                    </h2>
+                    <p className="mt-2 text-[16px] leading-[24px] font-normal text-[var(--text-secondary)]">
+                        {languageNotice.body}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-3">
+                        <button
+                            type="button"
+                            className="cursor-pointer text-[15px] leading-[22px] font-semibold underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] hover:decoration-current"
+                            style={{ color: "#e67621" }}
+                            onClick={() => onLegalLocaleChange("pl")}
+                        >
+                            {languageNotice.polishLabel}
+                        </button>
+                        <button
+                            type="button"
+                            className="cursor-pointer text-[15px] leading-[22px] font-semibold underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] hover:decoration-current"
+                            style={{ color: "#e67621" }}
+                            onClick={() => onLegalLocaleChange("en")}
+                        >
+                            {languageNotice.englishLabel}
+                        </button>
+                    </div>
+                </aside>
+            ) : null}
 
             <div className="mt-8 flex flex-col gap-4">
                 {document.intro.map((paragraph) => (

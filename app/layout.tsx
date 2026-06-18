@@ -2,7 +2,13 @@ import type { Metadata, Viewport } from "next"
 import { Gloria_Hallelujah } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
-import { siteConfig, siteLanguages, siteSocialImage, siteSocialTwitterImage } from "./_lib/site-content"
+import {
+    siteConfig,
+    siteLanguages,
+    siteSocialContent,
+    siteSocialImage,
+    siteSocialTwitterImage,
+} from "./_lib/site-content"
 
 const inter = localFont({
     src: "./fonts/InterVariable.woff2",
@@ -41,8 +47,8 @@ export const metadata: Metadata = {
     openGraph: {
         type: "website",
         url: siteConfig.siteUrl,
-        title: siteConfig.socialTitle,
-        description: siteConfig.socialDescription,
+        title: siteSocialContent.title,
+        description: siteSocialContent.description,
         siteName: siteConfig.name,
         locale: "pl_PL",
         alternateLocale: siteLanguages
@@ -52,8 +58,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: siteConfig.socialTitle,
-        description: siteConfig.socialDescription,
+        title: siteSocialContent.title,
+        description: siteSocialContent.description,
         images: [siteSocialTwitterImage],
     },
 }
@@ -67,7 +73,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en" className={`${inter.variable} ${gloriaHallelujah.variable}`}>
+        <html lang="pl" className={`${inter.variable} ${gloriaHallelujah.variable}`}>
             <body>{children}</body>
         </html>
     )

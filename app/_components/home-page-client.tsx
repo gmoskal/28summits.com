@@ -333,6 +333,7 @@ export function HomePageClient() {
     const [storyActionVisible, setStoryActionVisible] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
     const [statsFooterVisible, setStatsFooterVisible] = useState(false)
+    const [isCardStackZoomed, setCardStackZoomed] = useState(false)
     const [brandAnimationCycle, setBrandAnimationCycle] = useState(0)
     const brandAnimationRunningRef = useRef(false)
     const hasAutoScrolledToStoryRef = useRef(false)
@@ -455,7 +456,12 @@ export function HomePageClient() {
                     </div>
                 </div>
                 <div className="relative flex h-full w-full items-center justify-center">
-                    <CardStackPreview locale={locale} onDeckComplete={scrollToStorySection} />
+                    <CardStackPreview
+                        isZoomed={isCardStackZoomed}
+                        locale={locale}
+                        onDeckComplete={scrollToStorySection}
+                        onZoomChange={setCardStackZoomed}
+                    />
                 </div>
             </section>
 
@@ -513,7 +519,12 @@ export function HomePageClient() {
             >
                 <div className="flex w-full max-w-[760px] flex-col items-center justify-center gap-[clamp(1.5rem,4dvh,3rem)]">
                     {statsStarted ? (
-                        <CardStackPreview locale={locale} variant="stats" />
+                        <CardStackPreview
+                            isZoomed={isCardStackZoomed}
+                            locale={locale}
+                            variant="stats"
+                            onZoomChange={setCardStackZoomed}
+                        />
                     ) : (
                         <div className="h-[338px] w-full xl:h-[min(66dvh,640px)] xl:min-h-[500px]" aria-hidden />
                     )}

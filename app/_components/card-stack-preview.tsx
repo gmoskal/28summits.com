@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { SiteLocale } from "../_lib/site-content"
 
 type CardStackCard = {
@@ -31,9 +31,11 @@ type CardStackConfig = {
 }
 
 type CardStackPreviewProps = {
+    isZoomed: boolean
     locale: SiteLocale
     variant?: "adventure" | "stats"
     onDeckComplete?: () => void
+    onZoomChange: (isZoomed: boolean) => void
 }
 
 type DepartingCard = {
@@ -53,6 +55,10 @@ const adventureCards = [
         labels: {
             pl: "Pierwszy krok",
             en: "First step",
+            es: "Primer paso",
+            de: "Erster Schritt",
+            fr: "Premier pas",
+            nb: "Første steg",
             cs: "První krok",
             sk: "Prvý krok",
             uk: "Перший крок",
@@ -64,6 +70,10 @@ const adventureCards = [
         labels: {
             pl: "Łyk wody",
             en: "Water break",
+            es: "Un sorbo de agua",
+            de: "Wasserpause",
+            fr: "Gorgée d'eau",
+            nb: "Vannpause",
             cs: "Doušek vody",
             sk: "Dúšok vody",
             uk: "Ковток води",
@@ -75,6 +85,10 @@ const adventureCards = [
         labels: {
             pl: "Szybkie zdjęcie",
             en: "Quick photo",
+            es: "Foto rápida",
+            de: "Schnelles Foto",
+            fr: "Photo rapide",
+            nb: "Raskt bilde",
             cs: "Rychlá fotka",
             sk: "Rýchla fotka",
             uk: "Швидке фото",
@@ -86,6 +100,10 @@ const adventureCards = [
         labels: {
             pl: "Chwila ciszy",
             en: "Quiet moment",
+            es: "Un momento de calma",
+            de: "Kurze Ruhe",
+            fr: "Moment calme",
+            nb: "Et stille øyeblikk",
             cs: "Chvíle ticha",
             sk: "Chvíľa ticha",
             uk: "Мить тиші",
@@ -97,6 +115,10 @@ const adventureCards = [
         labels: {
             pl: "Jeszcze wyżej",
             en: "Higher still",
+            es: "Un poco más alto",
+            de: "Noch höher",
+            fr: "Encore plus haut",
+            nb: "Enda høyere",
             cs: "Ještě výš",
             sk: "Ešte vyššie",
             uk: "Ще вище",
@@ -108,6 +130,10 @@ const adventureCards = [
         labels: {
             pl: "Coś dobrego",
             en: "Something good",
+            es: "Algo rico",
+            de: "Etwas Gutes",
+            fr: "Quelque chose de bon",
+            nb: "Noe godt",
             cs: "Něco dobrého",
             sk: "Niečo dobré",
             uk: "Щось смачне",
@@ -119,6 +145,10 @@ const adventureCards = [
         labels: {
             pl: "Rysek melduje",
             en: "Rysek checks in",
+            es: "Rysek se reporta",
+            de: "Rysek meldet sich",
+            fr: "Rysek donne signe de vie",
+            nb: "Rysek sjekker inn",
             cs: "Rysek hlásí",
             sk: "Rysek hlási",
             uk: "Rysek на зв’язку",
@@ -130,6 +160,10 @@ const adventureCards = [
         labels: {
             pl: "Wreszcie na Rysach",
             en: "Finally on Rysy",
+            es: "Por fin en Rysy",
+            de: "Endlich auf Rysy",
+            fr: "Enfin sur le Rysy",
+            nb: "Endelig på Rysy",
             cs: "Konečně na Rysách",
             sk: "Konečne na Rysoch",
             uk: "Нарешті на Рисах",
@@ -141,6 +175,10 @@ const adventureCards = [
 const adventureAriaLabels: Record<SiteLocale, string> = {
     pl: "Stos zdjęć Ryska z aplikacji 28 gór.",
     en: "A stack of Rysek photos from the 28 gór app.",
+    es: "Un montón de fotos de Rysek de la app 28 gór.",
+    de: "Ein Stapel Rysek-Fotos aus der 28 gór App.",
+    fr: "Une pile de photos de Rysek tirées de l'app 28 gór.",
+    nb: "En bunke Rysek-bilder fra 28 gór-appen.",
     cs: "Stoh fotek Ryska z aplikace 28 gór.",
     sk: "Stoh fotiek Ryska z aplikácie 28 gór.",
     uk: "Стос фото Ryska із застосунку 28 gór.",
@@ -149,6 +187,10 @@ const adventureAriaLabels: Record<SiteLocale, string> = {
 const adventureHeadlineLabels: Record<SiteLocale, string> = {
     pl: "Gotowi na 28 przygód?",
     en: "Ready for 28 adventures?",
+    es: "¿Listos para 28 aventuras?",
+    de: "Bereit für 28 Abenteuer?",
+    fr: "Prêts pour 28 aventures ?",
+    nb: "Klar for 28 eventyr?",
     cs: "Připraveni na 28 dobrodružství?",
     sk: "Pripravení na 28 dobrodružstiev?",
     uk: "Готові до 28 пригод?",
@@ -160,6 +202,10 @@ const statsCards = [
         labels: {
             pl: "tu praca",
             en: "work here",
+            es: "aquí se trabaja",
+            de: "hier wird gearbeitet",
+            fr: "ici le travail",
+            nb: "jobb her",
             cs: "tady práce",
             sk: "tu práca",
             uk: "тут робота",
@@ -170,6 +216,10 @@ const statsCards = [
         labels: {
             pl: "tu ekran pieczątek",
             en: "stamp screen here",
+            es: "aquí la pantalla de sellos",
+            de: "hier der Stempelbildschirm",
+            fr: "ici l'écran des tampons",
+            nb: "stempelskjerm her",
             cs: "tady obrazovka razítek",
             sk: "tu obrazovka pečiatok",
             uk: "тут екран печаток",
@@ -180,6 +230,10 @@ const statsCards = [
         labels: {
             pl: "tu ekran szczytu",
             en: "peak screen here",
+            es: "aquí la pantalla de cima",
+            de: "hier der Gipfelbildschirm",
+            fr: "ici l'écran du sommet",
+            nb: "toppskjerm her",
             cs: "tady obrazovka vrcholu",
             sk: "tu obrazovka vrcholu",
             uk: "тут екран вершини",
@@ -190,6 +244,10 @@ const statsCards = [
         labels: {
             pl: "tu ekran mapy",
             en: "map screen here",
+            es: "aquí la pantalla del mapa",
+            de: "hier der Kartenbildschirm",
+            fr: "ici l'écran de carte",
+            nb: "kartskjerm her",
             cs: "tady obrazovka mapy",
             sk: "tu obrazovka mapy",
             uk: "тут екран мапи",
@@ -200,6 +258,10 @@ const statsCards = [
         labels: {
             pl: "tu gry",
             en: "games here",
+            es: "aquí los juegos",
+            de: "hier die Spiele",
+            fr: "ici les jeux",
+            nb: "spill her",
             cs: "tady hry",
             sk: "tu hry",
             uk: "тут ігри",
@@ -210,6 +272,10 @@ const statsCards = [
         labels: {
             pl: "tu dane",
             en: "data here",
+            es: "aquí los datos",
+            de: "hier die Daten",
+            fr: "ici les données",
+            nb: "data her",
             cs: "tady data",
             sk: "tu dáta",
             uk: "тут дані",
@@ -220,6 +286,10 @@ const statsCards = [
 const statsAriaLabels: Record<SiteLocale, string> = {
     pl: "Stos zdjęć z aplikacji 28 gór.",
     en: "A stack of 28 gór app photos.",
+    es: "Un montón de fotos de la app 28 gór.",
+    de: "Ein Stapel Fotos aus der 28 gór App.",
+    fr: "Une pile de photos de l'app 28 gór.",
+    nb: "En bunke bilder fra 28 gór-appen.",
     cs: "Stoh fotek z aplikace 28 gór.",
     sk: "Stoh fotiek z aplikácie 28 gór.",
     uk: "Стос фото із застосунку 28 gór.",
@@ -287,6 +357,8 @@ const deckEntry = {
     mass: 0.82,
 } as const
 
+const deckResizeClassName = "transition-[width,height,max-width,min-height] duration-[650ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
+
 const deckZoomControlLabels: Record<SiteLocale, DeckZoomControlLabel> = {
     pl: {
         zoomIn: "Powiększ stos zdjęć",
@@ -295,6 +367,22 @@ const deckZoomControlLabels: Record<SiteLocale, DeckZoomControlLabel> = {
     en: {
         zoomIn: "Zoom in photo stack",
         zoomOut: "Zoom out photo stack",
+    },
+    es: {
+        zoomIn: "Ampliar el montón de fotos",
+        zoomOut: "Reducir el montón de fotos",
+    },
+    de: {
+        zoomIn: "Fotostapel vergrößern",
+        zoomOut: "Fotostapel verkleinern",
+    },
+    fr: {
+        zoomIn: "Agrandir la pile de photos",
+        zoomOut: "Réduire la pile de photos",
+    },
+    nb: {
+        zoomIn: "Forstørr fotobunken",
+        zoomOut: "Forminsk fotobunken",
     },
     cs: {
         zoomIn: "Přiblížit stoh fotek",
@@ -403,7 +491,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
     const [deckResetKey, setDeckResetKey] = useState(0)
     const [isDeckEntryActive, setDeckEntryActive] = useState(shouldPlayDeckEntryAnimation)
-    const [isDeckZoomed, setDeckZoomed] = useState(false)
+    const hasActiveDragRef = useRef(false)
     const activeCardIndex = useMemo(
         () => topVisibleCardIndex(stackConfig.cards.length, dismissedCards, departingCard?.index ?? null),
         [departingCard, dismissedCards, stackConfig.cards.length],
@@ -413,10 +501,10 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     const cardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation
         ? deckEntry.cardDelaySeconds
         : 0
-    const deckSizeMode = isDeckZoomed ? "zoomed" : "normal"
+    const deckSizeMode = p.isZoomed ? "zoomed" : "normal"
     const deckSizeClassName = deckSizeClassNames[deckSizeMode]
     const zoomControlLabel = deckZoomControlLabels[p.locale]
-    const zoomButtonLabel = isDeckZoomed ? zoomControlLabel.zoomOut : zoomControlLabel.zoomIn
+    const zoomButtonLabel = p.isZoomed ? zoomControlLabel.zoomOut : zoomControlLabel.zoomIn
     const isZoomControlVisible = !isDeckEntryActive
 
     useEffect(() => {
@@ -442,14 +530,27 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     }, [dismissedCards, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
 
     function handleDragEnd(index: number, offset: { x: number; y: number }, velocity: { x: number; y: number }) {
+        window.setTimeout(() => {
+            hasActiveDragRef.current = false
+        }, 0)
+
         const hasStartedCardMovement =
-            Math.hypot(offset.x, offset.y) > flick.dragStartThreshold
+            hasActiveDragRef.current
+            || Math.hypot(offset.x, offset.y) > flick.dragStartThreshold
             || Math.hypot(velocity.x, velocity.y) > flick.velocityStartThreshold
         if (!hasStartedCardMovement) {
             return
         }
 
         setDepartingCard({ index, ...cardDirection(offset, velocity) })
+    }
+
+    function handleCardTap(index: number) {
+        if (hasActiveDragRef.current || index !== activeCardIndex || departingCard !== null || isDeckEntryActive) {
+            return
+        }
+
+        setDepartingCard({ index, directionX: 1, directionY: 0 })
     }
 
     function handleAnimationComplete(index: number) {
@@ -483,9 +584,16 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                     initial={shouldPlayDeckEntryAnimation ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                        delay: prefersReducedMotion ? 0 : deckEntry.headlineDelaySeconds,
-                        duration: prefersReducedMotion ? 0.01 : deckEntry.headlineDurationSeconds,
-                        ease: "easeOut",
+                        opacity: {
+                            delay: prefersReducedMotion ? 0 : deckEntry.headlineDelaySeconds,
+                            duration: prefersReducedMotion ? 0.01 : deckEntry.headlineDurationSeconds,
+                            ease: "easeOut",
+                        },
+                        y: {
+                            delay: prefersReducedMotion ? 0 : deckEntry.headlineDelaySeconds,
+                            duration: prefersReducedMotion ? 0.01 : deckEntry.headlineDurationSeconds,
+                            ease: "easeOut",
+                        },
                     }}
                     style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
                 >
@@ -497,10 +605,11 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                 className="absolute bottom-[9%] left-1/2 h-24 w-[72%] -translate-x-1/2 rounded-full blur-3xl xl:hidden"
                 style={{ backgroundColor: "var(--shadow-ground)" }}
             />
-            <div className={deckSizeClassName.frame}>
+            <div
+                className={`${deckSizeClassName.frame} ${deckResizeClassName}`}
+            >
                 <div
-                    key={`${variant}-${deckResetKey}-${deckSizeMode}`}
-                    className={deckSizeClassName.deck}
+                    className={`${deckSizeClassName.deck} ${deckResizeClassName}`}
                     role="img"
                     aria-label={stackConfig.ariaLabels[p.locale]}
                 >
@@ -526,8 +635,8 @@ export function CardStackPreview(p: CardStackPreviewProps) {
 
                     return (
                         <div
-                            key={card.src}
-                            className={`${deckSizeClassName.card} -translate-x-1/2 -translate-y-1/2`}
+                            key={`${deckResetKey}-${card.src}`}
+                            className={`${deckSizeClassName.card} ${deckResizeClassName} -translate-x-1/2 -translate-y-1/2`}
                             style={{
                                 pointerEvents: canDragCard ? "auto" : "none",
                                 zIndex: stackConfig.cards.length - index,
@@ -572,6 +681,10 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                                     WebkitTouchCallout: "none",
                                     WebkitUserSelect: "none",
                                     willChange: canDragCard || isDeparting ? "transform, opacity" : "transform",
+                                }}
+                                onTap={() => handleCardTap(index)}
+                                onDragStart={() => {
+                                    hasActiveDragRef.current = true
                                 }}
                                 onDragEnd={(_, info) => handleDragEnd(index, info.offset, info.velocity)}
                                 onAnimationComplete={() => handleAnimationComplete(index)}
@@ -629,11 +742,11 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                 <motion.button
                     type="button"
                     aria-label={zoomButtonLabel}
-                    aria-pressed={isDeckZoomed}
+                    aria-pressed={p.isZoomed}
                     title={zoomButtonLabel}
-                    className="absolute -bottom-12 right-0 z-40 inline-grid h-11 w-11 touch-manipulation place-items-center rounded-full border border-[rgba(255,255,255,0.42)] bg-[rgba(255,255,255,0.86)] text-[#171717] backdrop-blur-md transition-colors duration-200 hover:bg-white focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:-right-14 sm:bottom-4 xl:-right-16 xl:h-12 xl:w-12"
+                    className="absolute -bottom-12 right-0 z-40 inline-grid h-11 w-11 cursor-pointer touch-manipulation place-items-center text-[var(--text-primary)] transition-colors duration-200 hover:text-[#e67621] focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:-right-14 sm:bottom-4 xl:-right-16 xl:h-12 xl:w-12"
                     animate={{
-                        opacity: isZoomControlVisible ? 0.5 : 0,
+                        opacity: isZoomControlVisible ? 0.3 : 0,
                         x: 0,
                         y: 0,
                     }}
@@ -650,9 +763,9 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                     }}
                     whileHover={isZoomControlVisible ? { scale: 1.05 } : undefined}
                     whileTap={isZoomControlVisible ? { scale: 0.95 } : undefined}
-                    onClick={() => setDeckZoomed((currentValue) => !currentValue)}
+                    onClick={() => p.onZoomChange(!p.isZoomed)}
                 >
-                    <MagnifierIcon isZoomed={isDeckZoomed} />
+                    <MagnifierIcon isZoomed={p.isZoomed} />
                 </motion.button>
             </div>
         </div>
