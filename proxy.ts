@@ -5,6 +5,7 @@ import {
     siteConfig,
     siteLanguageByLocale,
     siteLocaleFromInput,
+    socialContentForLocale,
 } from "./app/_lib/site-content"
 
 const localeParamNames = ["lang", "locale"] as const
@@ -17,12 +18,6 @@ const facebookCrawlerUserAgentParts = [
     "meta-externalagent",
     "meta-externalfetcher",
 ] as const
-const facebookLegacySocialPreview = {
-    title: "28 gór - wszystko z gór w jednym pięknym miejscu",
-    description: "Zbieraj wejścia, zdjęcia, notatki i pieczątki rysowane dla każdego szczytu. Zamawiaj pamiątki i odkrywaj edukacyjne treści z Ryskiem.",
-    image: "/og-image-facebook-20260617.png",
-    imageAlt: "28 gór - dopracowana aplikacja z ręcznie rysowanymi pieczątkami, zdjęciami, edukacją i pamiątkami z tras.",
-} as const
 const socialImageSize = {
     width: 1200,
     height: 630,
@@ -74,12 +69,13 @@ function escapeHtml(value: string) {
 }
 
 function facebookSocialPreviewResponse(locale: SiteLocale) {
-    const language = siteLanguageByLocale[locale]
-    const pageUrl = canonicalSocialUrl(locale)
-    const imageUrl = `${siteConfig.siteUrl}${facebookLegacySocialPreview.image}`
-    const title = escapeHtml(facebookLegacySocialPreview.title)
-    const description = escapeHtml(facebookLegacySocialPreview.description)
-    const imageAlt = escapeHtml(facebookLegacySocialPreview.imageAlt)
+    const content = socialContentForLocale(locale)
+    const language = siteLanguageByLocale[content.locale]
+    const pageUrl = canonicalSocialUrl(content.locale)
+    const imageUrl = `${siteConfig.siteUrl}${content.image.replace(/\.png$/, ".jpg")}`
+    const title = escapeHtml(content.title)
+    const description = escapeHtml(content.description)
+    const imageAlt = escapeHtml(content.imageAlt)
 
     return new NextResponse(`<!doctype html>
 <html lang="${language.htmlLang}">
@@ -97,7 +93,7 @@ function facebookSocialPreviewResponse(locale: SiteLocale) {
 <meta property="og:image" content="${imageUrl}">
 <meta property="og:image:url" content="${imageUrl}">
 <meta property="og:image:secure_url" content="${imageUrl}">
-<meta property="og:image:type" content="image/png">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="${socialImageSize.width}">
 <meta property="og:image:height" content="${socialImageSize.height}">
 <meta property="og:image:alt" content="${imageAlt}">
