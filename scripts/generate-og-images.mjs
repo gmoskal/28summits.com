@@ -13,6 +13,7 @@ const imageSize = {
 const imageLayout = {
     photoTopPx: 32,
     photoHeightPx: 566,
+    titleOpticalOffsetPx: 18,
 }
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
@@ -194,6 +195,7 @@ function htmlForLocale(locale) {
             letter-spacing: 0;
             color: #fff2df;
             text-wrap: balance;
+            transform: translateY(${imageLayout.titleOpticalOffsetPx}px);
         }
 
         .teaser {
