@@ -10,6 +10,10 @@ const imageSize = {
     height: 630,
 }
 
+const imageLayout = {
+    titleGapPx: 42,
+}
+
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const repoRoot = path.resolve(scriptDir, "..")
 const publicDir = path.join(repoRoot, "public")
@@ -182,7 +186,7 @@ function htmlForLocale(locale) {
 
         .title {
             font-family: ${titleFontFamily(locale)};
-            margin: 42px 0 30px;
+            margin: ${imageLayout.titleGapPx}px 0 ${imageLayout.titleGapPx}px;
             font-size: ${titleSize}px;
             line-height: 1.02;
             font-weight: 400;
