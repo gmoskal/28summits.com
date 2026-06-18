@@ -12,8 +12,12 @@ const imageSize = {
 
 const imageLayout = {
     photoTopPx: 32,
+    photoLeftPx: 68,
+    textLeftPx: 520,
     photoHeightPx: 566,
-    titleOpticalOffsetPx: 18,
+    appIconOffsetYPx: 15,
+    iconTitleGapPx: 72,
+    titleTeaserGapPx: 58,
 }
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
@@ -172,30 +176,30 @@ function htmlForLocale(locale) {
             height: 126px;
             border-radius: 28px;
             box-shadow: 0 20px 34px rgba(0, 0, 0, 0.42);
+            transform: translateY(${imageLayout.appIconOffsetYPx}px);
         }
 
         .left-stack {
             position: absolute;
             top: ${imageLayout.photoTopPx}px;
-            left: 68px;
+            left: ${imageLayout.textLeftPx}px;
             width: 612px;
             height: ${imageLayout.photoHeightPx}px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .title {
             font-family: ${titleFontFamily(locale)};
-            margin: 0;
+            margin: ${imageLayout.iconTitleGapPx}px 0 ${imageLayout.titleTeaserGapPx}px;
             font-size: ${titleSize}px;
             line-height: 1.02;
             font-weight: 400;
             letter-spacing: 0;
             color: #fff2df;
             text-wrap: balance;
-            transform: translateY(${imageLayout.titleOpticalOffsetPx}px);
         }
 
         .teaser {
@@ -212,7 +216,7 @@ function htmlForLocale(locale) {
         .photo {
             position: absolute;
             top: ${imageLayout.photoTopPx}px;
-            left: 720px;
+            left: ${imageLayout.photoLeftPx}px;
             width: 420px;
             height: ${imageLayout.photoHeightPx}px;
             object-fit: cover;
