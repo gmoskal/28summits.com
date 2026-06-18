@@ -580,7 +580,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
         <div className={frameClassName}>
             {headlineLabel ? (
                 <motion.h2
-                    className="pointer-events-none mb-[1em] max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:mb-[1.5em] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
+                    className="pointer-events-none mb-[0.5em] max-w-[22rem] text-center text-[34px] leading-[1.08] font-normal tracking-normal text-[var(--text-primary)] sm:mb-[0.5em] sm:max-w-[38rem] sm:text-[46px] sm:leading-[1.05] lg:text-[58px] xl:max-w-[56rem] xl:text-[64px]"
                     initial={shouldPlayDeckEntryAnimation ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
