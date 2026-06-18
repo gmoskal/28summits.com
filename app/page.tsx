@@ -6,6 +6,7 @@ import {
     siteConfig,
     siteLanguageByLocale,
     siteLanguages,
+    siteLocaleFromInput,
     siteSocialImageForLocale,
     siteSocialTwitterImageForLocale,
     socialContentForLocale,
@@ -19,8 +20,8 @@ function firstSearchParam(value: string | string[] | undefined) {
     return Array.isArray(value) ? value[0] : value
 }
 
-function socialPageUrl(locale: SiteLocale) {
-    if (locale === defaultSiteLocale) {
+function socialPageUrl(locale: SiteLocale, hasLocaleParam: boolean) {
+    if (locale === defaultSiteLocale && !hasLocaleParam) {
         return siteConfig.siteUrl
     }
 
@@ -30,10 +31,11 @@ function socialPageUrl(locale: SiteLocale) {
 export async function generateMetadata(p: HomePageMetadataProps): Promise<Metadata> {
     const searchParams = await p.searchParams
     const localeParam = firstSearchParam(searchParams.lang ?? searchParams.locale)
-    const socialContent = socialContentForLocale(localeParam)
+    const localeFromParam = siteLocaleFromInput(localeParam)
+    const socialContent = socialContentForLocale(localeFromParam)
     const socialImage = siteSocialImageForLocale(socialContent.locale)
     const socialTwitterImage = siteSocialTwitterImageForLocale(socialContent.locale)
-    const pageUrl = socialPageUrl(socialContent.locale)
+    const pageUrl = socialPageUrl(socialContent.locale, Boolean(localeFromParam))
 
     return {
         title: siteConfig.name,
