@@ -1,5 +1,5 @@
 const siteIconVersion = "20260617-2"
-export const siteSocialImageVersion = "20260618-24"
+export const siteSocialImageVersion = "20260618-25"
 
 export const siteConfig = {
     name: "28 gór",
@@ -53,6 +53,7 @@ export type SiteSocialContent = {
     locale: SiteLocale
     title: string
     description: string
+    imageTeaser: string
     image: string
     imageAlt: string
 }
@@ -80,46 +81,55 @@ const socialCopyByLocale: Record<SiteLocale, Omit<SiteSocialContent, "locale" | 
     pl: {
         title: "Gotowi na 28 przygód?",
         description: "Zbieraj pieczątki z najwyższych gór w Polsce. Kolekcjonuj zdjęcia i pamiątki, odkrywaj gry edukacyjne, a przede wszystkim poznaj Ryska.",
+        imageTeaser: "Zbieraj pieczątki. Poznaj Ryska.",
         imageAlt: "Rysek pokazuje ekran pluszowych pieczątek w aplikacji 28 gór.",
     },
     en: {
         title: "Ready for 28 adventures?",
         description: "Collect stamps from Poland's highest mountains. Save photos and keepsakes, discover educational games, and most of all, meet Rysek.",
+        imageTeaser: "Collect stamps. Meet Rysek.",
         imageAlt: "Rysek points at the plush stamp screen in the 28 gór app.",
     },
     es: {
         title: "¿Todo listo para 28 aventuras?",
         description: "Colecciona sellos de las montañas más altas de Polonia. Guarda fotos y recuerdos, descubre juegos educativos y, sobre todo, conoce a Rysek.",
+        imageTeaser: "Colecciona sellos. Conoce a Rysek.",
         imageAlt: "Rysek señala la pantalla de sellos de peluche en la app 28 gór.",
     },
     de: {
         title: "Bereit für 28 Abenteuer?",
         description: "Sammle Stempel der höchsten Berge Polens. Bewahre Fotos und Andenken, entdecke Lernspiele und lerne vor allem Rysek kennen.",
+        imageTeaser: "Sammle Stempel. Lerne Rysek kennen.",
         imageAlt: "Rysek zeigt auf den Bildschirm mit Plüschstempeln in der 28 gór App.",
     },
     fr: {
         title: "Cap sur 28 aventures ?",
         description: "Collectionne les tampons des plus hauts sommets de Pologne. Garde tes photos et souvenirs, découvre des jeux éducatifs et, surtout, rencontre Rysek.",
+        imageTeaser: "Collectionne les tampons. Rencontre Rysek.",
         imageAlt: "Rysek montre l'écran des tampons en peluche dans l'app 28 gór.",
     },
     nb: {
         title: "Klar for 28 eventyr?",
         description: "Samle stempler fra Polens høyeste fjell. Ta vare på bilder og minner, oppdag lærerike spill og, viktigst av alt, bli kjent med Rysek.",
+        imageTeaser: "Samle stempler. Bli kjent med Rysek.",
         imageAlt: "Rysek peker på skjermen med plysjstempler i 28 gór-appen.",
     },
     cs: {
         title: "Připraveni na 28 dobrodružství?",
         description: "Sbírej razítka z nejvyšších hor Polska. Uchovávej fotografie a památky, objevuj vzdělávací hry a hlavně poznej Ryska.",
+        imageTeaser: "Sbírej razítka. Poznej Ryska.",
         imageAlt: "Rysek ukazuje na obrazovku s plyšovými razítky v aplikaci 28 gór.",
     },
     sk: {
         title: "Pripravení na 28 dobrodružstiev?",
         description: "Zbieraj pečiatky z najvyšších hôr Poľska. Ukladaj fotografie a pamiatky, objavuj vzdelávacie hry a hlavne spoznaj Ryska.",
+        imageTeaser: "Zbieraj pečiatky. Spoznaj Ryska.",
         imageAlt: "Rysek ukazuje na obrazovku s plyšovými pečiatkami v aplikácii 28 gór.",
     },
     uk: {
         title: "Готові до 28 пригод?",
         description: "Збирай штампи з найвищих гір Польщі. Зберігай фото й пам'ятки, відкривай освітні ігри, а головне - познайомся з Рисеком.",
+        imageTeaser: "Збирай штампи. Познайомся з Рисеком.",
         imageAlt: "Рисек показує екран плюшевих штампів у застосунку 28 gór.",
     },
 } as const

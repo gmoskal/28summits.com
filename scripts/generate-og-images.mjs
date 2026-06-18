@@ -90,26 +90,26 @@ function fontFaceCss() {
 
 function titleFontSize(title) {
     if (title.length > 35) {
-        return 50
+        return 64
     }
 
     if (title.length > 29) {
-        return 50
+        return 72
     }
 
-    return 50
+    return 86
 }
 
-function descriptionFontSize(description) {
-    if (description.length > 150) {
-        return 32
+function teaserFontSize(teaser) {
+    if (teaser.length > 38) {
+        return 42
     }
 
-    if (description.length > 130) {
-        return 32
+    if (teaser.length > 30) {
+        return 46
     }
 
-    return 32
+    return 52
 }
 
 function titleFontFamily(locale) {
@@ -123,7 +123,7 @@ function titleFontFamily(locale) {
 function htmlForLocale(locale) {
     const content = socialContent[locale]
     const titleSize = titleFontSize(content.title)
-    const bodySize = descriptionFontSize(content.description)
+    const teaserSize = teaserFontSize(content.imageTeaser)
 
     return `<!doctype html>
 <html lang="${locale}">
@@ -162,9 +162,9 @@ function htmlForLocale(locale) {
         }
 
         .app-icon {
-            width: 112px;
-            height: 112px;
-            border-radius: 25px;
+            width: 126px;
+            height: 126px;
+            border-radius: 28px;
             box-shadow: 0 20px 34px rgba(0, 0, 0, 0.42);
         }
 
@@ -172,8 +172,8 @@ function htmlForLocale(locale) {
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 82px;
-            width: 600px;
+            left: 68px;
+            width: 612px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -182,30 +182,32 @@ function htmlForLocale(locale) {
 
         .title {
             font-family: ${titleFontFamily(locale)};
-            margin: 50px 0 34px;
+            margin: 42px 0 30px;
             font-size: ${titleSize}px;
-            line-height: 1.04;
+            line-height: 1.02;
             font-weight: 400;
             letter-spacing: 0;
             color: #fff2df;
+            text-wrap: balance;
         }
 
-        .description {
+        .teaser {
             margin: 0;
-            max-width: 568px;
-            font-size: ${bodySize}px;
-            line-height: calc(${bodySize}px + 12px);
-            font-weight: 400;
+            max-width: 580px;
+            font-size: ${teaserSize}px;
+            line-height: calc(${teaserSize}px + 12px);
+            font-weight: 650;
             letter-spacing: 0;
             color: rgba(255, 255, 255, 0.97);
+            text-wrap: balance;
         }
 
         .photo {
             position: absolute;
-            top: 34px;
-            left: 696px;
-            width: 424px;
-            height: 562px;
+            top: 32px;
+            left: 720px;
+            width: 420px;
+            height: 566px;
             object-fit: cover;
             object-position: 50% 50%;
             border-radius: 18px;
@@ -218,7 +220,7 @@ function htmlForLocale(locale) {
         <section class="left-stack">
             <img class="app-icon" src="${pathToFileURL(appIconPath).href}" alt="">
             <h1 class="title">${escapeHtml(content.title)}</h1>
-            <p class="description">${escapeHtml(content.description)}</p>
+            <p class="teaser">${escapeHtml(content.imageTeaser)}</p>
         </section>
         <img class="photo" src="${pathToFileURL(appImagePath).href}" alt="">
     </main>
