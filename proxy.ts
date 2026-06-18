@@ -72,7 +72,7 @@ function facebookSocialPreviewResponse(locale: SiteLocale) {
     const content = socialContentForLocale(locale)
     const language = siteLanguageByLocale[content.locale]
     const pageUrl = canonicalSocialUrl(content.locale)
-    const imageUrl = `${siteConfig.siteUrl}${content.image.replace(/\.png$/, ".jpg")}`
+    const imageUrl = `${siteConfig.siteUrl}${content.image}`
     const title = escapeHtml(content.title)
     const description = escapeHtml(content.description)
     const imageAlt = escapeHtml(content.imageAlt)
@@ -93,7 +93,7 @@ function facebookSocialPreviewResponse(locale: SiteLocale) {
 <meta property="og:image" content="${imageUrl}">
 <meta property="og:image:url" content="${imageUrl}">
 <meta property="og:image:secure_url" content="${imageUrl}">
-<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="${socialImageSize.width}">
 <meta property="og:image:height" content="${socialImageSize.height}">
 <meta property="og:image:alt" content="${imageAlt}">
