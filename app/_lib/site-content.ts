@@ -74,6 +74,10 @@ export function siteLocaleFromInput(localeInput: string | null | undefined): Sit
 }
 
 function socialImagePath(locale: SiteLocale) {
+    if (locale === defaultSiteLocale) {
+        return "/og-image.png"
+    }
+
     return `/og-image-${siteSocialImageVersion}-${locale}.png`
 }
 

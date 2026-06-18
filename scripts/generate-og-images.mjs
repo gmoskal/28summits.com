@@ -227,8 +227,16 @@ try {
     }
 
     const polishImage = path.join(publicDir, socialContent.pl.image.replace(/^\//, ""))
-    copyFileSync(polishImage, path.join(publicDir, "og-image.png"))
-    copyFileSync(polishImage, path.join(publicDir, `og-image-${siteSocialImageVersion}.png`))
+    const defaultImage = path.join(publicDir, "og-image.png")
+    const versionedPolishImage = path.join(publicDir, `og-image-${siteSocialImageVersion}.png`)
+
+    if (polishImage !== defaultImage) {
+        copyFileSync(polishImage, defaultImage)
+    }
+
+    if (polishImage !== versionedPolishImage) {
+        copyFileSync(polishImage, versionedPolishImage)
+    }
 } finally {
     rmSync(tempDir, { recursive: true, force: true })
 }
