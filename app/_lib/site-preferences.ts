@@ -24,6 +24,12 @@ type LocalePreference = {
     source: "browser" | "manual"
 }
 
+type UrlPreferences = {
+    pathLocale: SiteLocale | null
+    queryLocale: SiteLocale | null
+    themeMode: SiteThemeMode | null
+}
+
 function parseSiteThemeMode(themeModeInput: string | null | undefined): SiteThemeMode | null {
     return siteThemeModes.find((mode) => mode === themeModeInput) ?? null
 }
@@ -48,17 +54,22 @@ function browserTheme(): SiteThemeMode {
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
-function queryPreferences(): { locale: SiteLocale | null; themeMode: SiteThemeMode | null } {
+function pathLocaleFromPathname(pathname: string): SiteLocale | null {
+    const [, pathLocaleInput] = pathname.split("/")
+
+    return siteLocaleFromInput(pathLocaleInput)
+}
+
+function urlPreferences(): UrlPreferences {
     if (typeof window === "undefined") {
-        return { locale: null, themeMode: null }
+        return { pathLocale: null, queryLocale: null, themeMode: null }
     }
 
     const params = new URLSearchParams(window.location.search)
-    const [, pathLocaleInput] = window.location.pathname.split("/")
 
     return {
-        locale: siteLocaleFromInput(params.get(legacyUrlLocaleParamName) ?? params.get(urlLocaleParamName))
-            ?? siteLocaleFromInput(pathLocaleInput),
+        pathLocale: pathLocaleFromPathname(window.location.pathname),
+        queryLocale: siteLocaleFromInput(params.get(legacyUrlLocaleParamName) ?? params.get(urlLocaleParamName)),
         themeMode: parseSiteThemeMode(params.get("theme") ?? params.get("themeMode") ?? params.get("mode")),
     }
 }
@@ -78,11 +89,21 @@ function updateUrlLocale(locale: SiteLocale) {
     }
 
     const url = new URL(window.location.href)
-    if (locale === defaultSiteLocale) {
+    const pathLocale = pathLocaleFromPathname(url.pathname)
+
+    if (pathLocale) {
+        const pathParts = url.pathname.split("/")
+        pathParts[1] = locale
+        url.pathname = pathParts.join("/") || "/"
         url.searchParams.delete(urlLocaleParamName)
     } else {
-        url.searchParams.set(urlLocaleParamName, locale)
+        if (locale === defaultSiteLocale) {
+            url.searchParams.delete(urlLocaleParamName)
+        } else {
+            url.searchParams.set(urlLocaleParamName, locale)
+        }
     }
+
     url.searchParams.delete(legacyUrlLocaleParamName)
     window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`)
 }
@@ -105,18 +126,19 @@ export function useSitePreferences() {
     const [shouldSyncLocaleUrl, setShouldSyncLocaleUrl] = useState(false)
 
     useEffect(() => {
-        const query = queryPreferences()
+        const url = urlPreferences()
         const manualLocale = siteLocaleFromInput(localStorage.getItem(sitePreferenceStorageKeys.manualLocale))
-        const nextLocale = manualLocale ?? browserLocale()
+        const nextLocale = url.pathLocale ?? manualLocale ?? browserLocale()
+        const source = url.pathLocale || manualLocale ? "manual" : "browser"
 
         localStorage.removeItem(sitePreferenceStorageKeys.legacyLocale)
         setLocalePreference({
             locale: nextLocale,
-            source: manualLocale ? "manual" : "browser",
+            source,
         })
-        setShouldSyncLocaleUrl(Boolean(manualLocale) || Boolean(query.locale) || urlHasLocaleParam())
+        setShouldSyncLocaleUrl(Boolean(manualLocale && !url.pathLocale) || Boolean(url.queryLocale) || urlHasLocaleParam())
         setThemeModeState(
-            query.themeMode
+            url.themeMode
                 ?? parseSiteThemeMode(localStorage.getItem(sitePreferenceStorageKeys.themeMode))
                 ?? browserTheme(),
         )
