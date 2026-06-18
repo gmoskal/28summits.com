@@ -11,13 +11,14 @@ const imageSize = {
 }
 
 const imageLayout = {
-    photoTopPx: 32,
-    photoLeftPx: 68,
-    textLeftPx: 520,
-    photoHeightPx: 566,
-    appIconOffsetYPx: 15,
-    iconTitleGapPx: 72,
-    titleTeaserGapPx: 58,
+    photoLeftPx: 660,
+    photoWidthPx: 540,
+    appIconLeftPx: 64,
+    appIconTopPx: 116,
+    appIconSizePx: 180,
+    teaserLeftPx: 64,
+    teaserTopPx: 320,
+    teaserWidthPx: 520,
 }
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
@@ -27,7 +28,7 @@ const jiti = createJiti(import.meta.url)
 const { siteLocales, siteSocialImageVersion, socialContent } = await jiti.import("../app/_lib/site-content.ts")
 
 const chromePath = process.env.CHROME_PATH ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-const appImagePath = path.join(publicDir, "misc", "app-grid.webp")
+const appImagePath = path.join(publicDir, "card-stack", "walking2.jpeg")
 const appIconPath = path.join(publicDir, "app-icon.png")
 const interFontPath = path.join(repoRoot, "app", "fonts", "InterVariable.woff2")
 const tempDir = mkdtempSync(path.join(tmpdir(), "28gor-og-"))
@@ -98,41 +99,20 @@ function fontFaceCss() {
     `
 }
 
-function titleFontSize(title) {
-    if (title.length > 35) {
-        return 64
-    }
-
-    if (title.length > 29) {
-        return 72
-    }
-
-    return 86
-}
-
 function teaserFontSize(teaser) {
     if (teaser.length > 38) {
-        return 42
+        return 48
     }
 
     if (teaser.length > 30) {
-        return 46
+        return 54
     }
 
-    return 52
-}
-
-function titleFontFamily(locale) {
-    if (locale === "uk") {
-        return `"Inter", system-ui, sans-serif`
-    }
-
-    return `"Gloria Hallelujah", "Comic Sans MS", cursive`
+    return 58
 }
 
 function htmlForLocale(locale) {
     const content = socialContent[locale]
-    const titleSize = titleFontSize(content.title)
     const teaserSize = teaserFontSize(content.imageTeaser)
 
     return `<!doctype html>
@@ -165,74 +145,47 @@ function htmlForLocale(locale) {
             width: ${imageSize.width}px;
             height: ${imageSize.height}px;
             overflow: hidden;
-            background:
-                radial-gradient(circle at 12% 18%, rgba(230, 118, 33, 0.16), transparent 33%),
-                radial-gradient(circle at 44% 48%, rgba(106, 54, 25, 0.17), transparent 38%),
-                linear-gradient(90deg, #0b0502 0%, #020201 56%, #000000 100%);
+            background: #030201;
         }
 
         .app-icon {
-            width: 126px;
-            height: 126px;
-            border-radius: 28px;
-            box-shadow: 0 20px 34px rgba(0, 0, 0, 0.42);
-            transform: translateY(${imageLayout.appIconOffsetYPx}px);
-        }
-
-        .left-stack {
             position: absolute;
-            top: ${imageLayout.photoTopPx}px;
-            left: ${imageLayout.textLeftPx}px;
-            width: 612px;
-            height: ${imageLayout.photoHeightPx}px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-        }
-
-        .title {
-            font-family: ${titleFontFamily(locale)};
-            margin: ${imageLayout.iconTitleGapPx}px 0 ${imageLayout.titleTeaserGapPx}px;
-            font-size: ${titleSize}px;
-            line-height: 1.02;
-            font-weight: 400;
-            letter-spacing: 0;
-            color: #fff2df;
-            text-wrap: balance;
+            top: ${imageLayout.appIconTopPx}px;
+            left: ${imageLayout.appIconLeftPx}px;
+            width: ${imageLayout.appIconSizePx}px;
+            height: ${imageLayout.appIconSizePx}px;
+            border-radius: 39px;
+            box-shadow: 0 20px 34px rgba(0, 0, 0, 0.42);
         }
 
         .teaser {
-            margin: 0;
-            max-width: 580px;
+            position: absolute;
+            top: ${imageLayout.teaserTopPx}px;
+            left: ${imageLayout.teaserLeftPx}px;
+            width: ${imageLayout.teaserWidthPx}px;
             font-size: ${teaserSize}px;
-            line-height: calc(${teaserSize}px + 12px);
-            font-weight: 650;
+            line-height: calc(${teaserSize}px + 10px);
+            font-weight: 760;
             letter-spacing: 0;
-            color: rgba(255, 255, 255, 0.97);
+            color: #ffffff;
             text-wrap: balance;
         }
 
         .photo {
             position: absolute;
-            top: ${imageLayout.photoTopPx}px;
+            top: 0;
             left: ${imageLayout.photoLeftPx}px;
-            width: 420px;
-            height: ${imageLayout.photoHeightPx}px;
+            width: ${imageLayout.photoWidthPx}px;
+            height: ${imageSize.height}px;
             object-fit: cover;
-            object-position: 50% 50%;
-            border-radius: 18px;
-            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.56);
+            object-position: 52% 50%;
         }
     </style>
 </head>
 <body>
     <main class="stage">
-        <section class="left-stack">
-            <img class="app-icon" src="${pathToFileURL(appIconPath).href}" alt="">
-            <h1 class="title">${escapeHtml(content.title)}</h1>
-            <p class="teaser">${escapeHtml(content.imageTeaser)}</p>
-        </section>
+        <img class="app-icon" src="${pathToFileURL(appIconPath).href}" alt="">
+        <p class="teaser">${escapeHtml(content.imageTeaser)}</p>
         <img class="photo" src="${pathToFileURL(appImagePath).href}" alt="">
     </main>
 </body>
