@@ -54,9 +54,11 @@ function queryPreferences(): { locale: SiteLocale | null; themeMode: SiteThemeMo
     }
 
     const params = new URLSearchParams(window.location.search)
+    const [, pathLocaleInput] = window.location.pathname.split("/")
 
     return {
-        locale: siteLocaleFromInput(params.get(legacyUrlLocaleParamName) ?? params.get(urlLocaleParamName)),
+        locale: siteLocaleFromInput(params.get(legacyUrlLocaleParamName) ?? params.get(urlLocaleParamName))
+            ?? siteLocaleFromInput(pathLocaleInput),
         themeMode: parseSiteThemeMode(params.get("theme") ?? params.get("themeMode") ?? params.get("mode")),
     }
 }
