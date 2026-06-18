@@ -12,6 +12,12 @@ const socialImageHeaders = [
     value: "*",
   },
 ];
+const socialPageHeaders = [
+  {
+    key: "Cache-Control",
+    value: "public, max-age=0, must-revalidate",
+  },
+];
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -20,6 +26,14 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: "/",
+        headers: socialPageHeaders,
+      },
+      {
+        source: "/:locale(pl|en|es|de|fr|nb|cs|sk|uk)",
+        headers: socialPageHeaders,
+      },
       {
         source: "/og-image.png",
         headers: socialImageHeaders,
