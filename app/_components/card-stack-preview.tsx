@@ -352,6 +352,7 @@ const deckEntry = {
     headlineDurationSeconds: 1,
     cardDelaySeconds: 1.5,
     cardStaggerSeconds: 0.055,
+    unlockPaddingSeconds: 1.1,
     stiffness: 215,
     damping: 28,
     mass: 0.82,
@@ -481,6 +482,12 @@ function cardDirection(offset: { x: number; y: number }, velocity: { x: number; 
     }
 }
 
+function deckEntryUnlockDelayMs(cardDelaySeconds: number, cardCount: number) {
+    const lastCardDelaySeconds = cardDelaySeconds + Math.max(0, cardCount - 1) * deckEntry.cardStaggerSeconds
+
+    return Math.round((lastCardDelaySeconds + deckEntry.unlockPaddingSeconds) * 1000)
+}
+
 export function CardStackPreview(p: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
     const shouldPlayDeckEntryAnimation = !prefersReducedMotion
@@ -528,6 +535,24 @@ export function CardStackPreview(p: CardStackPreviewProps) {
 
         return () => window.clearTimeout(resetTimer)
     }, [dismissedCards, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
+
+    useEffect(() => {
+        if (!isDeckEntryActive) {
+            return
+        }
+
+        if (!shouldPlayDeckEntryAnimation) {
+            setDeckEntryActive(false)
+            return
+        }
+
+        const unlockTimer = window.setTimeout(
+            () => setDeckEntryActive(false),
+            deckEntryUnlockDelayMs(cardDelaySeconds, stackConfig.cards.length),
+        )
+
+        return () => window.clearTimeout(unlockTimer)
+    }, [cardDelaySeconds, isDeckEntryActive, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
 
     function handleDragEnd(index: number, offset: { x: number; y: number }, velocity: { x: number; y: number }) {
         window.setTimeout(() => {
@@ -602,7 +627,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
             ) : null}
             <div
                 aria-hidden
-                className="absolute bottom-[9%] left-1/2 h-24 w-[72%] -translate-x-1/2 rounded-full blur-3xl xl:hidden"
+                className="pointer-events-none absolute bottom-[9%] left-1/2 h-24 w-[72%] -translate-x-1/2 rounded-full blur-3xl xl:hidden"
                 style={{ backgroundColor: "var(--shadow-ground)" }}
             />
             <div
