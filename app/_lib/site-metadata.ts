@@ -20,6 +20,9 @@ export function homeMetadataForLocale(locale: SiteLocale, pageUrl: string): Meta
         alternates: {
             canonical: pageUrl,
         },
+        icons: {
+            other: [{ rel: "image_src", url: socialImage.secureUrl }],
+        },
         openGraph: {
             type: "website",
             url: pageUrl,

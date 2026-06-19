@@ -4,6 +4,7 @@ import localFont from "next/font/local"
 import "./globals.css"
 import {
     siteConfig,
+    siteHomeUrl,
     siteLanguages,
     siteSocialContent,
     siteSocialImage,
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     applicationName: siteConfig.name,
     alternates: {
-        canonical: siteConfig.siteUrl,
+        canonical: siteHomeUrl,
     },
     icons: {
         shortcut: [{ url: siteConfig.faviconIconIco, type: "image/x-icon" }],
@@ -43,10 +44,11 @@ export const metadata: Metadata = {
             { url: siteConfig.appIcon, sizes: "1024x1024", type: "image/png" },
         ],
         apple: [{ url: siteConfig.appleTouchIcon, sizes: "180x180", type: "image/png" }],
+        other: [{ rel: "image_src", url: siteSocialImage.secureUrl }],
     },
     openGraph: {
         type: "website",
-        url: siteConfig.siteUrl,
+        url: siteHomeUrl,
         title: siteSocialContent.title,
         description: siteSocialContent.description,
         siteName: siteConfig.name,

@@ -23,6 +23,12 @@ export const siteConfig = {
     description: "28 gór zbiera plany, wejścia, zdjęcia, ręcznie rysowane pieczątki, edukację i górskie pamiątki w jednej dopracowanej aplikacji.",
 } as const
 
+export function absoluteSiteUrl(pathname: string = "/") {
+    return new URL(pathname, siteConfig.siteUrl).toString()
+}
+
+export const siteHomeUrl = absoluteSiteUrl("/")
+
 export const siteLanguages = [
     { locale: "pl", flag: "🇵🇱", name: "Polski", htmlLang: "pl", ogLocale: "pl_PL" },
     { locale: "en", flag: "🇬🇧", name: "English", htmlLang: "en", ogLocale: "en_US" },
@@ -154,7 +160,7 @@ export function siteSocialImageForLocale(localeInput: string | null | undefined 
 
     return {
         url: content.image,
-        secureUrl: `${siteConfig.siteUrl}${content.image}`,
+        secureUrl: absoluteSiteUrl(content.image),
         width: 1200,
         height: 630,
         type: "image/jpeg",
