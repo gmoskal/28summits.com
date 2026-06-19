@@ -91,10 +91,8 @@ function updateUrlLocale(locale: SiteLocale) {
     const url = new URL(window.location.href)
     const pathLocale = pathLocaleFromPathname(url.pathname)
 
-    if (pathLocale) {
-        const pathParts = url.pathname.split("/")
-        pathParts[1] = locale
-        url.pathname = pathParts.join("/") || "/"
+    if (pathLocale || url.pathname === "/") {
+        url.pathname = locale === defaultSiteLocale ? "/" : `/${locale}`
         url.searchParams.delete(urlLocaleParamName)
     } else {
         if (locale === defaultSiteLocale) {

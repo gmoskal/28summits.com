@@ -1,5 +1,5 @@
 const siteIconVersion = "20260617-2"
-export const siteSocialImageVersion = "20260619-01"
+export const siteSocialImageVersion = "20260619-02"
 
 export const siteConfig = {
     name: "28 gór",
@@ -74,11 +74,7 @@ export function siteLocaleFromInput(localeInput: string | null | undefined): Sit
 }
 
 function socialImagePath(locale: SiteLocale) {
-    if (locale === defaultSiteLocale) {
-        return "/og-image.png"
-    }
-
-    return `/og-image-${siteSocialImageVersion}-${locale}.png`
+    return `/og-image-${siteSocialImageVersion}-${locale}.jpeg`
 }
 
 const socialCopyByLocale: Record<SiteLocale, Omit<SiteSocialContent, "locale" | "image">> = {
@@ -161,7 +157,7 @@ export function siteSocialImageForLocale(localeInput: string | null | undefined 
         secureUrl: `${siteConfig.siteUrl}${content.image}`,
         width: 1200,
         height: 630,
-        type: "image/png",
+        type: "image/jpeg",
         alt: content.imageAlt,
     } as const
 }

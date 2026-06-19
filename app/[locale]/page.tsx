@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HomePageClient } from "../_components/home-page-client"
 import { homeMetadataForLocale } from "../_lib/site-metadata"
-import { siteConfig, siteLocaleFromInput, siteLocales } from "../_lib/site-content"
+import { defaultSiteLocale, siteConfig, siteLocaleFromInput, siteLocales } from "../_lib/site-content"
 
 type LocalizedHomePageProps = {
     params: Promise<{
@@ -17,6 +17,10 @@ export function generateStaticParams() {
 }
 
 function localePageUrl(locale: string) {
+    if (locale === defaultSiteLocale) {
+        return siteConfig.siteUrl
+    }
+
     return `${siteConfig.siteUrl}/${locale}`
 }
 

@@ -28,6 +28,7 @@ const jiti = createJiti(import.meta.url)
 const { siteLocales, siteSocialImageVersion, socialContent } = await jiti.import("../app/_lib/site-content.ts")
 
 const chromePath = process.env.CHROME_PATH ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+const jpegQuality = "92"
 const appImagePath = path.join(publicDir, "card-stack", "walking2.jpeg")
 const appIconPath = path.join(publicDir, "app-icon.png")
 const interFontPath = path.join(repoRoot, "app", "fonts", "InterVariable.woff2")
@@ -211,6 +212,26 @@ function chromeScreenshot(htmlPath, outputPath) {
     }
 }
 
+function convertPngToJpeg(inputPath, outputPath) {
+    const result = spawnSync("sips", [
+        "-s",
+        "format",
+        "jpeg",
+        "-s",
+        "formatOptions",
+        jpegQuality,
+        inputPath,
+        "--out",
+        outputPath,
+    ], {
+        stdio: "pipe",
+    })
+
+    if (result.status !== 0) {
+        throw new Error(`JPEG conversion failed for ${path.basename(outputPath)}:\n${result.stderr.toString()}`)
+    }
+}
+
 try {
     if (!existsSync(chromePath)) {
         throw new Error(`Chrome not found at ${chromePath}. Set CHROME_PATH to another Chromium binary.`)
@@ -221,14 +242,16 @@ try {
     for (const locale of siteLocales) {
         const htmlPath = path.join(tempDir, `og-${locale}.html`)
         const outputPath = path.join(publicDir, socialContent[locale].image.replace(/^\//, ""))
+        const pngPath = path.join(tempDir, `og-${locale}.png`)
         writeFileSync(htmlPath, htmlForLocale(locale))
-        chromeScreenshot(htmlPath, outputPath)
+        chromeScreenshot(htmlPath, pngPath)
+        convertPngToJpeg(pngPath, outputPath)
         console.log(`Generated ${path.relative(repoRoot, outputPath)}`)
     }
 
     const polishImage = path.join(publicDir, socialContent.pl.image.replace(/^\//, ""))
-    const defaultImage = path.join(publicDir, "og-image.png")
-    const versionedPolishImage = path.join(publicDir, `og-image-${siteSocialImageVersion}.png`)
+    const defaultImage = path.join(publicDir, "og-image.jpeg")
+    const versionedPolishImage = path.join(publicDir, `og-image-${siteSocialImageVersion}.jpeg`)
 
     if (polishImage !== defaultImage) {
         copyFileSync(polishImage, defaultImage)

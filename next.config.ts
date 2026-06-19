@@ -18,8 +18,6 @@ const socialPageHeaders = [
     value: "public, max-age=0, must-revalidate",
   },
 ];
-const rewrittenLocales = ["en", "es", "de", "fr", "nb", "cs", "sk", "uk"] as const;
-const localeParamNames = ["lang", "locale"] as const;
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -53,17 +51,6 @@ const nextConfig: NextConfig = {
       destination: `https://${canonicalHost}/:path*`,
       permanent: true,
     }));
-  },
-  async rewrites() {
-    return {
-      beforeFiles: localeParamNames.flatMap((paramName) =>
-        rewrittenLocales.map((locale) => ({
-          source: "/",
-          has: [{ type: "query" as const, key: paramName, value: locale }],
-          destination: `/${locale}`,
-        })),
-      ),
-    };
   },
 };
 
