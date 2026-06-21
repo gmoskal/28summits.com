@@ -376,6 +376,18 @@ export function HomePageClient() {
             block: "start",
         })
     }, [])
+    const scrollToStatsSection = useCallback(() => {
+        const statsSectionElement = statsSectionRef.current
+        if (!statsSectionElement) {
+            return
+        }
+
+        setStoryScrollCueDismissed(true)
+        statsSectionElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        })
+    }, [])
 
     const startStoryAnimation = useCallback(() => {
         setStoryStarted(true)
@@ -448,6 +460,10 @@ export function HomePageClient() {
 
         const dismissStoryScrollCue = () => setStoryScrollCueDismissed(true)
         const dismissStoryScrollCueByKey = (event: KeyboardEvent) => {
+            if (event.target instanceof Element && event.target.closest("[data-story-scroll-cue]")) {
+                return
+            }
+
             if (storyScrollCueDismissKeys.has(event.key)) {
                 dismissStoryScrollCue()
             }
@@ -559,9 +575,15 @@ export function HomePageClient() {
                     </div>
                 </article>
                 {storyScrollCueVisible ? (
-                    <div className="pointer-events-none absolute right-5 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] text-[var(--gooey-title-color)] transition duration-500 ease-out sm:right-auto sm:left-[70%] sm:h-[106px] sm:w-[60px] sm:-translate-x-1/2 xl:h-[126px] xl:w-[72px]">
+                    <button
+                        type="button"
+                        aria-label="Scroll to final screen"
+                        data-story-scroll-cue
+                        className="absolute right-5 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] touch-manipulation cursor-pointer rounded-[20px] border-0 bg-transparent p-0 text-[var(--gooey-title-color)] transition duration-500 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:right-auto sm:left-[70%] sm:h-[106px] sm:w-[60px] sm:-translate-x-1/2 lg:left-1/2 xl:h-[126px] xl:w-[72px]"
+                        onClick={scrollToStatsSection}
+                    >
                         <GooeyScrollArrow />
-                    </div>
+                    </button>
                 ) : null}
             </section>
 
