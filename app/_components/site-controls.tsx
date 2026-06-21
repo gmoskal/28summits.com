@@ -82,22 +82,28 @@ function LanguageSelect(p: Pick<SiteControlsProps, "content" | "locale" | "onLoc
     )
 }
 
-export function SiteControls(p: SiteControlsProps) {
+export function ThemeModeSwitch(p: Pick<SiteControlsProps, "content" | "themeMode" | "onThemeModeChange">) {
     const themeOptions: [DraggableSwitchOption<SiteThemeMode>, DraggableSwitchOption<SiteThemeMode>] = [
         { value: siteThemeModes[0], label: p.content.themeModes.light, content: <ThemeIcon mode={siteThemeModes[0]} /> },
         { value: siteThemeModes[1], label: p.content.themeModes.dark, content: <ThemeIcon mode={siteThemeModes[1]} /> },
     ]
 
     return (
+        <DraggableSwitch
+            ariaLabel={p.content.themeLabel}
+            value={p.themeMode}
+            options={themeOptions}
+            metrics={{ slotWidth: 36, thumbWidth: 32 }}
+            onChange={p.onThemeModeChange}
+        />
+    )
+}
+
+export function SiteControls(p: SiteControlsProps) {
+    return (
         <div className="flex flex-nowrap justify-center gap-2 lg:justify-end">
             <LanguageSelect content={p.content} locale={p.locale} onLocaleChange={p.onLocaleChange} />
-            <DraggableSwitch
-                ariaLabel={p.content.themeLabel}
-                value={p.themeMode}
-                options={themeOptions}
-                metrics={{ slotWidth: 36, thumbWidth: 32 }}
-                onChange={p.onThemeModeChange}
-            />
+            <ThemeModeSwitch content={p.content} themeMode={p.themeMode} onThemeModeChange={p.onThemeModeChange} />
         </div>
     )
 }

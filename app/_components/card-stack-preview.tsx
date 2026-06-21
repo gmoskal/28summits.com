@@ -646,6 +646,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                     const cardTransform = cardLayouts[index] ?? stackConfig.fallbackLayout[index] ?? fallbackCardLayout[index % fallbackCardLayout.length]
                     const isTopCard = index === activeCardIndex
                     const isDeparting = departingCard?.index === index
+                    const isInteractiveCard = isTopCard && !isDeparting
                     const canDragCard = isTopCard && !isDeparting && !isDeckEntryActive
                     const stackDepth = Math.max(index - activeCardIndex, 0)
                     const scale = isTopCard ? 1 : Math.max(0.9, 1 - stackDepth * 0.018)
@@ -663,13 +664,14 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                             key={`${deckResetKey}-${card.src}`}
                             className={`${deckSizeClassName.card} ${deckResizeClassName} -translate-x-1/2 -translate-y-1/2`}
                             style={{
-                                pointerEvents: canDragCard ? "auto" : "none",
+                                pointerEvents: isInteractiveCard ? "auto" : "none",
                                 zIndex: stackConfig.cards.length - index,
                             }}
                         >
                             <motion.div
                                 className="aspect-[1/1.18] w-full select-none cursor-grab active:cursor-grabbing"
-                                drag={canDragCard}
+                                drag={isInteractiveCard}
+                                dragListener={canDragCard}
                                 dragMomentum={false}
                                 initial={
                                     shouldAnimateDeckEntry
@@ -698,9 +700,9 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                                 }}
                                 style={{
                                     backfaceVisibility: "hidden",
-                                    pointerEvents: canDragCard ? "auto" : "none",
+                                    pointerEvents: isInteractiveCard ? "auto" : "none",
                                     transformStyle: "preserve-3d",
-                                    touchAction: canDragCard ? "none" : "auto",
+                                    touchAction: isInteractiveCard ? "none" : "auto",
                                     WebkitBackfaceVisibility: "hidden",
                                     WebkitTapHighlightColor: "transparent",
                                     WebkitTouchCallout: "none",

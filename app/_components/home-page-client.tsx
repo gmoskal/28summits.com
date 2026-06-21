@@ -6,7 +6,7 @@ import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
-import { GooeyBrandTitle } from "./gooey-brand-title"
+import { GooeyBrandTitle, GooeyScrollArrow } from "./gooey-brand-title"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
 import { SmoothLink } from "./smooth-navigation"
@@ -175,6 +175,7 @@ const statsRevealTiming = {
     footerDelayMs: 420,
 } as const
 
+const storyScrollCueDismissKeys = new Set(["ArrowDown", "End", "PageDown", " "])
 const topChromeClassName = "mx-auto flex max-w-[var(--layout-max-width)] items-start gap-4 px-5 pt-6 lg:px-[28px] lg:pt-[34px] xl:px-[32px]"
 
 function isSectionSnapped(mainElement: HTMLElement, sectionElement: HTMLElement) {
@@ -331,6 +332,7 @@ export function HomePageClient() {
     const [storyLogoVisible, setStoryLogoVisible] = useState(false)
     const [storyCopyVisible, setStoryCopyVisible] = useState(false)
     const [storyActionVisible, setStoryActionVisible] = useState(false)
+    const [storyScrollCueDismissed, setStoryScrollCueDismissed] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
     const [statsFooterVisible, setStatsFooterVisible] = useState(false)
     const [isCardStackZoomed, setCardStackZoomed] = useState(false)
@@ -377,8 +379,14 @@ export function HomePageClient() {
         setStoryStarted(true)
         setStoryLogoVisible(true)
     }, [])
-    const startStatsAnimation = useCallback(() => setStatsStarted(true), [])
-    const hideStoryLogo = useCallback(() => setStoryLogoVisible(false), [])
+    const startStatsAnimation = useCallback(() => {
+        setStatsStarted(true)
+        setStoryScrollCueDismissed(true)
+    }, [])
+    const hideStorySectionChrome = useCallback(() => {
+        setStoryLogoVisible(false)
+        setStoryScrollCueDismissed(true)
+    }, [])
     const showAndRestartStoryLogo = useCallback(() => {
         setStoryLogoVisible(true)
         restartStoryLogo()
@@ -395,7 +403,7 @@ export function HomePageClient() {
         mainRef,
         sectionRef: storySectionRef,
         isEnabled: storyStarted,
-        onExit: hideStoryLogo,
+        onExit: hideStorySectionChrome,
         onReentry: showAndRestartStoryLogo,
     })
 
@@ -429,6 +437,32 @@ export function HomePageClient() {
 
         return () => window.clearTimeout(footerTimer)
     }, [statsStarted])
+
+    useEffect(() => {
+        const mainElement = mainRef.current
+        if (!mainElement || !storyActionVisible || storyScrollCueDismissed) {
+            return
+        }
+
+        const dismissStoryScrollCue = () => setStoryScrollCueDismissed(true)
+        const dismissStoryScrollCueByKey = (event: KeyboardEvent) => {
+            if (storyScrollCueDismissKeys.has(event.key)) {
+                dismissStoryScrollCue()
+            }
+        }
+
+        mainElement.addEventListener("touchmove", dismissStoryScrollCue, { passive: true })
+        mainElement.addEventListener("wheel", dismissStoryScrollCue, { passive: true })
+        window.addEventListener("keydown", dismissStoryScrollCueByKey)
+
+        return () => {
+            mainElement.removeEventListener("touchmove", dismissStoryScrollCue)
+            mainElement.removeEventListener("wheel", dismissStoryScrollCue)
+            window.removeEventListener("keydown", dismissStoryScrollCueByKey)
+        }
+    }, [storyActionVisible, storyScrollCueDismissed])
+
+    const storyScrollCueVisible = storyActionVisible && !storyScrollCueDismissed
 
     return (
         <main
@@ -511,6 +545,11 @@ export function HomePageClient() {
                         </p>
                     </div>
                 </article>
+                {storyScrollCueVisible ? (
+                    <div className="pointer-events-none absolute bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] left-[70%] z-10 h-[88px] w-[50px] -translate-x-1/2 text-[var(--gooey-title-color)] transition duration-500 ease-out sm:h-[106px] sm:w-[60px] xl:h-[126px] xl:w-[72px]">
+                        <GooeyScrollArrow />
+                    </div>
+                ) : null}
             </section>
 
             <section
