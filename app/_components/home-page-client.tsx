@@ -169,6 +169,7 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
 const storyRevealTiming = {
     copyDelayMs: 320,
     actionDelayMs: 860,
+    scrollCueDelayMs: 3000,
 } as const
 
 const statsRevealTiming = {
@@ -332,6 +333,7 @@ export function HomePageClient() {
     const [storyLogoVisible, setStoryLogoVisible] = useState(false)
     const [storyCopyVisible, setStoryCopyVisible] = useState(false)
     const [storyActionVisible, setStoryActionVisible] = useState(false)
+    const [storyScrollCueReady, setStoryScrollCueReady] = useState(false)
     const [storyScrollCueDismissed, setStoryScrollCueDismissed] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
     const [statsFooterVisible, setStatsFooterVisible] = useState(false)
@@ -462,7 +464,18 @@ export function HomePageClient() {
         }
     }, [storyActionVisible, storyScrollCueDismissed])
 
-    const storyScrollCueVisible = storyActionVisible && !storyScrollCueDismissed
+    useEffect(() => {
+        if (!storyActionVisible || storyScrollCueDismissed) {
+            setStoryScrollCueReady(false)
+            return
+        }
+
+        const scrollCueTimer = window.setTimeout(() => setStoryScrollCueReady(true), storyRevealTiming.scrollCueDelayMs)
+
+        return () => window.clearTimeout(scrollCueTimer)
+    }, [storyActionVisible, storyScrollCueDismissed])
+
+    const storyScrollCueVisible = storyActionVisible && storyScrollCueReady && !storyScrollCueDismissed
 
     return (
         <main
@@ -546,7 +559,7 @@ export function HomePageClient() {
                     </div>
                 </article>
                 {storyScrollCueVisible ? (
-                    <div className="pointer-events-none absolute bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] left-[70%] z-10 h-[88px] w-[50px] -translate-x-1/2 text-[var(--gooey-title-color)] transition duration-500 ease-out sm:h-[106px] sm:w-[60px] xl:h-[126px] xl:w-[72px]">
+                    <div className="pointer-events-none absolute right-5 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] text-[var(--gooey-title-color)] transition duration-500 ease-out sm:right-auto sm:left-[70%] sm:h-[106px] sm:w-[60px] sm:-translate-x-1/2 xl:h-[126px] xl:w-[72px]">
                         <GooeyScrollArrow />
                     </div>
                 ) : null}
