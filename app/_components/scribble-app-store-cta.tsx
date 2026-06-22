@@ -148,6 +148,7 @@ export function ScribbleAppStoreCta(p: ScribbleAppStoreCtaProps) {
     const isActive = p.isActive ?? true
     const mobileScale = p.mobileScale ?? defaultMobileScale
     const shouldAnimate = isActive && !reduceMotion && animationToken > 0
+    const shouldRenderMarker = isActive && (hasStarted || reduceMotion)
     const drawDurationMs = Math.ceil(getScribbleMarkerDurationSeconds(p.strokeCount) * 1000)
     const ctaStyle: ScribbleCtaStyle = {
         "--scribble-height": `${p.height}px`,
@@ -163,6 +164,14 @@ export function ScribbleAppStoreCta(p: ScribbleAppStoreCtaProps) {
 
         setHasStarted(true)
         setAnimationToken((token) => token + 1)
+    }, [hasStarted, isActive])
+
+    useEffect(() => {
+        if (isActive || !hasStarted) {
+            return
+        }
+
+        setHasStarted(false)
     }, [hasStarted, isActive])
 
     useEffect(() => {
@@ -192,7 +201,7 @@ export function ScribbleAppStoreCta(p: ScribbleAppStoreCtaProps) {
             className="group relative inline-grid h-[var(--scribble-mobile-height)] w-[min(92vw,var(--scribble-mobile-width))] touch-manipulation place-items-center overflow-visible text-[var(--text-primary)] transition-transform duration-200 ease-out hover:scale-[1.035] active:scale-[0.99] focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:h-[var(--scribble-height)] sm:w-[var(--scribble-width)]"
             style={ctaStyle}
         >
-            {hasStarted || reduceMotion ? (
+            {shouldRenderMarker ? (
                 <ScribbleMarker
                     key={animationToken}
                     isDrawn={hasStarted || reduceMotion}
