@@ -76,7 +76,7 @@ function ScribbleMarker(p: ScribbleMarkerProps) {
     return (
         <svg
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full overflow-visible text-[var(--text-primary)]"
+            className="absolute inset-0 h-full w-full overflow-visible text-[var(--scribble-marker-color)]"
             preserveAspectRatio="none"
             viewBox={scribbleViewBox}
         >
