@@ -176,14 +176,16 @@ export function ScribbleAppStoreCta(p: ScribbleAppStoreCtaProps) {
             className="group relative inline-grid h-[var(--scribble-mobile-height)] w-[min(92vw,var(--scribble-mobile-width))] touch-manipulation place-items-center overflow-visible text-[var(--text-primary)] transition-transform duration-200 ease-out hover:scale-[1.035] active:scale-[0.99] focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:h-[var(--scribble-height)] sm:w-[var(--scribble-width)]"
             style={ctaStyle}
         >
-            <ScribbleMarker
-                key={animationToken}
-                isDrawn={hasStarted || reduceMotion}
-                shouldAnimate={shouldAnimate}
-                strokeAxis={p.strokeAxis ?? defaultScribbleStrokeAxis}
-                strokeCount={p.strokeCount}
-                strokeWidth={p.markerStrokeWidth}
-            />
+            {hasStarted || reduceMotion ? (
+                <ScribbleMarker
+                    key={animationToken}
+                    isDrawn={hasStarted || reduceMotion}
+                    shouldAnimate={shouldAnimate}
+                    strokeAxis={p.strokeAxis ?? defaultScribbleStrokeAxis}
+                    strokeCount={p.strokeCount}
+                    strokeWidth={p.markerStrokeWidth}
+                />
+            ) : null}
             <span className="relative z-10 grid h-full w-full place-items-center">
                 <AppStoreBadgeContent />
             </span>
