@@ -1096,7 +1096,7 @@ function GooeyGlyphDrawing(p: GooeyGlyphDrawingProps) {
 
 export const GooeyBrandTitle = (p: GooeyBrandTitleProps) => (
     <GooeyPathDrawing
-        className="block h-[105px] w-[min(95vw,446px)] text-[var(--gooey-title-color)] xl:h-[163px] xl:w-[min(36vw,510px)]"
+        className="block h-[89px] w-[min(81vw,379px)] text-[var(--gooey-title-color)] xl:h-[163px] xl:w-[min(36vw,510px)]"
         filterBounds={brandFilterBounds}
         filterIdPrefix="gooey-brand-title"
         pieces={brandGlyphs}
