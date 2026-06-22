@@ -1,100 +1,14 @@
 "use client"
 
-import Image from "next/image"
-import { animated, useSpring } from "@react-spring/web"
 import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
 import { GooeyBrandTitle, GooeyScrollArrow } from "./gooey-brand-title"
+import { ScribbleAppStoreCta } from "./scribble-app-store-cta"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
 import { SmoothLink } from "./smooth-navigation"
-
-type AppStoreButtonProps = {
-    badge: (typeof homeContent)[SiteLocale]["hero"]["appStoreBadge"]
-}
-
-type AppStoreBadgeTransform = {
-    scale: number
-}
-
-const appStoreBadgeMotion: {
-    config: {
-        friction: number
-        mass: number
-        tension: number
-    }
-    hover: AppStoreBadgeTransform
-    press: AppStoreBadgeTransform
-    rest: AppStoreBadgeTransform
-} = {
-    config: {
-        mass: 1,
-        tension: 520,
-        friction: 30,
-    },
-    hover: {
-        scale: 1.1,
-    },
-    press: {
-        scale: 1.06,
-    },
-    rest: {
-        scale: 1,
-    },
-}
-
-function AppStoreButton({ badge }: AppStoreButtonProps) {
-    const isHoveringRef = useRef(false)
-    const [badgeSpring, badgeApi] = useSpring<AppStoreBadgeTransform>(() => ({
-        ...appStoreBadgeMotion.rest,
-        config: appStoreBadgeMotion.config,
-    }))
-    const handlePointerEnter = () => {
-        isHoveringRef.current = true
-        badgeApi.start(appStoreBadgeMotion.hover)
-    }
-    const handlePointerLeave = () => {
-        isHoveringRef.current = false
-        badgeApi.start(appStoreBadgeMotion.rest)
-    }
-    const handlePointerDown = () => badgeApi.start(appStoreBadgeMotion.press)
-    const handlePointerUp = () => badgeApi.start(isHoveringRef.current ? appStoreBadgeMotion.hover : appStoreBadgeMotion.rest)
-
-    return (
-        <animated.a
-            href={siteConfig.launchUpdatesUrl}
-            aria-label={badge.actionLabel}
-            title={badge.actionLabel}
-            className="inline-grid touch-manipulation select-none place-items-center overflow-visible rounded-[11px] bg-[var(--app-store-button-bg)] px-[1.5em] py-[0.5em] shadow-[0_10px_30px_rgba(0,0,0,0.2)] focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)]"
-            onPointerCancel={handlePointerLeave}
-            onPointerDown={handlePointerDown}
-            onPointerEnter={handlePointerEnter}
-            onPointerLeave={handlePointerLeave}
-            onPointerUp={handlePointerUp}
-            style={{
-                scale: badgeSpring.scale,
-            }}
-        >
-            <span className="grid h-[54px] w-[182px] cursor-grab items-center justify-items-center active:cursor-grabbing">
-                <Image
-                    src={siteConfig.appStoreBadgeImage}
-                    alt=""
-                    width={135}
-                    height={40}
-                    unoptimized
-                    draggable={false}
-                    className="h-full w-full select-none object-contain"
-                    style={{
-                        clipPath: "inset(6px round 7px)",
-                        filter: "var(--app-store-badge-filter)",
-                    }}
-                />
-            </span>
-        </animated.a>
-    )
-}
 
 type LocalizedLegalNavProps = {
     labels: (typeof homeContent)[SiteLocale]["nav"]
@@ -178,6 +92,14 @@ const statsRevealTiming = {
 
 const storyScrollCueDismissKeys = new Set(["ArrowDown", "End", "PageDown", " "])
 const topChromeClassName = "mx-auto flex max-w-[var(--layout-max-width)] items-start gap-4 px-5 pt-6 lg:px-[28px] lg:pt-[34px] xl:px-[32px]"
+const storyAppStoreScribble = {
+    height: 125,
+    markerStrokeWidth: 71,
+    mobileScale: 0.72,
+    strokeAxis: "horizontal",
+    strokeCount: 6,
+    width: 350,
+} as const
 
 function isSectionSnapped(mainElement: HTMLElement, sectionElement: HTMLElement) {
     const mainTop = mainElement.getBoundingClientRect().top
@@ -331,8 +253,10 @@ export function HomePageClient() {
     const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
     const [storyLogoVisible, setStoryLogoVisible] = useState(false)
+    const [storyLogoAnimationComplete, setStoryLogoAnimationComplete] = useState(false)
     const [storyCopyVisible, setStoryCopyVisible] = useState(false)
     const [storyActionVisible, setStoryActionVisible] = useState(false)
+    const [storyCaptionVisible, setStoryCaptionVisible] = useState(false)
     const [storyScrollCueReady, setStoryScrollCueReady] = useState(false)
     const [storyScrollCueDismissed, setStoryScrollCueDismissed] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
@@ -344,14 +268,21 @@ export function HomePageClient() {
 
     const handleBrandAnimationStart = useCallback(() => {
         brandAnimationRunningRef.current = true
+        setStoryLogoAnimationComplete(false)
+        setStoryCaptionVisible(false)
     }, [])
 
     const handleBrandAnimationComplete = useCallback(() => {
         brandAnimationRunningRef.current = false
+        setStoryLogoAnimationComplete(true)
     }, [])
+
+    const handleStoryScribbleDrawComplete = useCallback(() => setStoryCaptionVisible(true), [])
 
     const restartStoryLogo = useCallback(() => {
         brandAnimationRunningRef.current = true
+        setStoryLogoAnimationComplete(false)
+        setStoryCaptionVisible(false)
         setBrandAnimationCycle((cycle) => cycle + 1)
     }, [])
 
@@ -390,6 +321,8 @@ export function HomePageClient() {
     }, [])
 
     const startStoryAnimation = useCallback(() => {
+        setStoryLogoAnimationComplete(false)
+        setStoryCaptionVisible(false)
         setStoryStarted(true)
         setStoryLogoVisible(true)
     }, [])
@@ -399,6 +332,8 @@ export function HomePageClient() {
     }, [])
     const hideStorySectionChrome = useCallback(() => {
         setStoryLogoVisible(false)
+        setStoryLogoAnimationComplete(false)
+        setStoryCaptionVisible(false)
         setStoryScrollCueDismissed(true)
     }, [])
     const showAndRestartStoryLogo = useCallback(() => {
@@ -428,6 +363,8 @@ export function HomePageClient() {
         onStart: startStatsAnimation,
     })
 
+    const storyScribbleActive = storyActionVisible && storyLogoAnimationComplete
+
     useEffect(() => {
         if (!storyStarted) {
             return
@@ -454,7 +391,7 @@ export function HomePageClient() {
 
     useEffect(() => {
         const mainElement = mainRef.current
-        if (!mainElement || !storyActionVisible || storyScrollCueDismissed) {
+        if (!mainElement || !storyScribbleActive || storyScrollCueDismissed) {
             return
         }
 
@@ -478,10 +415,10 @@ export function HomePageClient() {
             mainElement.removeEventListener("wheel", dismissStoryScrollCue)
             window.removeEventListener("keydown", dismissStoryScrollCueByKey)
         }
-    }, [storyActionVisible, storyScrollCueDismissed])
+    }, [storyScribbleActive, storyScrollCueDismissed])
 
     useEffect(() => {
-        if (!storyActionVisible || storyScrollCueDismissed) {
+        if (!storyScribbleActive || storyScrollCueDismissed) {
             setStoryScrollCueReady(false)
             return
         }
@@ -489,9 +426,9 @@ export function HomePageClient() {
         const scrollCueTimer = window.setTimeout(() => setStoryScrollCueReady(true), storyRevealTiming.scrollCueDelayMs)
 
         return () => window.clearTimeout(scrollCueTimer)
-    }, [storyActionVisible, storyScrollCueDismissed])
+    }, [storyScribbleActive, storyScrollCueDismissed])
 
-    const storyScrollCueVisible = storyActionVisible && storyScrollCueReady && !storyScrollCueDismissed
+    const storyScrollCueVisible = storyScribbleActive && storyScrollCueReady && !storyScrollCueDismissed
 
     return (
         <main
@@ -568,8 +505,23 @@ export function HomePageClient() {
                             storyActionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
                     >
-                        <AppStoreButton badge={content.hero.appStoreBadge} />
-                        <p className="mt-[1em] max-w-[320px] text-[12px] leading-[17px] font-semibold text-[var(--text-muted)] xl:text-[13px] xl:leading-[18px]">
+                        <ScribbleAppStoreCta
+                            ariaLabel={content.hero.appStoreBadge.actionLabel}
+                            height={storyAppStoreScribble.height}
+                            href={siteConfig.launchUpdatesUrl}
+                            isActive={storyScribbleActive}
+                            markerStrokeWidth={storyAppStoreScribble.markerStrokeWidth}
+                            mobileScale={storyAppStoreScribble.mobileScale}
+                            strokeAxis={storyAppStoreScribble.strokeAxis}
+                            strokeCount={storyAppStoreScribble.strokeCount}
+                            width={storyAppStoreScribble.width}
+                            onDrawComplete={handleStoryScribbleDrawComplete}
+                        />
+                        <p
+                            className={`mt-[1em] max-w-[320px] text-[12px] leading-[17px] font-semibold text-[var(--text-muted)] transition duration-700 ease-out xl:text-[13px] xl:leading-[18px] ${
+                                storyCaptionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-2 opacity-0 blur-[1px]"
+                            }`}
+                        >
                             {content.hero.caption}
                         </p>
                     </div>
@@ -579,7 +531,7 @@ export function HomePageClient() {
                         type="button"
                         aria-label="Scroll to final screen"
                         data-story-scroll-cue
-                        className="absolute right-5 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] touch-manipulation cursor-pointer rounded-[20px] border-0 bg-transparent p-0 text-[var(--gooey-title-color)] transition duration-500 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:right-auto sm:left-[70%] sm:h-[106px] sm:w-[60px] sm:-translate-x-1/2 lg:left-1/2 xl:h-[126px] xl:w-[72px]"
+                        className="absolute right-5 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] touch-manipulation cursor-pointer rounded-[20px] border-0 bg-transparent p-0 text-[var(--gooey-title-color)] transition duration-500 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:right-8 sm:h-[106px] sm:w-[60px] lg:right-auto lg:left-[calc(50%+300px)] lg:-translate-x-1/2 xl:h-[126px] xl:w-[72px]"
                         onClick={scrollToStatsSection}
                     >
                         <GooeyScrollArrow />

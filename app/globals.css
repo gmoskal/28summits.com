@@ -13,8 +13,6 @@
     --button-primary-text: #fffaf1;
     --button-secondary-bg: rgba(255, 250, 241, 0.72);
     --button-secondary-text: #1d1b16;
-    --app-store-badge-filter: none;
-    --app-store-button-bg: #000000;
     --mascot-bg: #f6efe6;
     --ink: #171717;
     --gooey-title-color: #000000;
@@ -51,8 +49,6 @@
         --button-primary-text: #16130f;
         --button-secondary-bg: rgba(255, 250, 241, 0.08);
         --button-secondary-text: #fff2df;
-        --app-store-badge-filter: invert(1);
-        --app-store-button-bg: #ffffff;
         --mascot-bg: #201d18;
         --ink: #fff2df;
         --gooey-title-color: #ffffff;
@@ -89,8 +85,6 @@
     --button-primary-text: #fffaf1;
     --button-secondary-bg: rgba(255, 250, 241, 0.72);
     --button-secondary-text: #1d1b16;
-    --app-store-badge-filter: none;
-    --app-store-button-bg: #000000;
     --mascot-bg: #f6efe6;
     --ink: #171717;
     --gooey-title-color: #000000;
@@ -126,8 +120,6 @@
     --button-primary-text: #16130f;
     --button-secondary-bg: rgba(255, 250, 241, 0.08);
     --button-secondary-text: #fff2df;
-    --app-store-badge-filter: invert(1);
-    --app-store-button-bg: #ffffff;
     --mascot-bg: #201d18;
     --ink: #fff2df;
     --gooey-title-color: #ffffff;
