@@ -98,7 +98,7 @@ const storyAppStoreScribble = {
     mobileScale: 0.72,
     strokeAxis: "horizontal",
     strokeCount: 6,
-    width: 350,
+    width: 470,
 } as const
 
 function isSectionSnapped(mainElement: HTMLElement, sectionElement: HTMLElement) {

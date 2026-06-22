@@ -45,6 +45,9 @@ const scribbleViewBox = "0 0 640 250"
 const scribblePathLength = 1
 const scribbleDashHidden = 1
 const scribbleDashVisible = 0
+const scribbleSegmentOpacityHidden = 0
+const scribbleSegmentOpacityVisible = 1
+const scribbleSegmentRevealDelaySeconds = 0.025
 const appStoreBadgeContentMask = "/app-store-badge-content-mask.svg"
 const scribbleSegmentAnimationKeySplines = scribbleAnimationKeySplines(1)
 const scribbleSegmentAnimationKeyTimes = scribbleAnimationKeyTimes(1)
@@ -60,6 +63,10 @@ function getScribbleMarkerDurationSeconds(strokeCount: number) {
     const duration = scribbleMarkerTiming.baseDurationSeconds + safeScribbleStrokeCount(strokeCount) * scribbleMarkerTiming.perStrokeDurationSeconds
 
     return Math.min(scribbleMarkerTiming.maxDurationSeconds, Math.max(scribbleMarkerTiming.minDurationSeconds, duration))
+}
+
+function getScribbleSegmentRevealBeginSeconds(delaySeconds: number) {
+    return Number((delaySeconds + scribbleSegmentRevealDelaySeconds).toFixed(3))
 }
 
 function ScribbleMarker(p: ScribbleMarkerProps) {
@@ -81,19 +88,28 @@ function ScribbleMarker(p: ScribbleMarkerProps) {
                         pathLength={scribblePathLength}
                         strokeDasharray={scribblePathLength}
                         strokeDashoffset={initialDashOffset}
+                        opacity={p.shouldAnimate ? scribbleSegmentOpacityHidden : scribbleSegmentOpacityVisible}
                         strokeWidth={segment.strokeWidth}
                     >
                         {p.shouldAnimate ? (
-                            <animate
-                                attributeName="stroke-dashoffset"
-                                begin={`${segment.delaySeconds}s`}
-                                calcMode="spline"
-                                dur={`${segment.durationSeconds}s`}
-                                fill="freeze"
-                                keySplines={scribbleSegmentAnimationKeySplines}
-                                keyTimes={scribbleSegmentAnimationKeyTimes}
-                                values={scribbleSegmentAnimationValues}
-                            />
+                            <>
+                                <set
+                                    attributeName="opacity"
+                                    begin={`${getScribbleSegmentRevealBeginSeconds(segment.delaySeconds)}s`}
+                                    fill="freeze"
+                                    to={scribbleSegmentOpacityVisible}
+                                />
+                                <animate
+                                    attributeName="stroke-dashoffset"
+                                    begin={`${segment.delaySeconds}s`}
+                                    calcMode="spline"
+                                    dur={`${segment.durationSeconds}s`}
+                                    fill="freeze"
+                                    keySplines={scribbleSegmentAnimationKeySplines}
+                                    keyTimes={scribbleSegmentAnimationKeyTimes}
+                                    values={scribbleSegmentAnimationValues}
+                                />
+                            </>
                         ) : null}
                     </path>
                 ))}
