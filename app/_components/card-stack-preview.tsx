@@ -34,7 +34,6 @@ type CardStackPreviewProps = {
     isZoomed: boolean
     locale: SiteLocale
     resetSignal?: number
-    resetAfterComplete?: boolean
     variant?: "adventure" | "stats"
     onDeckComplete?: () => void
 }
@@ -44,6 +43,8 @@ type DepartingCard = {
     directionX: number
     directionY: number
 }
+
+type DeckEntryTiming = "delayed" | "quick"
 
 const adventureCards = [
     {
@@ -353,7 +354,7 @@ const flick = {
     exitDurationSeconds: 0.32,
     dragStartThreshold: 6,
     velocityStartThreshold: 80,
-    resetDelayMs: 1000,
+    resetDelayMs: 500,
 } as const
 
 const deckEntry = {
@@ -462,6 +463,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     const [dismissedCards, setDismissedCards] = useState(() => new Set<number>())
     const [departingCard, setDepartingCard] = useState<DepartingCard | null>(null)
     const [deckResetKey, setDeckResetKey] = useState(0)
+    const [deckEntryTiming, setDeckEntryTiming] = useState<DeckEntryTiming>("delayed")
     const [isDeckEntryActive, setDeckEntryActive] = useState(shouldPlayDeckEntryAnimation)
     const hasActiveDragRef = useRef(false)
     const activeCardIndex = useMemo(
@@ -470,7 +472,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     )
     const headlineLabel = stackConfig.headlineLabels?.[p.locale]
     const shouldAnimateDeckEntry = shouldPlayDeckEntryAnimation && isDeckEntryActive
-    const cardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation
+    const cardDelaySeconds = headlineLabel && shouldPlayDeckEntryAnimation && deckEntryTiming === "delayed"
         ? deckEntry.cardDelaySeconds
         : 0
     const deckSizeMode = p.isZoomed ? "zoomed" : "normal"
@@ -484,24 +486,26 @@ export function CardStackPreview(p: CardStackPreviewProps) {
         setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
         setDismissedCards(new Set())
         setDepartingCard(null)
+        setDeckEntryTiming("delayed")
         setDeckResetKey((currentKey) => currentKey + 1)
         setDeckEntryActive(shouldPlayDeckEntryAnimation)
     }, [p.resetSignal, shouldPlayDeckEntryAnimation, stackConfig])
 
     useEffect(() => {
-        if (dismissedCards.size !== stackConfig.cards.length || p.resetAfterComplete === false) {
+        if (dismissedCards.size !== stackConfig.cards.length) {
             return
         }
 
         const resetTimer = window.setTimeout(() => {
             setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
             setDismissedCards(new Set())
+            setDeckEntryTiming("quick")
             setDeckResetKey((currentKey) => currentKey + 1)
             setDeckEntryActive(shouldPlayDeckEntryAnimation)
         }, flick.resetDelayMs)
 
         return () => window.clearTimeout(resetTimer)
-    }, [dismissedCards, p.resetAfterComplete, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
+    }, [dismissedCards, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
 
     useEffect(() => {
         if (!isDeckEntryActive) {

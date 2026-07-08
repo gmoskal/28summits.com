@@ -546,7 +546,6 @@ export function HomePageClient() {
                         isZoomed={isCardStackZoomed}
                         locale={locale}
                         resetSignal={heroDeckResetSignal}
-                        resetAfterComplete={false}
                         onDeckComplete={handleHeroDeckComplete}
                     />
                 </div>
@@ -577,7 +576,7 @@ export function HomePageClient() {
                     </h1>
 
                     <div
-                        className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-medium text-[var(--text-secondary)] transition duration-700 ease-out xl:mt-[5em] xl:mb-[2em] xl:text-[1.5375rem] xl:leading-[2.2575rem] ${
+                        className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-medium text-[var(--text-secondary)] transition duration-700 ease-out xl:mt-[5em] xl:mb-[2em] xl:text-[1.63125rem] xl:leading-[2.35125rem] ${
                             storyCopyVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
                         style={{ ...openSansTextStyle, fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
