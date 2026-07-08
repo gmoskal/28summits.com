@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Gloria_Hallelujah } from "next/font/google"
+import { Gloria_Hallelujah, Open_Sans } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
 import {
@@ -23,6 +23,13 @@ const gloriaHallelujah = Gloria_Hallelujah({
     variable: "--font-gloria",
     display: "swap",
     weight: "400",
+})
+
+const openSans = Open_Sans({
+    subsets: ["latin", "latin-ext"],
+    variable: "--font-open-sans",
+    display: "swap",
+    weight: "500",
 })
 
 export const metadata: Metadata = {
@@ -75,7 +82,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="pl" className={`${inter.variable} ${gloriaHallelujah.variable}`}>
+        <html lang="pl" className={`${inter.variable} ${gloriaHallelujah.variable} ${openSans.variable}`}>
             <body>{children}</body>
         </html>
     )

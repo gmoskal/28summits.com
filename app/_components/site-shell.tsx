@@ -1,4 +1,5 @@
 import Image from "next/image"
+import type { MouseEventHandler } from "react"
 import { siteConfig } from "../_lib/site-content"
 import { SmoothLink } from "./smooth-navigation"
 
@@ -10,15 +11,17 @@ const legalNavLinks = [
 
 type BrandMarkProps = {
     compact?: boolean
+    onClick?: MouseEventHandler<HTMLAnchorElement>
     showName?: boolean
 }
 
-export function BrandMark({ compact = false, showName = true }: BrandMarkProps) {
+export function BrandMark({ compact = false, onClick, showName = true }: BrandMarkProps) {
     return (
         <SmoothLink
             href="/"
             aria-label={`${siteConfig.name} home`}
             className="flex w-[99px] flex-col items-center gap-2 text-center"
+            onClick={onClick}
         >
             <Image
                 src={siteConfig.appIconHeader}

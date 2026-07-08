@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react"
 import type { SiteLocale } from "../_lib/site-content"
 
 type CardStackCard = {
@@ -33,20 +33,15 @@ type CardStackConfig = {
 type CardStackPreviewProps = {
     isZoomed: boolean
     locale: SiteLocale
+    resetSignal?: number
     variant?: "adventure" | "stats"
     onDeckComplete?: () => void
-    onZoomChange: (isZoomed: boolean) => void
 }
 
 type DepartingCard = {
     index: number
     directionX: number
     directionY: number
-}
-
-type DeckZoomControlLabel = {
-    zoomIn: string
-    zoomOut: string
 }
 
 const adventureCards = [
@@ -295,14 +290,28 @@ const statsAriaLabels: Record<SiteLocale, string> = {
     uk: "Стос фото із застосунку 28 gór.",
 }
 
-const adventureBadge = {
-    src: "/app-icon.png",
-    displaySize: 44,
-    inset: 15,
-    sourceSize: 88,
-} as const
-
 const cardPhotoSize = 720
+const cardBlobMask = "/misc/blob.svg"
+const cardBlobShadow = "drop-shadow(0 6px 10px rgba(0,0,0,0.42)) drop-shadow(0 16px 24px rgba(0,0,0,0.28))"
+const cardDepthOverlay = {
+    lastOpacity: 0.8,
+    secondOpacity: 0.4,
+} as const
+const cardBlobMaskStyle = {
+    maskImage: `url(${cardBlobMask})`,
+    maskPosition: "center",
+    maskRepeat: "no-repeat",
+    maskSize: "100% 100%",
+    WebkitMaskImage: `url(${cardBlobMask})`,
+    WebkitMaskPosition: "center",
+    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskSize: "100% 100%",
+} satisfies CSSProperties
+const cardCaptionGlowStyle = {
+    fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive",
+    textShadow: "0 2px 8px var(--page-bg), 0 0 18px var(--page-bg)",
+} satisfies CSSProperties
+const cardCaptionVisibleOpacity = 0.8
 
 const fallbackCardLayout = [
     { x: -35, y: 18, rotation: -11 },
@@ -329,7 +338,6 @@ const cardStackConfigs = {
         cards: adventureCards,
         ariaLabels: adventureAriaLabels,
         headlineLabels: adventureHeadlineLabels,
-        badge: adventureBadge,
         fallbackLayout: fallbackCardLayout,
     },
     stats: {
@@ -360,54 +368,17 @@ const deckEntry = {
 
 const deckResizeClassName = "transition-[width,height,max-width,min-height] duration-[650ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
 
-const deckZoomControlLabels: Record<SiteLocale, DeckZoomControlLabel> = {
-    pl: {
-        zoomIn: "Powiększ stos zdjęć",
-        zoomOut: "Pomniejsz stos zdjęć",
-    },
-    en: {
-        zoomIn: "Zoom in photo stack",
-        zoomOut: "Zoom out photo stack",
-    },
-    es: {
-        zoomIn: "Ampliar el montón de fotos",
-        zoomOut: "Reducir el montón de fotos",
-    },
-    de: {
-        zoomIn: "Fotostapel vergrößern",
-        zoomOut: "Fotostapel verkleinern",
-    },
-    fr: {
-        zoomIn: "Agrandir la pile de photos",
-        zoomOut: "Réduire la pile de photos",
-    },
-    nb: {
-        zoomIn: "Forstørr fotobunken",
-        zoomOut: "Forminsk fotobunken",
-    },
-    cs: {
-        zoomIn: "Přiblížit stoh fotek",
-        zoomOut: "Oddálit stoh fotek",
-    },
-    sk: {
-        zoomIn: "Priblížiť stoh fotiek",
-        zoomOut: "Oddialiť stoh fotiek",
-    },
-    uk: {
-        zoomIn: "Збільшити стос фото",
-        zoomOut: "Зменшити стос фото",
-    },
-}
-
 const deckSizeClassNames = {
     normal: {
         card: "absolute left-1/2 top-1/2 w-[236px] xl:w-[min(30vw,360px)] xl:max-w-[360px]",
+        caption: "translate-y-[142px] xl:translate-y-[215px]",
         deck: "relative h-[310px] w-full select-none overscroll-contain xl:h-[min(52dvh,500px)] xl:min-h-[390px]",
         frame: "relative flex w-full max-w-[320px] items-center justify-center overflow-visible xl:w-[min(39vw,430px)] xl:max-w-[430px]",
         imageSizes: "(min-width: 1280px) 360px, 236px",
     },
     zoomed: {
         card: "absolute left-1/2 top-1/2 w-[274px] sm:w-[330px] xl:w-[min(45vw,540px)] xl:max-w-[540px]",
+        caption: "translate-y-[164px] sm:translate-y-[194px] xl:translate-y-[308px]",
         deck: "relative h-[360px] w-full select-none overscroll-contain sm:h-[434px] xl:h-[min(78dvh,702px)] xl:min-h-[585px]",
         frame: "relative flex w-[calc(100vw-48px)] max-w-[371px] items-center justify-center overflow-visible sm:w-[calc(100vw-72px)] sm:max-w-[448px] xl:w-[min(72vw,645px)] xl:max-w-[645px]",
         imageSizes: "(min-width: 1280px) 540px, (min-width: 640px) 330px, 274px",
@@ -416,26 +387,6 @@ const deckSizeClassNames = {
 
 function randomBetween(min: number, max: number) {
     return min + Math.random() * (max - min)
-}
-
-function MagnifierIcon({ isZoomed }: { isZoomed: boolean }) {
-    return (
-        <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2.35"
-        >
-            <circle cx="10.5" cy="10.5" r="6.4" />
-            <path d="m15.2 15.2 5.1 5.1" />
-            <path d="M7.7 10.5h5.6" />
-            {isZoomed ? null : <path d="M10.5 7.7v5.6" />}
-        </svg>
-    )
 }
 
 function createFallbackCardStackLayout(config: CardStackConfig): CardStackTransform[] {
@@ -488,6 +439,19 @@ function deckEntryUnlockDelayMs(cardDelaySeconds: number, cardCount: number) {
     return Math.round((lastCardDelaySeconds + deckEntry.unlockPaddingSeconds) * 1000)
 }
 
+function cardOverlayOpacity(stackDepth: number, maxStackDepth: number) {
+    if (stackDepth <= 0) {
+        return 0
+    }
+
+    if (maxStackDepth <= 1) {
+        return cardDepthOverlay.secondOpacity
+    }
+
+    const depthProgress = (stackDepth - 1) / (maxStackDepth - 1)
+    return cardDepthOverlay.secondOpacity + depthProgress * (cardDepthOverlay.lastOpacity - cardDepthOverlay.secondOpacity)
+}
+
 export function CardStackPreview(p: CardStackPreviewProps) {
     const prefersReducedMotion = useReducedMotion()
     const shouldPlayDeckEntryAnimation = !prefersReducedMotion
@@ -510,16 +474,18 @@ export function CardStackPreview(p: CardStackPreviewProps) {
         : 0
     const deckSizeMode = p.isZoomed ? "zoomed" : "normal"
     const deckSizeClassName = deckSizeClassNames[deckSizeMode]
-    const zoomControlLabel = deckZoomControlLabels[p.locale]
-    const zoomButtonLabel = p.isZoomed ? zoomControlLabel.zoomOut : zoomControlLabel.zoomIn
-    const isZoomControlVisible = !isDeckEntryActive
+    const captionLabel = activeCardIndex >= 0
+        ? stackConfig.cards[activeCardIndex]?.labels[p.locale] ?? ""
+        : ""
+    const isCaptionVisible = captionLabel !== "" && !isDeckEntryActive
 
     useEffect(() => {
         setCardLayouts(createRandomCardStackLayout(stackConfig.cards.length))
         setDismissedCards(new Set())
         setDepartingCard(null)
+        setDeckResetKey((currentKey) => currentKey + 1)
         setDeckEntryActive(shouldPlayDeckEntryAnimation)
-    }, [shouldPlayDeckEntryAnimation, stackConfig])
+    }, [p.resetSignal, shouldPlayDeckEntryAnimation, stackConfig])
 
     useEffect(() => {
         if (dismissedCards.size !== stackConfig.cards.length) {
@@ -599,7 +565,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     }
 
     const frameClassName = headlineLabel
-        ? "relative flex w-full select-none flex-col items-center justify-center gap-[4rem] overflow-visible px-5 pt-1 pb-1 sm:gap-[4.5rem] xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:gap-8 xl:px-14 xl:py-12"
+        ? "relative flex w-full select-none flex-col items-center justify-center gap-[2rem] overflow-visible px-5 pt-1 pb-1 sm:gap-[2.5rem] xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:gap-8 xl:px-14 xl:py-12"
         : "relative flex w-full select-none items-center justify-center overflow-visible px-5 pt-5 pb-2 xl:h-[min(66dvh,640px)] xl:min-h-[500px] xl:px-14 xl:py-16"
     return (
         <div className={frameClassName}>
@@ -649,11 +615,15 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                     const isInteractiveCard = isTopCard && !isDeparting
                     const canDragCard = isTopCard && !isDeparting && !isDeckEntryActive
                     const stackDepth = Math.max(index - activeCardIndex, 0)
+                    const maxStackDepth = Math.max(stackConfig.cards.length - activeCardIndex - 1, 1)
+                    const depthOverlayOpacity = isDeparting || isDeckEntryActive
+                        ? 0
+                        : cardOverlayOpacity(stackDepth, maxStackDepth)
                     const scale = isTopCard ? 1 : Math.max(0.9, 1 - stackDepth * 0.018)
                     const y = cardTransform.y
                     const x = isDeparting ? departingCard.directionX * flick.exitDistance : cardTransform.x
                     const exitY = isDeparting ? y + departingCard.directionY * flick.exitDistance : y
-                    const rotation = isDeparting ? cardTransform.rotation + departingCard.directionX * 28 : cardTransform.rotation
+                    const rotation = isTopCard || isDeparting ? 0 : cardTransform.rotation
                     const animationDelay =
                         dismissedCards.size === 0 && departingCard === null && shouldAnimateDeckEntry
                             ? cardDelaySeconds + (stackConfig.cards.length - 1 - index) * deckEntry.cardStaggerSeconds
@@ -669,7 +639,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                             }}
                         >
                             <motion.div
-                                className="aspect-[1/1.18] w-full select-none cursor-grab active:cursor-grabbing"
+                                className="aspect-[1199/1167] w-full select-none cursor-grab active:cursor-grabbing"
                                 drag={isInteractiveCard}
                                 dragListener={canDragCard}
                                 dragMomentum={false}
@@ -707,6 +677,8 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                                     WebkitTapHighlightColor: "transparent",
                                     WebkitTouchCallout: "none",
                                     WebkitUserSelect: "none",
+                                    filter: cardBlobShadow,
+                                    WebkitFilter: cardBlobShadow,
                                     willChange: canDragCard || isDeparting ? "transform, opacity" : "transform",
                                 }}
                                 onTap={() => handleCardTap(index)}
@@ -716,10 +688,8 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                                 onDragEnd={(_, info) => handleDragEnd(index, info.offset, info.velocity)}
                                 onAnimationComplete={() => handleAnimationComplete(index)}
                             >
-                                <div
-                                    className="relative flex h-full w-full flex-col rounded-[7px] bg-white p-[10px] pb-[22px] shadow-[0_28px_80px_rgba(31,29,24,0.22)] xl:p-3 xl:pb-[30px] xl:shadow-[0_18px_36px_rgba(31,29,24,0.12)]"
-                                >
-                                    <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-[3px] bg-neutral-100">
+                                <div className="relative h-full w-full bg-white" style={cardBlobMaskStyle}>
+                                    <div className="absolute inset-[3px] overflow-hidden bg-neutral-100" style={cardBlobMaskStyle}>
                                         <Image
                                             src={card.src}
                                             alt=""
@@ -731,6 +701,15 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                                             sizes={deckSizeClassName.imageSizes}
                                             className="pointer-events-none h-full w-full select-none object-cover object-center"
                                             onDragStart={(event) => event.preventDefault()}
+                                        />
+                                        <motion.div
+                                            className="pointer-events-none absolute inset-0 bg-black"
+                                            animate={{ opacity: depthOverlayOpacity }}
+                                            initial={false}
+                                            transition={{
+                                                duration: prefersReducedMotion ? 0.01 : 0.22,
+                                                ease: "easeOut",
+                                            }}
                                         />
                                         {stackConfig.badge ? (
                                             <Image
@@ -752,48 +731,28 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                                             />
                                         ) : null}
                                     </div>
-                                    <div className="flex min-h-0 flex-1 items-center justify-center p-[2em]">
-                                        <span
-                                            className="inline-block -translate-y-[5px] text-center text-[20px] leading-none font-normal text-[#171717] xl:text-[24px]"
-                                            style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
-                                        >
-                                            {card.labels[p.locale]}
-                                        </span>
-                                    </div>
                                 </div>
                             </motion.div>
                         </div>
                     )
                 })}
+                    <motion.div
+                        className={`pointer-events-none absolute left-1/2 top-1/2 z-30 w-[min(82vw,22rem)] -translate-x-1/2 text-center ${deckSizeClassName.caption}`}
+                        animate={{ opacity: isCaptionVisible ? cardCaptionVisibleOpacity : 0 }}
+                        initial={false}
+                        transition={{
+                            duration: prefersReducedMotion ? 0.01 : 0.28,
+                            ease: "easeOut",
+                        }}
+                    >
+                        <span
+                            className="inline-block text-[20px] leading-[1.05] font-normal text-[var(--text-primary)] xl:text-[26px] xl:font-medium"
+                            style={cardCaptionGlowStyle}
+                        >
+                            {captionLabel}
+                        </span>
+                    </motion.div>
                 </div>
-                <motion.button
-                    type="button"
-                    aria-label={zoomButtonLabel}
-                    aria-pressed={p.isZoomed}
-                    title={zoomButtonLabel}
-                    className="absolute -bottom-12 right-0 z-40 inline-grid h-11 w-11 cursor-pointer touch-manipulation place-items-center text-[var(--text-primary)] transition-colors duration-200 hover:text-[#e67621] focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:-right-14 sm:bottom-4 xl:-right-16 xl:h-12 xl:w-12"
-                    animate={{
-                        opacity: isZoomControlVisible ? 0.3 : 0,
-                        x: 0,
-                        y: 0,
-                    }}
-                    initial={false}
-                    transition={{
-                        type: prefersReducedMotion ? "tween" : "spring",
-                        duration: prefersReducedMotion ? 0.01 : undefined,
-                        stiffness: 320,
-                        damping: 30,
-                        mass: 0.82,
-                    }}
-                    style={{
-                        pointerEvents: isZoomControlVisible ? "auto" : "none",
-                    }}
-                    whileHover={isZoomControlVisible ? { scale: 1.05 } : undefined}
-                    whileTap={isZoomControlVisible ? { scale: 0.95 } : undefined}
-                    onClick={() => p.onZoomChange(!p.isZoomed)}
-                >
-                    <MagnifierIcon isZoomed={p.isZoomed} />
-                </motion.button>
             </div>
         </div>
     )

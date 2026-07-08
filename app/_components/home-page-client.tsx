@@ -1,6 +1,6 @@
 "use client"
 
-import { type RefObject, useCallback, useEffect, useRef, useState } from "react"
+import { type CSSProperties, type MouseEvent, type RefObject, useCallback, useEffect, useRef, useState } from "react"
 import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
@@ -34,8 +34,12 @@ type SectionReentryOptions = {
     onReentry: () => void
 }
 
-const legalAccentStyle = { color: "#666666" }
-const legalNavLinkClassName = "text-[16px] leading-[23px] font-semibold transition-[color,filter] hover:brightness-95 xl:text-[20px] xl:leading-[29px]"
+const legalLinkStyle = { color: "var(--gooey-title-color)" }
+const openSansTextStyle = {
+    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+    fontWeight: 500,
+} satisfies CSSProperties
+const legalNavLinkClassName = "text-[16px] leading-[23px] font-medium transition-[color,filter] hover:brightness-95 xl:text-[1.6rem] xl:leading-[2.32rem]"
 const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
 const sectionStart = {
     tolerancePx: 3,
@@ -44,14 +48,18 @@ const sectionStart = {
 
 function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
     return (
-        <nav className={`flex items-center gap-4 ${className}`} style={legalAccentStyle} aria-label="Legal">
-            <SmoothLink className={legalNavLinkClassName} href="/privacy">
+        <nav
+            className={`flex items-center gap-4 ${className}`}
+            style={{ ...legalLinkStyle, ...openSansTextStyle }}
+            aria-label="Legal"
+        >
+            <SmoothLink className={legalNavLinkClassName} href="/privacy" style={legalLinkStyle}>
                 {labels.privacy}
             </SmoothLink>
-            <SmoothLink className={legalNavLinkClassName} href="/terms">
+            <SmoothLink className={legalNavLinkClassName} href="/terms" style={legalLinkStyle}>
                 {labels.terms}
             </SmoothLink>
-            <SmoothLink className={legalNavLinkClassName} href="/support">
+            <SmoothLink className={legalNavLinkClassName} href="/support" style={legalLinkStyle}>
                 {labels.support}
             </SmoothLink>
         </nav>
@@ -60,7 +68,10 @@ function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
 
 function ComplianceNotice({ content }: ComplianceNoticeProps) {
     return (
-        <p className="max-w-[760px] text-center text-[16px] leading-[23px] font-semibold text-[var(--text-secondary)] xl:text-[20px] xl:leading-[29px]">
+        <p
+            className="max-w-[760px] text-center text-[16px] leading-[23px] font-medium text-[var(--text-secondary)] xl:text-[1.5375rem] xl:leading-[2.2575rem]"
+            style={openSansTextStyle}
+        >
             {content.summaryParts.map((part, index) => (
                 <span key={part}>
                     {index > 0 ? <span aria-hidden> · </span> : null}
@@ -69,11 +80,11 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
             ))}
             <span aria-hidden> · </span>
             <span>{content.contactLabel}: </span>
-            <a href={`mailto:${siteConfig.contactEmail}`} className={legalInlineLinkClassName} style={legalAccentStyle}>
+            <a href={`mailto:${siteConfig.contactEmail}`} className={legalInlineLinkClassName} style={legalLinkStyle}>
                 {siteConfig.contactEmail}
             </a>
             <span aria-hidden> · </span>
-            <SmoothLink href="/terms" className={legalInlineLinkClassName} style={legalAccentStyle}>
+            <SmoothLink href="/terms" className={legalInlineLinkClassName} style={legalLinkStyle}>
                 {content.legalPolicies}
             </SmoothLink>
         </p>
@@ -100,6 +111,51 @@ const storyAppStoreScribble = {
     strokeCount: 6,
     width: 470,
 } as const
+const defaultCardStackZoomed = true
+const homeScrollReset = {
+    fallbackDelayMs: 1400,
+    targetTop: 0,
+    tolerancePx: 2,
+} as const
+
+function scrollElementToTop(element: HTMLElement, onComplete: () => void) {
+    let animationFrame = 0
+    let timeout = 0
+    let hasCompleted = false
+
+    function complete() {
+        if (hasCompleted) {
+            return
+        }
+
+        hasCompleted = true
+        element.removeEventListener("scrollend", complete)
+        if (animationFrame !== 0) {
+            window.cancelAnimationFrame(animationFrame)
+        }
+        if (timeout !== 0) {
+            window.clearTimeout(timeout)
+        }
+        onComplete()
+    }
+
+    function checkPosition() {
+        if (Math.abs(element.scrollTop - homeScrollReset.targetTop) <= homeScrollReset.tolerancePx) {
+            complete()
+            return
+        }
+
+        animationFrame = window.requestAnimationFrame(checkPosition)
+    }
+
+    element.addEventListener("scrollend", complete, { once: true })
+    element.scrollTo({
+        top: homeScrollReset.targetTop,
+        behavior: "smooth",
+    })
+    animationFrame = window.requestAnimationFrame(checkPosition)
+    timeout = window.setTimeout(complete, homeScrollReset.fallbackDelayMs)
+}
 
 function isSectionSnapped(mainElement: HTMLElement, sectionElement: HTMLElement) {
     const mainTop = mainElement.getBoundingClientRect().top
@@ -261,7 +317,8 @@ export function HomePageClient() {
     const [storyScrollCueDismissed, setStoryScrollCueDismissed] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
     const [statsFooterVisible, setStatsFooterVisible] = useState(false)
-    const [isCardStackZoomed, setCardStackZoomed] = useState(false)
+    const isCardStackZoomed = defaultCardStackZoomed
+    const [heroDeckResetSignal, setHeroDeckResetSignal] = useState(0)
     const [brandAnimationCycle, setBrandAnimationCycle] = useState(0)
     const brandAnimationRunningRef = useRef(false)
     const hasAutoScrolledToStoryRef = useRef(false)
@@ -278,6 +335,22 @@ export function HomePageClient() {
     }, [])
 
     const handleStoryScribbleDrawComplete = useCallback(() => setStoryCaptionVisible(true), [])
+
+    const restartHeroDeck = useCallback(() => {
+        setHeroDeckResetSignal((resetSignal) => resetSignal + 1)
+    }, [])
+
+    const handleBrandMarkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault()
+
+        const mainElement = mainRef.current
+        if (!mainElement) {
+            restartHeroDeck()
+            return
+        }
+
+        scrollElementToTop(mainElement, restartHeroDeck)
+    }, [restartHeroDeck])
 
     const restartStoryLogo = useCallback(() => {
         brandAnimationRunningRef.current = true
@@ -438,7 +511,7 @@ export function HomePageClient() {
             <div className="sticky top-0 z-30 h-0 overflow-visible">
                 <div className={`pointer-events-none justify-start ${topChromeClassName}`}>
                     <div className="pointer-events-auto">
-                        <BrandMark compact showName={false} />
+                        <BrandMark compact showName={false} onClick={handleBrandMarkClick} />
                     </div>
                 </div>
             </div>
@@ -459,8 +532,8 @@ export function HomePageClient() {
                     <CardStackPreview
                         isZoomed={isCardStackZoomed}
                         locale={locale}
+                        resetSignal={heroDeckResetSignal}
                         onDeckComplete={scrollToStorySection}
-                        onZoomChange={setCardStackZoomed}
                     />
                 </div>
             </section>
@@ -490,10 +563,10 @@ export function HomePageClient() {
                     </h1>
 
                     <div
-                        className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-semibold text-[var(--text-secondary)] transition duration-700 ease-out xl:mt-[5em] xl:mb-[2em] xl:text-[20px] xl:leading-[29px] ${
+                        className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-medium text-[var(--text-secondary)] transition duration-700 ease-out xl:mt-[5em] xl:mb-[2em] xl:text-[1.5375rem] xl:leading-[2.2575rem] ${
                             storyCopyVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
                         }`}
-                        style={{ fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
+                        style={{ ...openSansTextStyle, fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
                     >
                         {content.hero.body.map((paragraph) => (
                             <p key={paragraph}>{paragraph}</p>
@@ -518,9 +591,10 @@ export function HomePageClient() {
                             onDrawComplete={handleStoryScribbleDrawComplete}
                         />
                         <p
-                            className={`mt-[1em] max-w-[320px] text-[12px] leading-[17px] font-semibold text-[var(--text-muted)] transition duration-700 ease-out xl:text-[13px] xl:leading-[18px] ${
+                            className={`mt-[1em] max-w-[320px] text-[16px] leading-[21px] font-medium text-[var(--text-muted)] transition duration-700 ease-out xl:text-[1.29rem] xl:leading-[1.735rem] ${
                                 storyCaptionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-2 opacity-0 blur-[1px]"
                             }`}
+                            style={openSansTextStyle}
                         >
                             {content.hero.caption}
                         </p>
@@ -549,14 +623,13 @@ export function HomePageClient() {
                             isZoomed={isCardStackZoomed}
                             locale={locale}
                             variant="stats"
-                            onZoomChange={setCardStackZoomed}
                         />
                     ) : (
                         <div className="h-[338px] w-full xl:h-[min(66dvh,640px)] xl:min-h-[500px]" aria-hidden />
                     )}
                     <footer
                         aria-hidden={!statsFooterVisible}
-                        className={`flex flex-col items-center gap-3 transition duration-700 ease-out ${
+                        className={`mt-[2em] flex flex-col items-center gap-3 transition duration-700 ease-out ${
                             statsFooterVisible ? "translate-y-0 opacity-100 blur-0" : "pointer-events-none translate-y-5 opacity-0 blur-[2px]"
                         }`}
                     >
