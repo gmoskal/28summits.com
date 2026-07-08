@@ -34,6 +34,7 @@ type CardStackPreviewProps = {
     isZoomed: boolean
     locale: SiteLocale
     resetSignal?: number
+    resetAfterComplete?: boolean
     variant?: "adventure" | "stats"
     onDeckComplete?: () => void
 }
@@ -488,7 +489,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     }, [p.resetSignal, shouldPlayDeckEntryAnimation, stackConfig])
 
     useEffect(() => {
-        if (dismissedCards.size !== stackConfig.cards.length) {
+        if (dismissedCards.size !== stackConfig.cards.length || p.resetAfterComplete === false) {
             return
         }
 
@@ -500,7 +501,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
         }, flick.resetDelayMs)
 
         return () => window.clearTimeout(resetTimer)
-    }, [dismissedCards, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
+    }, [dismissedCards, p.resetAfterComplete, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
 
     useEffect(() => {
         if (!isDeckEntryActive) {
