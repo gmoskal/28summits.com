@@ -18,6 +18,11 @@ const socialPageHeaders = [
     value: "public, max-age=0, must-revalidate",
   },
 ];
+const socialImageSources = [
+  "/og-image.png",
+  "/og-image.jpeg",
+  "/og-image.jpg",
+] as const;
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -34,10 +39,10 @@ const nextConfig: NextConfig = {
         source: "/:locale(pl|en|es|de|fr|nb|cs|sk|uk)",
         headers: socialPageHeaders,
       },
-      {
-        source: "/og-image.png",
+      ...socialImageSources.map((source) => ({
+        source,
         headers: socialImageHeaders,
-      },
+      })),
       {
         source: "/og-image-:path(.*)",
         headers: socialImageHeaders,

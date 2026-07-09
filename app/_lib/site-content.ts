@@ -1,5 +1,5 @@
 const siteIconVersion = "20260617-2"
-export const siteSocialImageVersion = "20260619-02"
+export const siteSocialImageVersion = "20260709-01"
 
 export const siteConfig = {
     name: "28 gór",
