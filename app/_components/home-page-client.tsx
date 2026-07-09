@@ -318,8 +318,6 @@ export function HomePageClient() {
     const [statsStarted, setStatsStarted] = useState(false)
     const [statsFooterVisible, setStatsFooterVisible] = useState(false)
     const isCardStackZoomed = defaultCardStackZoomed
-    const [isHeroDeckComplete, setHeroDeckComplete] = useState(false)
-    const [heroDeckResetSignal, setHeroDeckResetSignal] = useState(0)
     const [brandAnimationCycle, setBrandAnimationCycle] = useState(0)
     const brandAnimationRunningRef = useRef(false)
     const hasAutoScrolledToStoryRef = useRef(false)
@@ -337,28 +335,16 @@ export function HomePageClient() {
 
     const handleStoryScribbleDrawComplete = useCallback(() => setStoryCaptionVisible(true), [])
 
-    const restartHeroDeck = useCallback(() => {
-        setHeroDeckComplete(false)
-        setHeroDeckResetSignal((resetSignal) => resetSignal + 1)
-    }, [])
-
-    const handleHeroTopReached = useCallback(() => {
-        if (!isHeroDeckComplete) {
-            restartHeroDeck()
-        }
-    }, [isHeroDeckComplete, restartHeroDeck])
-
     const handleBrandMarkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
 
         const mainElement = mainRef.current
         if (!mainElement) {
-            handleHeroTopReached()
             return
         }
 
-        scrollElementToTop(mainElement, handleHeroTopReached)
-    }, [handleHeroTopReached])
+        scrollElementToTop(mainElement, () => undefined)
+    }, [])
 
     const restartStoryLogo = useCallback(() => {
         brandAnimationRunningRef.current = true
@@ -390,7 +376,6 @@ export function HomePageClient() {
     }, [])
 
     const handleHeroDeckComplete = useCallback(() => {
-        setHeroDeckComplete(true)
         scrollToStorySection()
     }, [scrollToStorySection])
     const scrollToStatsSection = useCallback(() => {
@@ -545,7 +530,6 @@ export function HomePageClient() {
                     <CardStackPreview
                         isZoomed={isCardStackZoomed}
                         locale={locale}
-                        resetSignal={heroDeckResetSignal}
                         onDeckComplete={handleHeroDeckComplete}
                     />
                 </div>
