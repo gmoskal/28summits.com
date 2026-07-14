@@ -8,9 +8,42 @@ type SiteControlsProps = {
     content: (typeof homeContent)[SiteLocale]["controls"]
     locale: SiteLocale
     themeMode: SiteThemeMode
+    compact?: boolean
     onLocaleChange: (locale: SiteLocale) => void
     onThemeModeChange: (mode: SiteThemeMode) => void
 }
+
+const EmailIcon = () => (
+    <svg aria-hidden="true" className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+        <path d="m4.5 7 7.5 6 7.5-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+    </svg>
+)
+
+const InstagramIcon = () => (
+    <svg aria-hidden="true" className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="17.4" cy="6.7" r="1" fill="currentColor" />
+    </svg>
+)
+
+const FacebookIcon = () => (
+    <svg aria-hidden="true" className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.6 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.4V13h2.8v8h3.4Z" />
+    </svg>
+)
+
+const socialLinks = [
+    { href: "mailto:rysek@28gor.app", label: "E-mail", Icon: EmailIcon, external: false },
+    { href: "https://www.instagram.com/28gor.app", label: "Instagram", Icon: InstagramIcon, external: true },
+    {
+        href: "https://www.facebook.com/profile.php?id=61591852292572",
+        label: "Facebook",
+        Icon: FacebookIcon,
+        external: true,
+    },
+] as const
 
 function SunIcon() {
     return (
@@ -82,6 +115,27 @@ function LanguageSelect(p: Pick<SiteControlsProps, "content" | "locale" | "onLoc
     )
 }
 
+const SocialLinks = () => (
+    <nav
+        aria-label="Contact and social media"
+        className="col-span-2 flex h-10 items-center justify-self-end rounded-full bg-[var(--control-bg)] p-1"
+    >
+        {socialLinks.map((link) => (
+            <a
+                key={link.href}
+                href={link.href}
+                aria-label={link.label}
+                title={link.label}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+                className="grid h-8 w-8 place-items-center rounded-full text-[var(--text-muted)] outline-none transition-[color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-[var(--border-muted)] hover:text-[var(--text-primary)] focus-visible:bg-[var(--border-muted)] focus-visible:text-[var(--text-primary)] focus-visible:shadow-[0_0_0_3px_var(--selection-bg)] motion-reduce:transform-none"
+            >
+                <link.Icon />
+            </a>
+        ))}
+    </nav>
+)
+
 export function ThemeModeSwitch(p: Pick<SiteControlsProps, "content" | "themeMode" | "onThemeModeChange">) {
     const themeOptions: [DraggableSwitchOption<SiteThemeMode>, DraggableSwitchOption<SiteThemeMode>] = [
         { value: siteThemeModes[0], label: p.content.themeModes.light, content: <ThemeIcon mode={siteThemeModes[0]} /> },
@@ -100,8 +154,13 @@ export function ThemeModeSwitch(p: Pick<SiteControlsProps, "content" | "themeMod
 }
 
 export function SiteControls(p: SiteControlsProps) {
+    const layoutClassName = p.compact
+        ? "grid grid-cols-[auto_auto] justify-end gap-2"
+        : "grid grid-cols-[auto_auto] justify-end gap-2 lg:flex lg:items-center"
+
     return (
-        <div className="flex flex-nowrap justify-center gap-2 lg:justify-end">
+        <div className={layoutClassName}>
+            <SocialLinks />
             <LanguageSelect content={p.content} locale={p.locale} onLocaleChange={p.onLocaleChange} />
             <ThemeModeSwitch content={p.content} themeMode={p.themeMode} onThemeModeChange={p.onThemeModeChange} />
         </div>
