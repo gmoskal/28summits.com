@@ -48,7 +48,6 @@ export function LegalPageClient({ slug }: { slug: LegalDocument["slug"] }) {
                             content={content.controls}
                             locale={locale}
                             themeMode={themeMode}
-                            compact
                             onLocaleChange={setLocale}
                             onThemeModeChange={setThemeMode}
                         />

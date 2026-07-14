@@ -1,14 +1,13 @@
 "use client"
 
 import type { ChangeEvent } from "react"
-import { SiteLocale, SiteThemeMode, homeContent, siteLanguages, siteThemeModes } from "../_lib/site-content"
+import { SiteLocale, SiteThemeMode, homeContent, siteLanguageByLocale, siteLanguages, siteThemeModes } from "../_lib/site-content"
 import { DraggableSwitch, type DraggableSwitchOption } from "./draggable-switch"
 
 type SiteControlsProps = {
     content: (typeof homeContent)[SiteLocale]["controls"]
     locale: SiteLocale
     themeMode: SiteThemeMode
-    compact?: boolean
     onLocaleChange: (locale: SiteLocale) => void
     onThemeModeChange: (mode: SiteThemeMode) => void
 }
@@ -83,17 +82,19 @@ function LanguageSelect(p: Pick<SiteControlsProps, "content" | "locale" | "onLoc
 
     return (
         <label
-            className="relative inline-flex h-10 w-[142px] items-center overflow-hidden rounded-full sm:w-[170px]"
+            className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full transition-shadow focus-within:shadow-[0_0_0_3px_var(--selection-bg)]"
             style={{
                 backgroundColor: "var(--control-bg)",
                 color: "var(--text-muted)",
             }}
         >
+            <span aria-hidden="true" className="pointer-events-none text-[17px] leading-[17px]">
+                {siteLanguageByLocale[p.locale].flag}
+            </span>
             <select
                 aria-label={p.content.languageLabel}
                 value={p.locale}
-                className="h-full w-full appearance-none rounded-full bg-transparent py-0 pr-9 pl-4 text-[13px] leading-4 font-bold outline-none transition-[box-shadow,color] focus-visible:shadow-[0_0_0_3px_var(--selection-bg)]"
-                style={{ color: "var(--text-primary)" }}
+                className="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-full opacity-0"
                 onChange={handleLanguageChange}
             >
                 {siteLanguages.map((language) => (
@@ -102,15 +103,6 @@ function LanguageSelect(p: Pick<SiteControlsProps, "content" | "locale" | "onLoc
                     </option>
                 ))}
             </select>
-            <svg
-                aria-hidden="true"
-                className="pointer-events-none absolute right-3 h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="none"
-                style={{ color: "var(--text-muted)" }}
-            >
-                <path d="M5.5 7.75 10 12.25l4.5-4.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-            </svg>
         </label>
     )
 }
@@ -153,16 +145,10 @@ export function ThemeModeSwitch(p: Pick<SiteControlsProps, "content" | "themeMod
     )
 }
 
-export function SiteControls(p: SiteControlsProps) {
-    const layoutClassName = p.compact
-        ? "grid grid-cols-[auto_auto] justify-end gap-2"
-        : "grid grid-cols-[auto_auto] justify-end gap-2 lg:flex lg:items-center"
-
-    return (
-        <div className={layoutClassName}>
-            <SocialLinks />
-            <LanguageSelect content={p.content} locale={p.locale} onLocaleChange={p.onLocaleChange} />
-            <ThemeModeSwitch content={p.content} themeMode={p.themeMode} onThemeModeChange={p.onThemeModeChange} />
-        </div>
-    )
-}
+export const SiteControls = (p: SiteControlsProps) => (
+    <div className="flex flex-nowrap items-center justify-end gap-1 sm:gap-2">
+        <SocialLinks />
+        <LanguageSelect content={p.content} locale={p.locale} onLocaleChange={p.onLocaleChange} />
+        <ThemeModeSwitch content={p.content} themeMode={p.themeMode} onThemeModeChange={p.onThemeModeChange} />
+    </div>
+)
