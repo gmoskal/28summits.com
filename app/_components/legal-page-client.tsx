@@ -89,6 +89,11 @@ function LegalBody({
             <p className="mt-4 text-center text-[15px] leading-[22px] text-[var(--text-muted)] lg:text-left lg:text-[17px] lg:leading-[25px]">
                 {document.effectiveDate}
             </p>
+            {document.updatedDate ? (
+                <p className="mt-1 text-center text-[15px] leading-[22px] text-[var(--text-muted)] lg:text-left lg:text-[17px] lg:leading-[25px]">
+                    {document.updatedDate}
+                </p>
+            ) : null}
 
             {languageNotice ? (
                 <aside className="mt-7 border-l-2 border-[#e67621] py-1 pl-5 text-left">

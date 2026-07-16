@@ -14,6 +14,7 @@ export const siteConfig = {
     operatorAddress: "Kolejowa 43, 57-220 Ziębice, Polska",
     physicalReturnsAddress: "",
     contactEmail: "rysek@28gor.app",
+    contactPhone: "+48 537 765 122",
     siteHost: "28gor.app",
     currencyCode: "PLN",
     paymentProcessorName: "Stripe",
@@ -616,6 +617,7 @@ export type LegalDocument = {
     slug: "privacy" | "support" | "terms"
     title: string
     effectiveDate: string
+    updatedDate?: string
     intro: string[]
     sections: LegalSection[]
 }

@@ -2,6 +2,7 @@ import type { LegalDocument, LegalSection, LegalTextBlock } from "./site-content
 
 type LegalSiteConfig = {
     readonly contactEmail: string
+    readonly contactPhone: string
     readonly operatorAddress: string
     readonly operatorTaxId: string
     readonly operatorTradingName: string
@@ -142,6 +143,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             slug: "terms",
             title: "Regulamin",
             effectiveDate: "Obowiązuje od 16 lipca 2026 r.",
+            updatedDate: "Ostatnia aktualizacja: 16 lipca 2026 r.",
             intro: [
                 `Regulamin określa zasady korzystania z aplikacji 28 gór i strony ${config.siteHost}, zakupów cyfrowych w App Store oraz zamawiania fizycznych metalowych pinów.`,
                 "Korzystając z usługi, użytkownik zobowiązuje się przestrzegać regulaminu oraz bezwzględnie obowiązujących przepisów prawa.",
@@ -150,7 +152,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Usługodawca i kontakt",
                     paragraph(`Usługodawcą, operatorem 28 gór i sprzedawcą fizycznych pinów jest ${polishOperatorIdentity}.`),
-                    paragraph(`Kontakt w sprawach usługi, zakupów, reklamacji i danych osobowych: ${config.contactEmail}.`),
+                    paragraph(`Kontakt w sprawach usługi, zakupów, reklamacji i danych osobowych: ${config.contactEmail}, telefon: ${config.contactPhone}.`),
                 ),
                 section(
                     "Pierwszeństwo wersji polskiej",
@@ -410,6 +412,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             slug: "terms",
             title: "Terms of Service",
             effectiveDate: "Effective date: July 16, 2026",
+            updatedDate: "Last updated: July 16, 2026",
             intro: [
                 `These terms govern the 28 gór app and ${config.siteHost}, digital App Store purchases, and orders for physical metal pins.`,
                 "By using the service, users agree to follow these terms and all mandatory applicable laws.",
@@ -418,7 +421,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Service provider and contact",
                     paragraph(`The provider and operator of 28 gór and the seller of physical pins is ${englishOperatorIdentity}.`),
-                    paragraph(`For service, purchase, complaint, and privacy matters, email ${config.contactEmail}.`),
+                    paragraph(`For service, purchase, complaint, and privacy matters, email ${config.contactEmail} or call ${config.contactPhone}.`),
                 ),
                 section(
                     "Polish version precedence",

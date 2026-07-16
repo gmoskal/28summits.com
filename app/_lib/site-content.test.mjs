@@ -47,8 +47,10 @@ test("public profile is explicitly covered by the English privacy policy", () =>
 test("Polish and English legal documents use the release effective date and aligned sections", () => {
     assert.equal(legalDocuments.privacy.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
     assert.equal(legalDocuments.terms.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
+    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r.")
     assert.equal(englishLegalDocuments.privacy.effectiveDate, "Effective date: July 16, 2026")
     assert.equal(englishLegalDocuments.terms.effectiveDate, "Effective date: July 16, 2026")
+    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 16, 2026")
     assert.equal(legalDocuments.privacy.sections.length, englishLegalDocuments.privacy.sections.length)
     assert.equal(legalDocuments.terms.sections.length, englishLegalDocuments.terms.sections.length)
 
@@ -67,6 +69,7 @@ test("public legal identity uses verified business fields", () => {
     assert.equal(siteConfig.operatorTaxId, "7492012796")
     assert.equal(siteConfig.operatorAddress, "Kolejowa 43, 57-220 Ziębice, Polska")
     assert.equal(siteConfig.registeredOperatorName, "Async.Studio Grzegorz Moskal")
+    assert.equal(siteConfig.contactPhone, "+48 537 765 122")
 
     const allDocuments = [
         legalDocuments.privacy,
@@ -90,6 +93,10 @@ test("public legal identity uses verified business fields", () => {
         const text = documentText(document)
         assert.match(text, /Kolejowa 43, 57-220 Ziębice, Poland/)
         assert.doesNotMatch(text, /Polska/)
+    }
+
+    for (const terms of [legalDocuments.terms, englishLegalDocuments.terms]) {
+        assert.match(documentText(terms), /\+48 537 765 122/)
     }
 })
 
