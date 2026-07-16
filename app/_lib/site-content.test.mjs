@@ -29,7 +29,7 @@ function sectionText(document, heading) {
 test("public profile is explicitly covered by the Polish privacy policy", () => {
     const polishPrivacy = documentText(legalDocuments.privacy)
 
-    assert.match(polishPrivacy, /nazwa profilu/i)
+    assert.match(polishPrivacy, /nazwa profilu|nazwa wyświetlana/i)
     assert.match(polishPrivacy, /avatar|zdjęcie profilowe/i)
     assert.match(polishPrivacy, /publiczn/i)
     assert.match(polishPrivacy, /ranking/i)
@@ -47,10 +47,12 @@ test("public profile is explicitly covered by the English privacy policy", () =>
 test("Polish and English legal documents use the release effective date and aligned sections", () => {
     assert.equal(legalDocuments.privacy.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
     assert.equal(legalDocuments.terms.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
-    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r., 20:10 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(legalDocuments.privacy.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r., 21:29 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r., 21:29 CEST (UTC+02:00, Europe/Warsaw)")
     assert.equal(englishLegalDocuments.privacy.effectiveDate, "Effective date: July 16, 2026")
     assert.equal(englishLegalDocuments.terms.effectiveDate, "Effective date: July 16, 2026")
-    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 16, 2026, 20:10 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(englishLegalDocuments.privacy.updatedDate, "Last updated: July 16, 2026, 21:29 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 16, 2026, 21:29 CEST (UTC+02:00, Europe/Warsaw)")
     assert.equal(legalDocuments.privacy.sections.length, englishLegalDocuments.privacy.sections.length)
     assert.equal(legalDocuments.terms.sections.length, englishLegalDocuments.terms.sections.length)
 
@@ -113,7 +115,8 @@ test("terms keep the three payment models separate in both languages", () => {
         assert.match(unlock, /non-consumable|niekonsumpcyjn/i)
         assert.match(unlock, /restore|przywróć|odtworzyć/i)
         assert.match(unlock, /same Apple ID|tego samego Apple ID/i)
-        assert.match(unlock, /same 28 gór account|tego samego konta 28 gór/i)
+        assert.match(unlock, /authenticated 28 gór account|uwierzytelnionego konta 28 gór/i)
+        assert.match(unlock, /new account|nowego konta/i)
         assert.match(unlock, /not a subscription|nie jest to subskrypcja/i)
     }
 
@@ -168,9 +171,13 @@ test("terms describe available reporting channels without claiming dedicated act
     const englishModeration = sectionText(englishLegalDocuments.terms, "User content and moderation")
 
     assert.match(polishModeration, /Komentarze i inne treści można zgłaszać za pomocą dostępnych funkcji w aplikacji/)
-    assert.match(polishModeration, /Treści, profile, konta lub wpisy rankingowe można również zgłaszać na rysek@28gor\.app/)
+    assert.match(polishModeration, /Punktem kontaktowym.*rysek@28gor\.app/)
+    assert.match(polishModeration, /dokładne miejsce lub identyfikator/)
+    assert.match(polishModeration, /dokładne i kompletne/)
     assert.match(englishModeration, /Comments and other content can be reported using the reporting features available in the app/)
-    assert.match(englishModeration, /Content, profiles, accounts, or leaderboard entries may also be reported by emailing rysek@28gor\.app/)
+    assert.match(englishModeration, /contact point.*rysek@28gor\.app/)
+    assert.match(englishModeration, /exact location or identifier/)
+    assert.match(englishModeration, /accurate and complete/)
 
     for (const moderation of [polishModeration, englishModeration]) {
         assert.doesNotMatch(moderation, /dedicated report|osobn(?:a|ą|ej) funkcj(?:a|ę|i) zgłoszenia|blocking users|blokowanie użytkowników/i)
@@ -196,9 +203,48 @@ test("physical withdrawal and complaint sections include the required consumer s
     for (const complaint of [polishComplaint, englishComplaint]) {
         assert.match(complaint, /repair|napraw/i)
         assert.match(complaint, /replacement|wymian/i)
-        assert.match(complaint, /price reduction|obniżenia ceny/i)
+        assert.match(complaint, /price reduction|obniżeni[ae] ceny/i)
         assert.match(complaint, /withdrawal|odstąpienia/i)
         assert.match(complaint, /Photos are helpful but optional|Zdjęcia są pomocne, ale nie są obowiązkowe/i)
+        assert.match(complaint, /two years|dwóch lat/i)
+        assert.match(complaint, /disproportionate costs|nadmiernych kosztów/i)
+        assert.match(complaint, /burden of proving|ciężar wykazania/i)
+    }
+})
+
+test("terms address hostile-customer abuse without removing mandatory consumer rights", () => {
+    const polishDelivery = sectionText(legalDocuments.terms, "Dostawa fizycznych pinów")
+    const englishDelivery = sectionText(englishLegalDocuments.terms, "Delivery of physical pins")
+    const polishWithdrawal = sectionText(legalDocuments.terms, "Odstąpienie od zakupu fizycznego pina")
+    const englishWithdrawal = sectionText(englishLegalDocuments.terms, "Withdrawal from a physical-pin purchase")
+    const polishDisputes = sectionText(legalDocuments.terms, "Spory płatnicze i podwójne zwroty")
+    const englishDisputes = sectionText(englishLegalDocuments.terms, "Payment disputes and duplicate refunds")
+    const polishAbuse = sectionText(legalDocuments.terms, "Nadużycia usługi i kontaktu")
+    const englishAbuse = sectionText(englishLegalDocuments.terms, "Service and contact abuse")
+
+    for (const delivery of [polishDelivery, englishDelivery]) {
+        assert.match(delivery, /risk.*receipt|Ryzyko.*otrzymaniu/i)
+        assert.match(delivery, /actually incurred and documented|rzeczywiście poniesionych i udokumentowanych/i)
+        assert.match(delivery, /does not limit complaint or withdrawal rights|nie ogranicza prawa do reklamacji ani odstąpienia/i)
+    }
+
+    for (const withdrawal of [polishWithdrawal, englishWithdrawal]) {
+        assert.match(withdrawal, /empty parcel|pustej przesyłki/i)
+        assert.match(withdrawal, /contrary evidence|dowody przeciwne/i)
+        assert.match(withdrawal, /Original packaging.*not a condition|Oryginalne opakowanie.*nie są warunkiem/i)
+    }
+
+    for (const disputes of [polishDisputes, englishDisputes]) {
+        assert.match(disputes, /right to dispute|prawo do zakwestionowania/i)
+        assert.match(disputes, /more than one source|więcej niż jednego źródła/i)
+        assert.match(disputes, /actual documented loss|rzeczywiście poniesionej i udokumentowanej szkody/i)
+        assert.match(disputes, /no penalty or chargeback fee|nie ustanawia kary ani opłaty za chargeback/i)
+    }
+
+    for (const abuse of [polishAbuse, englishAbuse]) {
+        assert.match(abuse, /false reports|fałszywych zgłoszeń/i)
+        assert.match(abuse, /statutory complaint|ustawowej reklamacji/i)
+        assert.match(abuse, /necessary scope and duration|potrzebnego zakresu i czasu/i)
     }
 })
 
@@ -211,9 +257,73 @@ test("privacy policies cover transaction, order, ranking, verification, and mode
         assert.match(privacy, /payment status|status płatności/i)
         assert.match(privacy, /score verification|weryfikacji wyników/i)
         assert.match(privacy, /moderation reports|zgłoszenia moderacyjne/i)
+        assert.match(privacy, /chargeback|sporu płatniczego/i)
+        assert.match(privacy, /empty parcel|pustej przesyłki/i)
+        assert.match(privacy, /carrier events|zdarzenia przewoźnika/i)
+        assert.match(privacy, /challenge the outcome|zakwestionować wynik/i)
         assert.match(privacy, /completed mountains|ukończone góry/i)
         assert.match(privacy, /leaderboard position|pozycja w rankingu/i)
-        assert.match(privacy, /do not store full|nie przechowujemy pełnych/i)
+        assert.match(privacy, /does? not store full|nie (?:przechowujemy|przechowuje) pełnych/i)
+    }
+})
+
+test("privacy policies match the audited location, photo, deletion, and provider flows", () => {
+    const polishPrivacy = documentText(legalDocuments.privacy)
+    const englishPrivacy = documentText(englishLegalDocuments.privacy)
+
+    for (const privacy of [polishPrivacy, englishPrivacy]) {
+        assert.match(privacy, /precise location|dokładnej lokalizacji/i)
+        assert.match(privacy, /background location|lokalizacji w tle/i)
+        assert.match(privacy, /not sent to the backend|nie są wysyłane do backendu/i)
+        assert.match(privacy, /EXIF/)
+        assert.match(privacy, /original metadata|oryginalnymi metadanymi/i)
+        assert.match(privacy, /avatar.*JPEG.*without metadata|Avatar.*JPEG bez metadanych/i)
+        assert.match(privacy, /StoreKit transaction ledger|rejestr transakcji StoreKit/i)
+        assert.match(privacy, /random technical identifier.*does not contain the former account identifier|losowy identyfikator techniczny bez dawnego identyfikatora konta/i)
+        assert.match(privacy, /pseudonymized|pseudonimizowane/i)
+        assert.match(privacy, /within one month|w ciągu miesiąca/i)
+        assert.match(privacy, /hidden on leaderboards by default|domyślnie ukryte w rankingach/i)
+        assert.match(privacy, /Firebase/)
+        assert.match(privacy, /InPost/)
+        assert.match(privacy, /Resend/)
+        assert.match(privacy, /OpenAI/)
+        assert.match(privacy, /Meta/)
+    }
+
+    assert.deepEqual(
+        legalDocuments.privacy.sections.map(({ body }) => body.length),
+        englishLegalDocuments.privacy.sections.map(({ body }) => body.length),
+    )
+})
+
+test("terms cover contract formation, payment, safety, digital conformity, durable records, and ADR", () => {
+    const polishTerms = documentText(legalDocuments.terms)
+    const englishTerms = documentText(englishLegalDocuments.terms)
+
+    for (const terms of [polishTerms, englishTerms]) {
+        assert.match(terms, /durable medium|trwałym nośniku/i)
+        assert.match(terms, /obligation to pay|obowiązk(?:iem|u) zapłaty/i)
+        assert.match(terms, /not a toy|nie jest zabawką/i)
+        assert.match(terms, /sharp point|ostre zakończenie/i)
+        assert.match(terms, /digital content (?:or|and) services|treści i usług cyfrowych/i)
+        assert.match(terms, /14 days|14 dni/i)
+        assert.match(terms, /model (?:withdrawal )?(?:statement|form)|Wzór oświadczenia/i)
+        assert.match(terms, /out-of-court|Pozasądowe/i)
+        assert.match(terms, /records? the accepted version identifier|zapisuje identyfikator zaakceptowanej wersji/i)
+        assert.match(terms, /express prior consent|wyraźnej uprzedniej zgodzie/i)
+        assert.match(terms, /postal and electronic addresses|adres pocztowy i elektroniczny/i)
+        assert.match(terms, /last resort|środkiem ostatecznym/i)
+    }
+})
+
+test("user-facing legal copy does not use en or em dashes", () => {
+    for (const document of [
+        legalDocuments.privacy,
+        legalDocuments.terms,
+        englishLegalDocuments.privacy,
+        englishLegalDocuments.terms,
+    ]) {
+        assert.doesNotMatch(documentText(document), /[\u2013\u2014]/)
     }
 })
 
