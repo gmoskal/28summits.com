@@ -47,10 +47,10 @@ test("public profile is explicitly covered by the English privacy policy", () =>
 test("Polish and English legal documents use the release effective date and aligned sections", () => {
     assert.equal(legalDocuments.privacy.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
     assert.equal(legalDocuments.terms.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
-    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r.")
+    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r., 20:10 CEST (UTC+02:00, Europe/Warsaw)")
     assert.equal(englishLegalDocuments.privacy.effectiveDate, "Effective date: July 16, 2026")
     assert.equal(englishLegalDocuments.terms.effectiveDate, "Effective date: July 16, 2026")
-    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 16, 2026")
+    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 16, 2026, 20:10 CEST (UTC+02:00, Europe/Warsaw)")
     assert.equal(legalDocuments.privacy.sections.length, englishLegalDocuments.privacy.sections.length)
     assert.equal(legalDocuments.terms.sections.length, englishLegalDocuments.terms.sections.length)
 

@@ -143,7 +143,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             slug: "terms",
             title: "Regulamin",
             effectiveDate: "Obowiązuje od 16 lipca 2026 r.",
-            updatedDate: "Ostatnia aktualizacja: 16 lipca 2026 r.",
+            updatedDate: "Ostatnia aktualizacja: 16 lipca 2026 r., 20:10 CEST (UTC+02:00, Europe/Warsaw)",
             intro: [
                 `Regulamin określa zasady korzystania z aplikacji 28 gór i strony ${config.siteHost}, zakupów cyfrowych w App Store oraz zamawiania fizycznych metalowych pinów.`,
                 "Korzystając z usługi, użytkownik zobowiązuje się przestrzegać regulaminu oraz bezwzględnie obowiązujących przepisów prawa.",
@@ -412,7 +412,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             slug: "terms",
             title: "Terms of Service",
             effectiveDate: "Effective date: July 16, 2026",
-            updatedDate: "Last updated: July 16, 2026",
+            updatedDate: "Last updated: July 16, 2026, 20:10 CEST (UTC+02:00, Europe/Warsaw)",
             intro: [
                 `These terms govern the 28 gór app and ${config.siteHost}, digital App Store purchases, and orders for physical metal pins.`,
                 "By using the service, users agree to follow these terms and all mandatory applicable laws.",

@@ -8,7 +8,7 @@ Do commitów i pushy używaj zwykłego `git`. Nie wymagaj `gh`, nie twórz pull 
 
 Każda zmiana treści regulaminu lub polityki prywatności musi zostać równolegle wprowadzona po polsku i angielsku. Obie wersje muszą być kompletne i równoważne znaczeniowo.
 
-Przy każdej edycji regulaminu lub polityki prywatności zaktualizuj widoczną na początku dokumentu datę ostatniej zmiany we wszystkich jego wersjach językowych.
+Przy każdej edycji regulaminu lub polityki prywatności zaktualizuj widoczną na początku dokumentu datę i godzinę ostatniej zmiany we wszystkich jego wersjach językowych. Znacznik musi zawierać skrót strefy czasowej, offset UTC oraz nazwę strefy IANA `Europe/Warsaw`.
 
 Każde pozostałe copy i każdy tekst prezentowany użytkownikowi na stronie musi być przetłumaczony na wszystkie języki wymienione w `siteLocales`. Dotyczy to także nawigacji, etykiet, komunikatów, metadanych i informacji otaczających dokumenty prawne. Nie kończ zmiany z brakującym tłumaczeniem ani z fallbackiem językowym traktowanym jako rozwiązanie docelowe.
 
