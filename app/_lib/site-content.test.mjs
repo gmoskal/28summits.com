@@ -94,6 +94,7 @@ test("terms keep the three payment models separate in both languages", () => {
     for (const unlock of [polishUnlock, englishUnlock]) {
         assert.match(unlock, /Apple In-App Purchase/)
         assert.match(unlock, /non-consumable|niekonsumpcyjn/i)
+        assert.match(unlock, /restore|przywróć|odtworzyć/i)
         assert.match(unlock, /same Apple ID|tego samego Apple ID/i)
         assert.match(unlock, /same 28 gór account|tego samego konta 28 gór/i)
         assert.match(unlock, /not a subscription|nie jest to subskrypcja/i)
@@ -104,7 +105,8 @@ test("terms keep the three payment models separate in both languages", () => {
         assert.match(support, /consumable|konsumpcyjn/i)
         assert.match(support, /more than once|więcej niż raz/i)
         assert.match(support, /does not unlock|nie odblokowuje/i)
-        assert.match(support, /not restorable|nie podlega przywracaniu/i)
+        assert.match(support, /cannot be restored|nie podlega przywracaniu/i)
+        assert.match(support, /one or more price options|jednym lub kilku wariantach cenowych/i)
     }
 
     for (const pins of [polishPins, englishPins]) {
@@ -113,8 +115,48 @@ test("terms keep the three payment models separate in both languages", () => {
         assert.match(pins, /BLIK/)
         assert.match(pins, /physical|fizyczn/i)
         assert.match(pins, /price|cen/i)
-        assert.match(pins, /shipping|dostaw/i)
+        assert.match(pins, /delivery|shipping|dostaw/i)
         assert.match(pins, /total|łączn/i)
+        assert.match(pins, /not Apple In-App Purchases|Nie są Apple In-App Purchase/i)
+    }
+
+    assert.match(polishPins, /Przed złożeniem zamówienia użytkownik otrzymuje informacje o produkcie, cenie, kosztach dostawy, łącznej kwocie oraz dostęp do danych sprzedawcy i warunków sprzedaży/)
+    assert.match(polishPins, /Dane sprzedawcy oraz informacje dotyczące zamówienia są również przekazywane lub udostępniane w potwierdzeniu zamówienia/)
+    assert.match(englishPins, /Before placing an order, the user receives information about the product, its price, delivery costs, the total amount, and access to the seller’s identifying details and the applicable sales terms/)
+    assert.match(englishPins, /The seller’s details and information relating to the order are also provided or made available in the order confirmation/)
+
+    const termsText = `${documentText(legalDocuments.terms)} ${documentText(englishLegalDocuments.terms)}`
+    assert.doesNotMatch(termsText, /four (?:support products|support options|price options)|cztery (?:warianty|opcje|produkty wsparcia)/i)
+    assert.doesNotMatch(termsText, /checkout and the order confirmation show|Checkout i potwierdzenie zamówienia pokazują/i)
+    assert.doesNotMatch(termsText, /checkout (?:shows|displays) (?:the )?(?:complete|full) seller(?:’s|'s)? (?:address|details)|checkout pokazuje pełne dane sprzedawcy/i)
+
+    const alignedSectionPairs = [
+        ["Treści użytkownika i moderacja", "User content and moderation"],
+        ["Jednorazowe odblokowanie pełnego dostępu do gier", "One-time full game unlock"],
+        ["Dobrowolne wsparcie „Nakarm Ryska”", "Voluntary “Feed Rysek” support"],
+        ["Fizyczne metalowe piny", "Physical metal pins"],
+    ]
+    assert.deepEqual(
+        alignedSectionPairs.map(([polishHeading]) => legalDocuments.terms.sections.findIndex(({ heading }) => heading === polishHeading)),
+        alignedSectionPairs.map(([, englishHeading]) => englishLegalDocuments.terms.sections.findIndex(({ heading }) => heading === englishHeading)),
+    )
+    assert.deepEqual(
+        legalDocuments.terms.sections.map(({ body }) => body.length),
+        englishLegalDocuments.terms.sections.map(({ body }) => body.length),
+    )
+})
+
+test("terms describe available reporting channels without claiming dedicated actions", () => {
+    const polishModeration = sectionText(legalDocuments.terms, "Treści użytkownika i moderacja")
+    const englishModeration = sectionText(englishLegalDocuments.terms, "User content and moderation")
+
+    assert.match(polishModeration, /Komentarze i inne treści można zgłaszać za pomocą dostępnych funkcji w aplikacji/)
+    assert.match(polishModeration, /Treści, profile, konta lub wpisy rankingowe można również zgłaszać na rysek@28gor\.app/)
+    assert.match(englishModeration, /Comments and other content can be reported using the reporting features available in the app/)
+    assert.match(englishModeration, /Content, profiles, accounts, or leaderboard entries may also be reported by emailing rysek@28gor\.app/)
+
+    for (const moderation of [polishModeration, englishModeration]) {
+        assert.doesNotMatch(moderation, /dedicated report|osobn(?:a|ą|ej) funkcj(?:a|ę|i) zgłoszenia|blocking users|blokowanie użytkowników/i)
     }
 })
 
