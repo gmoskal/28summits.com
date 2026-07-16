@@ -4,6 +4,12 @@
 
 Do commitów i pushy używaj zwykłego `git`. Nie wymagaj `gh`, nie twórz pull requestów i nie zakładaj gałęzi tylko na potrzeby PR. Jeżeli użytkownik prosi o commit lub push, po sprawdzeniu zakresu zmian commituj i pushuj bezpośrednio bieżącą gałąź.
 
+## Lokalizacja treści
+
+Każda zmiana treści regulaminu lub polityki prywatności musi zostać równolegle wprowadzona po polsku i angielsku. Obie wersje muszą być kompletne i równoważne znaczeniowo.
+
+Każde pozostałe copy i każdy tekst prezentowany użytkownikowi na stronie musi być przetłumaczony na wszystkie języki wymienione w `siteLocales`. Dotyczy to także nawigacji, etykiet, komunikatów, metadanych i informacji otaczających dokumenty prawne. Nie kończ zmiany z brakującym tłumaczeniem ani z fallbackiem językowym traktowanym jako rozwiązanie docelowe.
+
 ## Deploy na domenę
 
 Projekt jest podpięty do Vercel w `.vercel/project.json`.
