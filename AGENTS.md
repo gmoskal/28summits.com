@@ -1,5 +1,9 @@
 # Agent Notes
 
+## Git
+
+Do commitów i pushy używaj zwykłego `git`. Nie wymagaj `gh`, nie twórz pull requestów i nie zakładaj gałęzi tylko na potrzeby PR. Jeżeli użytkownik prosi o commit lub push, po sprawdzeniu zakresu zmian commituj i pushuj bezpośrednio bieżącą gałąź.
+
 ## Deploy na domenę
 
 Projekt jest podpięty do Vercel w `.vercel/project.json`.
