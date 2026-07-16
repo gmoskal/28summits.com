@@ -68,18 +68,28 @@ test("public legal identity uses verified business fields", () => {
     assert.equal(siteConfig.operatorAddress, "Kolejowa 43, 57-220 Ziębice, Polska")
     assert.equal(siteConfig.registeredOperatorName, "Async.Studio Grzegorz Moskal")
 
-    for (const document of [
+    const allDocuments = [
         legalDocuments.privacy,
         legalDocuments.terms,
         englishLegalDocuments.privacy,
         englishLegalDocuments.terms,
-    ]) {
+    ]
+    for (const document of allDocuments) {
         const text = documentText(document)
         assert.match(text, /Async\.Studio/)
         assert.match(text, /Grzegorz Moskal/)
-        assert.match(text, /NIP 7492012796/)
-        assert.match(text, /Kolejowa 43, 57-220 Ziębice, Polska/)
+        assert.match(text, /NIP: 7492012796/)
         assert.doesNotMatch(text, /TODO|undefined|null/)
+    }
+
+    for (const document of [legalDocuments.privacy, legalDocuments.terms]) {
+        assert.match(documentText(document), /Kolejowa 43, 57-220 Ziębice, Polska/)
+    }
+
+    for (const document of [englishLegalDocuments.privacy, englishLegalDocuments.terms]) {
+        const text = documentText(document)
+        assert.match(text, /Kolejowa 43, 57-220 Ziębice, Poland/)
+        assert.doesNotMatch(text, /Polska/)
     }
 })
 

@@ -21,7 +21,9 @@ export function createLegalDocuments(config: LegalSiteConfig): {
     pl: LegalDocuments
 } {
     const publicOperatorName = config.registeredOperatorName.trim() || config.operatorTradingName
-    const operatorIdentity = `${publicOperatorName}, NIP ${config.operatorTaxId}, ${config.operatorAddress}`
+    const polishOperatorIdentity = `${publicOperatorName}, NIP: ${config.operatorTaxId}, ${config.operatorAddress}`
+    const englishOperatorAddress = config.operatorAddress.replace(/, Polska$/, ", Poland")
+    const englishOperatorIdentity = `${publicOperatorName}, NIP: ${config.operatorTaxId}, ${englishOperatorAddress}`
 
     const pl: LegalDocuments = {
         privacy: {
@@ -35,7 +37,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             sections: [
                 section(
                     "Administrator i kontakt",
-                    paragraph(`Administratorem danych osobowych jest ${operatorIdentity}.`),
+                    paragraph(`Administratorem danych osobowych jest ${polishOperatorIdentity}.`),
                     paragraph(`W sprawach prywatności, danych osobowych i obsługi użytkownika napisz na ${config.contactEmail}.`),
                 ),
                 section(
@@ -147,7 +149,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             sections: [
                 section(
                     "Usługodawca i kontakt",
-                    paragraph(`Usługodawcą, operatorem 28 gór i sprzedawcą fizycznych pinów jest ${operatorIdentity}.`),
+                    paragraph(`Usługodawcą, operatorem 28 gór i sprzedawcą fizycznych pinów jest ${polishOperatorIdentity}.`),
                     paragraph(`Kontakt w sprawach usługi, zakupów, reklamacji i danych osobowych: ${config.contactEmail}.`),
                 ),
                 section(
@@ -217,7 +219,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Fizyczne metalowe piny",
                     paragraph("Piny są towarami fizycznymi sprzedawanymi oddzielnie od odblokowania gier i „Nakarm Ryska”. Nie są Apple In-App Purchase i nie nadają cyfrowych uprawnień, chyba że opis produktu jednoznacznie wskazuje dodatkową, zgodną z prawem funkcję."),
-                    paragraph(`Sprzedawcą jest ${operatorIdentity}. Przed złożeniem zamówienia użytkownik otrzymuje informacje o produkcie, cenie, kosztach dostawy, łącznej kwocie oraz dostęp do danych sprzedawcy i warunków sprzedaży. Dane sprzedawcy oraz informacje dotyczące zamówienia są również przekazywane lub udostępniane w potwierdzeniu zamówienia.`),
+                    paragraph(`Sprzedawcą jest ${polishOperatorIdentity}. Przed złożeniem zamówienia użytkownik otrzymuje informacje o produkcie, cenie, kosztach dostawy, łącznej kwocie oraz dostęp do danych sprzedawcy i warunków sprzedaży. Dane sprzedawcy oraz informacje dotyczące zamówienia są również przekazywane lub udostępniane w potwierdzeniu zamówienia.`),
                     paragraph(`${config.paymentProcessorName} obsługuje płatność. Dostępne metody obejmują Apple Pay i BLIK, jeżeli są dostępne dla urządzenia, banku, kraju i bieżącej konfiguracji płatności. Operator nie przechowuje pełnych numerów kart, kodów BLIK ani pełnych danych uwierzytelniających płatność.`),
                     paragraph("Pin może być dostępny w ograniczonej liczbie, wykonywany na zamówienie lub oferowany w przedsprzedaży. Odpowiednie oznaczenie i przewidywany termin realizacji są pokazywane przed zakupem."),
                 ),
@@ -303,7 +305,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             sections: [
                 section(
                     "Controller and contact",
-                    paragraph(`The data controller is ${operatorIdentity}.`),
+                    paragraph(`The data controller is ${englishOperatorIdentity}.`),
                     paragraph(`For privacy, personal data, or user support matters, email ${config.contactEmail}.`),
                 ),
                 section(
@@ -415,7 +417,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
             sections: [
                 section(
                     "Service provider and contact",
-                    paragraph(`The provider and operator of 28 gór and the seller of physical pins is ${operatorIdentity}.`),
+                    paragraph(`The provider and operator of 28 gór and the seller of physical pins is ${englishOperatorIdentity}.`),
                     paragraph(`For service, purchase, complaint, and privacy matters, email ${config.contactEmail}.`),
                 ),
                 section(
@@ -485,7 +487,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Physical metal pins",
                     paragraph("Pins are physical goods sold separately from the game unlock and “Feed Rysek.” They are not Apple In-App Purchases and do not grant digital entitlements unless the product description clearly identifies an additional lawful feature."),
-                    paragraph(`The seller is ${operatorIdentity}. Before placing an order, the user receives information about the product, its price, delivery costs, the total amount, and access to the seller’s identifying details and the applicable sales terms. The seller’s details and information relating to the order are also provided or made available in the order confirmation.`),
+                    paragraph(`The seller is ${englishOperatorIdentity}. Before placing an order, the user receives information about the product, its price, delivery costs, the total amount, and access to the seller’s identifying details and the applicable sales terms. The seller’s details and information relating to the order are also provided or made available in the order confirmation.`),
                     paragraph(`${config.paymentProcessorName} processes payment. Available methods include Apple Pay and BLIK where supported by the device, bank, country, and current payment configuration. The operator does not store full card numbers, BLIK codes, or complete payment-authentication credentials.`),
                     paragraph("A pin may be limited in quantity, made to order, or sold as a preorder. The relevant label and expected fulfillment time are shown before purchase."),
                 ),
