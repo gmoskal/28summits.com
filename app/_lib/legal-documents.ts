@@ -56,11 +56,11 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Cele i podstawy prawne",
                     list(
-                        "utworzenie i obsługa konta, synchronizacja, dziennik górski, rankingi, zakupione funkcje i realizacja zamówień — wykonanie umowy, art. 6 ust. 1 lit. b RODO,",
-                        "obsługa płatności, dostawy, odstąpień, reklamacji i kontaktu z użytkownikiem — wykonanie umowy lub działania przed jej zawarciem, art. 6 ust. 1 lit. b RODO,",
-                        "rachunkowość, podatki i obowiązki konsumenckie — obowiązek prawny, art. 6 ust. 1 lit. c RODO,",
-                        "bezpieczeństwo, zapobieganie nadużyciom, weryfikacja wyników, moderacja, diagnostyka i dochodzenie roszczeń — prawnie uzasadniony interes administratora i społeczności, art. 6 ust. 1 lit. f RODO,",
-                        "publikacja opcjonalnej nazwy i avatara oraz funkcje wymagające uprawnień urządzenia — zgodnie z wyborem i ustawieniami użytkownika; gdy prawo wymaga zgody, art. 6 ust. 1 lit. a RODO.",
+                        "utworzenie i obsługa konta, synchronizacja, dziennik górski, rankingi, zakupione funkcje i realizacja zamówień: wykonanie umowy, art. 6 ust. 1 lit. b RODO,",
+                        "obsługa płatności, dostawy, odstąpień, reklamacji i kontaktu z użytkownikiem: wykonanie umowy lub działania przed jej zawarciem, art. 6 ust. 1 lit. b RODO,",
+                        "rachunkowość, podatki i obowiązki konsumenckie: obowiązek prawny, art. 6 ust. 1 lit. c RODO,",
+                        "bezpieczeństwo, zapobieganie nadużyciom, weryfikacja wyników, moderacja, diagnostyka i dochodzenie roszczeń: prawnie uzasadniony interes administratora i społeczności, art. 6 ust. 1 lit. f RODO,",
+                        "publikacja opcjonalnej nazwy i avatara oraz funkcje wymagające uprawnień urządzenia: zgodnie z wyborem i ustawieniami użytkownika; gdy prawo wymaga zgody, art. 6 ust. 1 lit. a RODO.",
                     ),
                 ),
                 section(
@@ -157,12 +157,12 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Definicje",
                     list(
-                        "aplikacja lub usługa — aplikacja mobilna 28 gór wraz z powiązanymi usługami internetowymi i stroną,",
-                        "konto — indywidualne konto użytkownika w 28 gór,",
-                        "odblokowanie gier — jednorazowy zakup pełnego, wcześniejszego dostępu do wszystkich gier archiwum,",
-                        "„Nakarm Ryska” — dobrowolne, niezależne wsparcie operatora kupowane przez Apple In-App Purchase,",
-                        "pin — fizyczna metalowa przypinka lub inna wyraźnie oznaczona fizyczna pamiątka oferowana w sklepie,",
-                        "treści użytkownika — w szczególności zdjęcia, podpisy, notatki, oceny, komentarze, pseudonim, avatar i publiczny profil."
+                        "aplikacja lub usługa: aplikacja mobilna 28 gór wraz z powiązanymi usługami internetowymi i stroną,",
+                        "konto: indywidualne konto użytkownika w 28 gór,",
+                        "odblokowanie gier: jednorazowy zakup pełnego, wcześniejszego dostępu do wszystkich gier archiwum,",
+                        "„Nakarm Ryska”: dobrowolne, niezależne wsparcie operatora kupowane przez Apple In-App Purchase,",
+                        "pin: fizyczna metalowa przypinka lub inna wyraźnie oznaczona fizyczna pamiątka oferowana w sklepie,",
+                        "treści użytkownika: w szczególności zdjęcia, podpisy, notatki, oceny, komentarze, pseudonim, avatar i publiczny profil."
                     ),
                 ),
                 section(
@@ -229,9 +229,9 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Odstąpienie od zakupu fizycznego pina",
                     paragraph(`Konsument może odstąpić od umowy zakupu fizycznego pina bez podawania przyczyny w ciągu 14 dni od jego otrzymania. Wystarczy wysłać jednoznaczne oświadczenie na ${config.contactEmail} przed upływem terminu; nie jest potrzebna wcześniejsza zgoda operatora.`),
-                    paragraph("Pin należy odesłać nie później niż 14 dni od złożenia oświadczenia. Aktualny adres zwrotu przekażemy po otrzymaniu oświadczenia — jest to informacja organizacyjna, a nie zgoda na odstąpienie. Koszt przesyłki zwrotnej ponosi konsument tylko wtedy, gdy został o tym prawidłowo poinformowany przed zakupem."),
+                    paragraph("Pin należy odesłać nie później niż 14 dni od złożenia oświadczenia. Aktualny adres zwrotu przekażemy po otrzymaniu oświadczenia. Jest to informacja organizacyjna, a nie zgoda na odstąpienie. Koszt przesyłki zwrotnej ponosi konsument tylko wtedy, gdy został o tym prawidłowo poinformowany przed zakupem."),
                     paragraph("Konsument może otworzyć opakowanie i obejrzeć pin w zakresie potrzebnym do ustalenia jego charakteru, cech i działania. Odpowiada jedynie za zmniejszenie wartości wynikające z obchodzenia się z towarem w sposób wykraczający poza taki zakres; samo otwarcie opakowania nie wyłącza prawa odstąpienia."),
-                    paragraph("Zwracamy cenę pina oraz koszt najtańszej oferowanej zwykłej dostawy, co do zasady tą samą metodą płatności, w terminie wymaganym prawem. Możemy wstrzymać zwrot do otrzymania pina lub przedstawienia dowodu jego odesłania — zależnie od tego, co nastąpi wcześniej."),
+                    paragraph("Po skutecznym odstąpieniu zwracamy cenę pina oraz koszt najtańszej oferowanej zwykłej dostawy. Nie zwracamy dopłaty za wybrany droższy sposób dostawy. Zwrot następuje co do zasady tą samą metodą płatności i w terminie wymaganym prawem. Możemy go wstrzymać do otrzymania pina lub przedstawienia dowodu jego odesłania, zależnie od tego, co nastąpi wcześniej."),
                 ),
                 section(
                     "Reklamacje fizycznych pinów",
@@ -324,11 +324,11 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Purposes and legal bases",
                     list(
-                        "creating and operating accounts, syncing, the mountain journal, leaderboards, purchased functionality, and order fulfillment — performance of a contract, Article 6(1)(b) GDPR,",
-                        "handling payments, delivery, withdrawals, complaints, and user contact — performance of a contract or steps before entering one, Article 6(1)(b) GDPR,",
-                        "accounting, tax, and consumer-law duties — legal obligation, Article 6(1)(c) GDPR,",
-                        "security, fraud prevention, score verification, moderation, diagnostics, and legal claims — the legitimate interests of the controller and community, Article 6(1)(f) GDPR,",
-                        "publishing an optional name and avatar and using device permissions — according to the user's choices and settings; where consent is required, Article 6(1)(a) GDPR."
+                        "creating and operating accounts, syncing, the mountain journal, leaderboards, purchased functionality, and order fulfillment: performance of a contract, Article 6(1)(b) GDPR,",
+                        "handling payments, delivery, withdrawals, complaints, and user contact: performance of a contract or steps before entering one, Article 6(1)(b) GDPR,",
+                        "accounting, tax, and consumer-law duties: legal obligation, Article 6(1)(c) GDPR,",
+                        "security, fraud prevention, score verification, moderation, diagnostics, and legal claims: the legitimate interests of the controller and community, Article 6(1)(f) GDPR,",
+                        "publishing an optional name and avatar and using device permissions: according to the user's choices and settings; where consent is required, Article 6(1)(a) GDPR."
                     ),
                 ),
                 section(
@@ -425,12 +425,12 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Definitions",
                     list(
-                        "app or service — the 28 gór mobile app, related online services, and website,",
-                        "account — an individual 28 gór user account,",
-                        "game unlock — a one-time purchase of full early access to all archive games included in the offer,",
-                        "“Feed Rysek” — voluntary, independent support for the operator purchased through Apple In-App Purchase,",
-                        "pin — a physical metal pin or other clearly identified physical keepsake offered in the shop,",
-                        "user content — including photos, captions, notes, ratings, comments, nickname, avatar, and public profile."
+                        "app or service: the 28 gór mobile app, related online services, and website,",
+                        "account: an individual 28 gór user account,",
+                        "game unlock: a one-time purchase of full early access to all archive games included in the offer,",
+                        "“Feed Rysek”: voluntary, independent support for the operator purchased through Apple In-App Purchase,",
+                        "pin: a physical metal pin or other clearly identified physical keepsake offered in the shop,",
+                        "user content: including photos, captions, notes, ratings, comments, nickname, avatar, and public profile."
                     ),
                 ),
                 section(
@@ -497,9 +497,9 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 section(
                     "Withdrawal from a physical-pin purchase",
                     paragraph(`A consumer may withdraw from a physical-pin purchase without giving a reason within 14 days after receipt. It is enough to send an unequivocal statement to ${config.contactEmail} before the deadline; the operator's prior approval is not required.`),
-                    paragraph("The pin must be returned no later than 14 days after the statement. We will provide the current returns address after receiving the statement — this is logistical information, not approval of the withdrawal. The consumer bears direct return cost only if properly informed before purchase."),
+                    paragraph("The pin must be returned no later than 14 days after the statement. We will provide the current returns address after receiving the statement. This is logistical information, not approval of the withdrawal. The consumer bears direct return cost only if properly informed before purchase."),
                     paragraph("A consumer may open the package and inspect the pin as necessary to establish its nature, characteristics, and functioning. The consumer is responsible only for diminished value caused by handling beyond that scope; opening the package alone does not remove the right of withdrawal."),
-                    paragraph("We refund the pin price and the cost of the least expensive standard delivery offered, generally using the original payment method, within the period required by law. We may withhold reimbursement until we receive the pin or proof that it was sent back, whichever occurs first."),
+                    paragraph("After a valid withdrawal, we refund the pin price and the cost of the least expensive standard delivery offered. We do not refund the surcharge for a more expensive delivery method selected by the consumer. We generally use the original payment method and refund within the period required by law. We may withhold reimbursement until we receive the pin or proof that it was sent back, whichever occurs first."),
                 ),
                 section(
                     "Complaints about physical pins",
