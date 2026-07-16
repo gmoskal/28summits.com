@@ -9,9 +9,7 @@ export const siteConfig = {
     name: "28 gór",
     productName: "28 gór",
     operatorTradingName,
-    // TODO: Enter the exact registered entrepreneur name from CEIDG.
-    // For a sole proprietorship this may need to include the owner's first and last name.
-    registeredOperatorName: "",
+    registeredOperatorName: "Async.Studio Grzegorz Moskal",
     operatorTaxId: "7492012796",
     operatorAddress: "Kolejowa 43, 57-220 Ziębice, Polska",
     physicalReturnsAddress: "",

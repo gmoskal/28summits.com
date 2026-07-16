@@ -62,11 +62,11 @@ test("Polish and English legal documents use the release effective date and alig
     }
 })
 
-test("public legal identity uses verified business fields without leaking an empty registered name", () => {
+test("public legal identity uses verified business fields", () => {
     assert.equal(siteConfig.operatorTradingName, "Async.Studio")
     assert.equal(siteConfig.operatorTaxId, "7492012796")
     assert.equal(siteConfig.operatorAddress, "Kolejowa 43, 57-220 Ziębice, Polska")
-    assert.equal(siteConfig.registeredOperatorName, "")
+    assert.equal(siteConfig.registeredOperatorName, "Async.Studio Grzegorz Moskal")
 
     for (const document of [
         legalDocuments.privacy,
@@ -76,6 +76,7 @@ test("public legal identity uses verified business fields without leaking an emp
     ]) {
         const text = documentText(document)
         assert.match(text, /Async\.Studio/)
+        assert.match(text, /Grzegorz Moskal/)
         assert.match(text, /NIP 7492012796/)
         assert.match(text, /Kolejowa 43, 57-220 Ziębice, Polska/)
         assert.doesNotMatch(text, /TODO|undefined|null/)
