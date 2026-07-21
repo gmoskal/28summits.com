@@ -1,8 +1,8 @@
 # Bug 002 — Ucięte animowane logo na mobile
 
 > Start pracy: 2026-07-21 23:02
-> Koniec pracy: —
-> Status: fix zaimplementowany
+> Koniec pracy: 2026-07-21 23:27
+> Status: zweryfikowany
 > Zgłoszenie: „animowane logo na mobile jest delikatnie ucięte od dołu, popraw, zrób commit, push i wrzyc na domene” — [zrzut z urządzenia](./assets/002-uciete-logo-mobile/before-device.png)
 > Uzupełnienie 1: „na desktop dodaj żeby telefon miał lekko paralaxowego scrolla, niech ląduje w miejscu gdzie jest teraz ale niech wpada tam z lekkim opóźnieniem, kumasz?” — osobna zmiana funkcjonalna realizowana w tej samej dostawie, poza granicą błędu 002.
 > Klasyfikacja: klient-lokalny
@@ -46,7 +46,7 @@ Test geometrii jest kontraktem źródłowym, nie pełnym testem renderera Safari
 
 ## Raport z implementacji i testów
 
-Dostarczenie: oczekuje — branch `bug/002-uciete-logo-mobile`, commit `215bc784d5eb485053f009fdfcb1066f4d576990`.
+Dostarczenie: commit `887f50cf5abfc49f6690578d1c9796137d229f03` na `master` (implementacja `215bc784d5eb485053f009fdfcb1066f4d576990`), oznaczony tagiem `fix/002-uciete-logo-mobile`.
 
 ### Zmiany
 
@@ -115,13 +115,16 @@ Kod wyjścia: `0`.
 Polecenie zakresu: `git diff --check` — kod wyjścia `0`, bez komunikatów.
 
 - **AC-1: zielony lokalnie** — test geometrii oraz [zrzut po poprawce](./assets/002-uciete-logo-mobile/after-local-mobile.png). Pomiar przy viewportcie `402 × 874`: SVG `top=84`, `bottom=217`; koła znaku `top=97.29`, `bottom=201.05`, czyli dolna część mieści się z zapasem około `15.95 px`.
-- **AC-2: oczekuje** — deploy produkcyjny i obserwacja produkcji są kolejnym krokiem tej samej sesji.
+- **AC-2: zielony na produkcji** — Vercel deployment `dpl_F94PXnGrrximaMfeRZAiMGniAyMd` osiągnął `readyState: READY` i został zaliasowany na `https://28gor.app`. `curl -I` zwrócił `HTTP/2 200`; HTML zawiera canonical, `og:url`, `og:image` oraz `twitter:image` wskazujące `28gor.app`.
+- **Dowód produkcyjny:** [mobilny Chromium](./assets/002-uciete-logo-mobile/after-production-mobile.png) i [WebKit 26.0 / Safari 26.0](./assets/002-uciete-logo-mobile/after-production-webkit.png). W WebKit przy viewportcie `402 × 874`: SVG `top=84`, `bottom=217`, koła `top=97.29`, `bottom=201.05`, brak błędów strony — dolna krawędź ma około `15.95 px` zapasu wewnątrz viewportu SVG.
 - **Funkcja spoza AC:** przy rzeczywistym desktopowym scrollu pomiar kolejnych klatek wykazał offset `54.00 → 45.17 → 39.35 → … → 0.00 px`. Pozycja spoczynkowa telefonu lokalnie (`x=772.08`, `y=32.70`, `415.81 × 834.59` przy `1440 × 900`) jest identyczna z pozycją na dotychczasowej produkcji.
 
 ### Cleanup
 
 - Lokalny proces `npm run dev` zatrzymany sygnałem `SIGINT`; `pgrep -fal "next dev|Google Chrome.*headless"` nie wykazał pozostałego procesu.
 - Bezprofilowa instancja headless Chrome zamknięta przez API przeglądarki; ten sam test procesów nie wykazał pozostałości.
+- Druga bezprofilowa instancja headless Chrome do weryfikacji produkcji została zamknięta w tym samym przebiegu testowym.
+- Izolowany `~/tmp/codex/bug-002-playwright/` (`288M`) z WebKit 26.0 oraz proces WebKit zostały usunięte po weryfikacji. `test ! -e /Users/gmm/tmp/codex/bug-002-playwright` zwrócił sukces, a `pgrep` nie wykazał `MiniBrowser`, `WebKitWebProcess`, headless Chrome ani `next dev`.
 - Dowody wizualne są zapisywane bezpośrednio w `bugs/assets/002-uciete-logo-mobile/`, nie w katalogu tymczasowym.
 - Obowiązkowy przegląd poprzednich numerów: `~/tmp/codex/bug-001` i `~/tmp/codex/bug-000` nie istnieją; `git worktree list --porcelain` pokazuje wyłącznie bieżący checkout.
 - Pozostawiono nietknięte `~/tmp/codex/bug-091-regresja-1` (`4.4G`) i `~/tmp/codex/bug-092` (`1.2G`): nie należą do raportu 002, nie są worktree tego repozytorium i nie ma dowodu, że są zakończone lub nieaktywne.
@@ -130,8 +133,8 @@ Polecenie zakresu: `git diff --check` — kod wyjścia `0`, bez komunikatów.
 
 1. **Czerwone odtworzenie:** w checkoutcie bazy `65a27c0a3bc2e6660604113360a462ae0181511b` skopiować niezmieniony `app/_components/gooey-brand-title.test.mjs`, dopisać go do polecenia testowego i uruchomić `npm test`; oczekiwany błąd: `Brand viewBox bottom 168.0 clips filtered digit geometry ending at 229.1`.
 2. **Zielone odtworzenie:** na bieżącym kodzie uruchomić `npm test`, `npm run typecheck`, `npm run build` oraz `git diff --check`; oczekiwane wyniki: `23/23` testy, typecheck/build/diff z kodem `0`. Test geometrii czyta prawdziwe stałe i ścieżkę komponentu, bez atrap; nie emuluje renderera Safari.
-3. **Weryfikacja środowiska:** jeszcze niewykonana. Po deployu otworzyć `https://28gor.app/` w mobilnym viewportcie, przejść na drugi ekran i sprawdzić, że dolna krawędź cyfry „8” jest kompletna. Sprawdzić też `curl -I https://28gor.app/` i metadane strony.
+3. **Weryfikacja środowiska:** wykonana na `https://28gor.app/`. Deployment `dpl_F94PXnGrrximaMfeRZAiMGniAyMd` ma `READY` i alias `https://28gor.app`; HTTP zwraca `200`. Mobilny Chromium i WebKit 26.0 po przejściu na drugi ekran pokazały pełną cyfrę „8”; w WebKit dolny obrys kończy się `15.95 px` przed dolną granicą SVG. Powtórzenie: otworzyć produkcję w mobilnym Safari/WebKit `402 × 874`, przewinąć `main` o jeden viewport i porównać z [dowodem WebKit](./assets/002-uciete-logo-mobile/after-production-webkit.png).
 4. **Inspekcja diffu:** sprawdzić `brandViewBox` i rozmiary `GooeyBrandTitle` w `app/_components/gooey-brand-title.tsx`, funkcję `storyPhoneParallaxFrame` oraz efekt/ref w `home-page-client.tsx`. Ścieżki glifów, timing animowanego logo, teksty, lokalizacje, media telefonu i zachowanie górnej ikony na desktopie nie mogą być zmienione.
-5. **Spot-check twierdzeń i AC:** AC-1 potwierdza test `brand logo viewBox contains the complete filtered digit geometry` oraz porównanie [przed](./assets/002-uciete-logo-mobile/before-device.png)/[po](./assets/002-uciete-logo-mobile/after-local-mobile.png). AC-2 potwierdza odpowiedź produkcyjnej domeny i obserwacja po wdrożeniu. Parallax potwierdzają dwa testy `home-story-phone.motion.test.mjs` oraz końcowa zmienna `--story-phone-parallax-y: 0.00px`.
+5. **Spot-check twierdzeń i AC:** AC-1 potwierdza test `brand logo viewBox contains the complete filtered digit geometry` oraz porównanie [przed](./assets/002-uciete-logo-mobile/before-device.png)/[po na WebKit](./assets/002-uciete-logo-mobile/after-production-webkit.png). AC-2 potwierdzają `curl`, deployment `READY` i produkcyjna obserwacja WebKit. Parallax potwierdzają dwa testy `home-story-phone.motion.test.mjs` oraz końcowa zmienna `--story-phone-parallax-y: 0.00px`.
 6. **Kontrola dostarczenia:** po integracji uruchomić `git tag -l 'fix/002-uciete-logo-mobile'` oraz `git merge-base --is-ancestor $(git rev-parse 'fix/002-uciete-logo-mobile^{commit}') master`.
-7. **Znane ograniczenie:** dowód lokalny pochodzi z headless Chrome; specyficzne zachowanie iOS Safari wymaga obserwacji strony po produkcyjnym deployu.
+7. **Znane ograniczenie:** końcowy test używa WebKit 26.0 z mobilnym viewportem i dotykiem, nie fizycznego iPhone'a; zachowanie przycinania SVG jest jednak wykonywane przez silnik Safari 26.0, a produkcyjny obraz i pomiary są zapisane w repozytorium.
