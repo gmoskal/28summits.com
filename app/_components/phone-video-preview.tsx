@@ -16,13 +16,13 @@ const phonePreviewAssets = {
     frame: "/iphone-17-pro-deep-blue.svg",
 } as const
 const phonePreviewSlides = [
-    { src: "/video/rec0-onboarding.MP4" },
-    { src: "/video/rec1-overview.MP4" },
-    { src: "/video/rec2-options.MP4" },
-    { src: "/video/rec3-peak.MP4" },
-    { src: "/video/rec4-game.MP4" },
-    { src: "/video/rec5-funcs.MP4" },
-    { src: "/video/rec6-con.MP4" },
+    { src: "/video/rec0-onboarding-web.mp4" },
+    { src: "/video/rec1-overview-web.mp4" },
+    { src: "/video/rec2-options-web.mp4" },
+    { src: "/video/rec3-peak-web.mp4" },
+    { src: "/video/rec4-game-web.mp4" },
+    { src: "/video/rec5-funcs-web.mp4" },
+    { src: "/video/rec6-con-web.mp4" },
 ] as const
 const phoneCarouselTiming = {
     slideDurationMs: 7000,

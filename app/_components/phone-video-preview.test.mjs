@@ -28,13 +28,13 @@ test("snapping and the indicator read the same physical carousel position", () =
 
 test("the carousel uses every supplied recording", () => {
     for (const source of [
-        "/video/rec0-onboarding.MP4",
-        "/video/rec1-overview.MP4",
-        "/video/rec2-options.MP4",
-        "/video/rec3-peak.MP4",
-        "/video/rec4-game.MP4",
-        "/video/rec5-funcs.MP4",
-        "/video/rec6-con.MP4",
+        "/video/rec0-onboarding-web.mp4",
+        "/video/rec1-overview-web.mp4",
+        "/video/rec2-options-web.mp4",
+        "/video/rec3-peak-web.mp4",
+        "/video/rec4-game-web.mp4",
+        "/video/rec5-funcs-web.mp4",
+        "/video/rec6-con-web.mp4",
     ]) {
         assert.match(componentSource, new RegExp(source.replace(".", "\\.")))
     }
