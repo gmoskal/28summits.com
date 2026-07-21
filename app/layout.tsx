@@ -29,7 +29,7 @@ const openSans = Open_Sans({
     subsets: ["latin", "latin-ext"],
     variable: "--font-open-sans",
     display: "swap",
-    weight: "500",
+    weight: ["300", "500"],
 })
 
 export const metadata: Metadata = {

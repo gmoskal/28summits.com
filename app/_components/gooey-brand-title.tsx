@@ -5,6 +5,7 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "re
 
 type GooeyBrandTitleProps = {
     onAnimationComplete?: () => void
+    onAnimationMidpoint?: () => void
     onAnimationStart?: () => void
     replayToken?: number
 }
@@ -38,6 +39,7 @@ type GooeyPathDrawingProps = {
     filterBounds: GooeyFilterBounds
     filterIdPrefix: string
     onAnimationComplete?: () => void
+    onAnimationMidpoint?: () => void
     onAnimationStart?: () => void
     pieces: readonly GooeyPathPiece[]
     replayToken?: number
@@ -790,6 +792,7 @@ function GooeyPathDrawing(p: GooeyPathDrawingProps) {
     const pathRefs = useRef<Array<SVGPathElement | null>>([])
     const circleRefs = useRef<Array<Array<SVGCircleElement | null>>>([])
     const animationCompleteDelayMs = useMemo(() => animationDurationMs(p.pieces), [p.pieces])
+    const animationMidpointDelayMs = animationCompleteDelayMs / 2
 
     useBrowserLayoutEffect(() => {
         resetCircles(circleRefs.current, p.startPoint)
@@ -837,14 +840,16 @@ function GooeyPathDrawing(p: GooeyPathDrawingProps) {
                 )
             })
         })
+        const midpointTimer = window.setTimeout(p.onAnimationMidpoint ?? noop, prefersReducedMotion ? 0 : animationMidpointDelayMs)
         const completeTimer = window.setTimeout(p.onAnimationComplete ?? noop, prefersReducedMotion ? 0 : animationCompleteDelayMs)
 
         return () => {
+            window.clearTimeout(midpointTimer)
             window.clearTimeout(completeTimer)
             animations.forEach((animation) => animation.stop())
             resetCircles(circleRefs.current, p.startPoint)
         }
-    }, [animationCompleteDelayMs, p.onAnimationComplete, p.onAnimationStart, p.pieces, prefersReducedMotion, p.replayToken, p.startPoint])
+    }, [animationCompleteDelayMs, animationMidpointDelayMs, p.onAnimationComplete, p.onAnimationMidpoint, p.onAnimationStart, p.pieces, prefersReducedMotion, p.replayToken, p.startPoint])
 
     return (
         <span
@@ -1103,6 +1108,7 @@ export const GooeyBrandTitle = (p: GooeyBrandTitleProps) => (
         startPoint={brandStartPoint}
         viewBox={brandViewBox}
         onAnimationComplete={p.onAnimationComplete}
+        onAnimationMidpoint={p.onAnimationMidpoint}
         onAnimationStart={p.onAnimationStart}
         replayToken={p.replayToken}
     />

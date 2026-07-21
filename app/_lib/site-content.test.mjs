@@ -47,12 +47,12 @@ test("public profile is explicitly covered by the English privacy policy", () =>
 test("Polish and English legal documents use the release effective date and aligned sections", () => {
     assert.equal(legalDocuments.privacy.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
     assert.equal(legalDocuments.terms.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
-    assert.equal(legalDocuments.privacy.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r., 22:22 CEST (UTC+02:00, Europe/Warsaw)")
-    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 16 lipca 2026 r., 22:22 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(legalDocuments.privacy.updatedDate, "Ostatnia aktualizacja: 20 lipca 2026 r., 18:00 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 20 lipca 2026 r., 18:00 CEST (UTC+02:00, Europe/Warsaw)")
     assert.equal(englishLegalDocuments.privacy.effectiveDate, "Effective date: July 16, 2026")
     assert.equal(englishLegalDocuments.terms.effectiveDate, "Effective date: July 16, 2026")
-    assert.equal(englishLegalDocuments.privacy.updatedDate, "Last updated: July 16, 2026, 22:22 CEST (UTC+02:00, Europe/Warsaw)")
-    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 16, 2026, 22:22 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(englishLegalDocuments.privacy.updatedDate, "Last updated: July 20, 2026, 18:00 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 20, 2026, 18:00 CEST (UTC+02:00, Europe/Warsaw)")
     assert.equal(legalDocuments.privacy.sections.length, englishLegalDocuments.privacy.sections.length)
     assert.equal(legalDocuments.terms.sections.length, englishLegalDocuments.terms.sections.length)
 
@@ -296,6 +296,56 @@ test("privacy policies match the audited location, photo, deletion, and provider
         legalDocuments.privacy.sections.map(({ body }) => body.length),
         englishLegalDocuments.privacy.sections.map(({ body }) => body.length),
     )
+})
+
+test("privacy policies fully disclose the planned iOS analytics and crash reporting", () => {
+    const polishAnalytics = sectionText(legalDocuments.privacy, "Analityka, diagnostyka, reklama i pamięć lokalna")
+    const englishAnalytics = sectionText(englishLegalDocuments.privacy, "Analytics, diagnostics, advertising, and local storage")
+    const polishRetention = sectionText(legalDocuments.privacy, "Okres przechowywania i usunięcie konta")
+    const englishRetention = sectionText(englishLegalDocuments.privacy, "Retention and account deletion")
+
+    for (const analytics of [polishAnalytics, englishAnalytics]) {
+        assert.match(analytics, /Google Analytics for Firebase/)
+        assert.match(analytics, /Crashlytics/)
+        assert.match(analytics, /BigQuery/)
+        assert.match(analytics, /app instance identifier|identyfikator instancji aplikacji/i)
+        assert.match(analytics, /screens and interface elements|ekrany i elementy interfejsu/i)
+        assert.match(analytics, /testerAccount/)
+        assert.match(analytics, /email.*Firebase Auth UID|e-mail.*UID Firebase Auth/i)
+        assert.match(analytics, /precise GPS coordinates|dokładnych współrzędnych GPS/i)
+        assert.match(analytics, /IDFA/)
+        assert.match(analytics, /ad personalization|personalizacj[ai] reklam/i)
+        assert.match(analytics, /collected automatically|zbierane automatycznie/i)
+        assert.match(analytics, /legitimate interest|prawnie uzasadnionym interesie/i)
+        assert.match(analytics, /right to object|prawo sprzeciwu/i)
+    }
+
+    for (const retention of [polishRetention, englishRetention]) {
+        assert.match(retention, /14 months|14 miesięcy/i)
+        assert.match(retention, /24 months|24 miesiące/i)
+        assert.match(retention, /90 days|90 dni/i)
+    }
+
+    assert.match(polishAnalytics, /statystyk produktu.*nie wykorzystujemy ich do reklam/i)
+    assert.match(englishAnalytics, /product statistics.*do not use (?:it|them) for advertising/i)
+})
+
+test("terms describe analytics as automatic legitimate-interest processing", () => {
+    const polishAnalytics = sectionText(legalDocuments.terms, "Analityka i diagnostyka")
+    const englishAnalytics = sectionText(englishLegalDocuments.terms, "Analytics and diagnostics")
+
+    for (const analytics of [polishAnalytics, englishAnalytics]) {
+        assert.match(analytics, /Google Analytics for Firebase/)
+        assert.match(analytics, /Crashlytics/)
+        assert.match(analytics, /Privacy Policy|Polityk[ai] prywatności/i)
+        assert.match(analytics, /collected automatically|zbierane automatycznie/i)
+        assert.match(analytics, /legitimate interest|prawnie uzasadnionym interesie/i)
+        assert.match(analytics, /right to object|prawo sprzeciwu/i)
+        assert.match(analytics, /behavioral advertising|reklam behawioralnych/i)
+    }
+
+    assert.match(polishAnalytics, /statystyk produktu.*nie służą reklamom/i)
+    assert.match(englishAnalytics, /product statistics.*not for advertising/i)
 })
 
 test("terms cover contract formation, payment, safety, digital conformity, durable records, and ADR", () => {

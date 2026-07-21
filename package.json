@@ -8,7 +8,7 @@
     "build": "next build",
     "og:generate": "node scripts/generate-og-images.mjs",
     "start": "next start",
-    "test": "node --test app/_lib/site-content.test.mjs",
+    "test": "node --test app/_lib/site-content.test.mjs app/_components/phone-video-preview.test.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

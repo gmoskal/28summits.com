@@ -5,6 +5,7 @@ import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
 import { GooeyBrandTitle, GooeyScrollArrow } from "./gooey-brand-title"
+import { PhoneVideoPreview, phonePreviewAspectRatio } from "./phone-video-preview"
 import { ScribbleAppStoreCta } from "./scribble-app-store-cta"
 import { BrandMark } from "./site-shell"
 import { SiteControls } from "./site-controls"
@@ -69,8 +70,8 @@ function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
 function ComplianceNotice({ content }: ComplianceNoticeProps) {
     return (
         <p
-            className="max-w-[760px] text-center text-[16px] leading-[23px] font-medium text-[var(--text-secondary)] xl:text-[1.5375rem] xl:leading-[2.2575rem]"
-            style={openSansTextStyle}
+            className="max-w-[760px] text-center text-[13px] leading-[20px] font-light text-[var(--text-secondary)] lg:text-[16px] lg:leading-[24px] xl:text-[20px] xl:leading-[30px]"
+            style={{ ...openSansTextStyle, fontWeight: 300 }}
         >
             {content.summaryParts.map((part, index) => (
                 <span key={part}>
@@ -92,10 +93,53 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
 }
 
 const storyRevealTiming = {
-    copyDelayMs: 320,
-    actionDelayMs: 860,
-    scrollCueDelayMs: 3000,
+    contentDelayMs: 1000,
+    scrollCueDelayMs: 30_000,
 } as const
+const storyLayoutMotionTiming = {
+    delayMs: 500,
+    durationMs: 2050,
+} as const
+const storyPhoneRevealTiming = {
+    delayMs: 1300,
+    durationMs: 1400,
+} as const
+const storyPhoneVideoStartDelayMs = storyPhoneRevealTiming.delayMs + storyPhoneRevealTiming.durationMs / 2
+const storyIntroSettleDelayMs = Math.max(
+    storyLayoutMotionTiming.delayMs + storyLayoutMotionTiming.durationMs,
+    storyPhoneRevealTiming.delayMs + storyPhoneRevealTiming.durationMs,
+)
+const storyLayoutMotionClassName = "ease-[cubic-bezier(0.4,0,0.2,1)]"
+const storyLayoutMotionStyle = {
+    transitionDelay: `${storyLayoutMotionTiming.delayMs}ms`,
+    transitionDuration: `${storyLayoutMotionTiming.durationMs}ms`,
+} satisfies CSSProperties
+const storyPhoneFadeStyle = {
+    transitionDelay: `${storyPhoneRevealTiming.delayMs}ms`,
+    transitionDuration: `${storyPhoneRevealTiming.durationMs}ms`,
+} satisfies CSSProperties
+const storyResponsiveMotionStyle = {
+    transitionDelay: "0ms",
+    transitionDuration: "150ms",
+} satisfies CSSProperties
+const storyPhoneLayout = {
+    baseMaxHeightPx: 642,
+    baseViewportHeightDvh: 72,
+    scale: 1.3,
+} as const
+const storyPhoneHeight = {
+    maxPx: storyPhoneLayout.baseMaxHeightPx * storyPhoneLayout.scale,
+    viewportDvh: storyPhoneLayout.baseViewportHeightDvh * storyPhoneLayout.scale,
+} as const
+const storyPhoneHalfWidth = {
+    maxPx: storyPhoneHeight.maxPx * phonePreviewAspectRatio / 2,
+    viewportDvh: storyPhoneHeight.viewportDvh * phonePreviewAspectRatio / 2,
+} as const
+const storyColumnBalanceBasePx = 240
+const storyColumnLayoutStyle: CSSProperties & Record<"--story-column-offset" | "--story-phone-height", string> = {
+    "--story-column-offset": `calc(${storyColumnBalanceBasePx}px - min(${storyPhoneHalfWidth.viewportDvh}dvh, ${storyPhoneHalfWidth.maxPx}px))`,
+    "--story-phone-height": `min(${storyPhoneHeight.viewportDvh}dvh, ${storyPhoneHeight.maxPx}px)`,
+}
 
 const statsRevealTiming = {
     footerDelayMs: 420,
@@ -111,6 +155,15 @@ const storyAppStoreScribble = {
     strokeCount: 6,
     width: 470,
 } as const
+const storyAppStoreScale = 0.6
+const storyAppStoreScaledFrameStyle = {
+    height: storyAppStoreScribble.height * storyAppStoreScale,
+    width: storyAppStoreScribble.width * storyAppStoreScale,
+} satisfies CSSProperties
+const storyAppStoreTransformStyle = {
+    transform: `scale(${storyAppStoreScale})`,
+    transformOrigin: "top left",
+} satisfies CSSProperties
 const defaultCardStackZoomed = true
 const homeScrollReset = {
     fallbackDelayMs: 1400,
@@ -309,10 +362,11 @@ export function HomePageClient() {
     const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
     const [storyLogoVisible, setStoryLogoVisible] = useState(false)
-    const [storyLogoAnimationComplete, setStoryLogoAnimationComplete] = useState(false)
-    const [storyCopyVisible, setStoryCopyVisible] = useState(false)
-    const [storyActionVisible, setStoryActionVisible] = useState(false)
-    const [storyCaptionVisible, setStoryCaptionVisible] = useState(false)
+    const [storyLayoutShifted, setStoryLayoutShifted] = useState(false)
+    const [storyIntroSettled, setStoryIntroSettled] = useState(false)
+    const [storyContentRevealReady, setStoryContentRevealReady] = useState(false)
+    const [storyContentVisible, setStoryContentVisible] = useState(false)
+    const [storyPhoneVideoPlaying, setStoryPhoneVideoPlaying] = useState(false)
     const [storyScrollCueReady, setStoryScrollCueReady] = useState(false)
     const [storyScrollCueDismissed, setStoryScrollCueDismissed] = useState(false)
     const [statsStarted, setStatsStarted] = useState(false)
@@ -324,16 +378,13 @@ export function HomePageClient() {
 
     const handleBrandAnimationStart = useCallback(() => {
         brandAnimationRunningRef.current = true
-        setStoryLogoAnimationComplete(false)
-        setStoryCaptionVisible(false)
+        setStoryLayoutShifted(true)
     }, [])
 
     const handleBrandAnimationComplete = useCallback(() => {
         brandAnimationRunningRef.current = false
-        setStoryLogoAnimationComplete(true)
     }, [])
-
-    const handleStoryScribbleDrawComplete = useCallback(() => setStoryCaptionVisible(true), [])
+    const handleBrandAnimationMidpoint = useCallback(() => setStoryContentRevealReady(true), [])
 
     const handleBrandMarkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
@@ -348,8 +399,6 @@ export function HomePageClient() {
 
     const restartStoryLogo = useCallback(() => {
         brandAnimationRunningRef.current = true
-        setStoryLogoAnimationComplete(false)
-        setStoryCaptionVisible(false)
         setBrandAnimationCycle((cycle) => cycle + 1)
     }, [])
 
@@ -392,8 +441,6 @@ export function HomePageClient() {
     }, [])
 
     const startStoryAnimation = useCallback(() => {
-        setStoryLogoAnimationComplete(false)
-        setStoryCaptionVisible(false)
         setStoryStarted(true)
         setStoryLogoVisible(true)
     }, [])
@@ -403,8 +450,6 @@ export function HomePageClient() {
     }, [])
     const hideStorySectionChrome = useCallback(() => {
         setStoryLogoVisible(false)
-        setStoryLogoAnimationComplete(false)
-        setStoryCaptionVisible(false)
         setStoryScrollCueDismissed(true)
     }, [])
     const showAndRestartStoryLogo = useCallback(() => {
@@ -434,21 +479,40 @@ export function HomePageClient() {
         onStart: startStatsAnimation,
     })
 
-    const storyScribbleActive = storyActionVisible && storyLogoAnimationComplete
+    const storyScribbleActive = storyContentVisible
 
     useEffect(() => {
-        if (!storyStarted) {
+        if (!storyContentRevealReady) {
             return
         }
 
-        const copyTimer = window.setTimeout(() => setStoryCopyVisible(true), storyRevealTiming.copyDelayMs)
-        const actionTimer = window.setTimeout(() => setStoryActionVisible(true), storyRevealTiming.actionDelayMs)
+        const contentTimer = window.setTimeout(() => setStoryContentVisible(true), storyRevealTiming.contentDelayMs)
 
-        return () => {
-            window.clearTimeout(copyTimer)
-            window.clearTimeout(actionTimer)
+        return () => window.clearTimeout(contentTimer)
+    }, [storyContentRevealReady])
+
+    useEffect(() => {
+        if (!storyLayoutShifted) {
+            return
         }
-    }, [storyStarted])
+
+        const videoTimer = window.setTimeout(
+            () => setStoryPhoneVideoPlaying(true),
+            storyPhoneVideoStartDelayMs,
+        )
+
+        return () => window.clearTimeout(videoTimer)
+    }, [storyLayoutShifted])
+
+    useEffect(() => {
+        if (!storyLayoutShifted) {
+            return
+        }
+
+        const settleTimer = window.setTimeout(() => setStoryIntroSettled(true), storyIntroSettleDelayMs)
+
+        return () => window.clearTimeout(settleTimer)
+    }, [storyLayoutShifted])
 
     useEffect(() => {
         if (!statsStarted) {
@@ -537,72 +601,99 @@ export function HomePageClient() {
 
             <section
                 ref={storySectionRef}
-                className="relative flex h-[100dvh] snap-start snap-always flex-col items-center overflow-hidden px-5 pt-[18dvh] pb-[2em] text-center lg:px-[28px] xl:px-[32px]"
+                className="relative flex h-[100dvh] snap-start snap-always flex-col items-center overflow-hidden px-5 pt-[84px] pb-[2em] text-center transition-[padding] duration-300 ease-out lg:px-[28px] lg:pt-[2em] xl:px-[32px]"
+                style={storyColumnLayoutStyle}
             >
-                <article className="flex w-full max-w-[720px] flex-col items-center">
-                    <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
-                        {storyStarted ? (
-                            <button
-                                type="button"
-                                aria-label={content.hero.replayLogoAnimationLabel}
-                                className={`inline-flex touch-manipulation cursor-pointer appearance-none items-center justify-center rounded-[24px] border-0 bg-transparent p-0 text-inherit transition duration-300 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] ${
-                                    storyLogoVisible ? "opacity-100 blur-0" : "pointer-events-none opacity-0 blur-[1px]"
-                                }`}
-                                onClick={replayStoryLogo}
-                            >
-                                <GooeyBrandTitle
-                                    onAnimationComplete={handleBrandAnimationComplete}
-                                    onAnimationStart={handleBrandAnimationStart}
-                                    replayToken={brandAnimationCycle}
-                                />
-                            </button>
-                        ) : null}
-                    </h1>
-
-                    <div
-                        className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[620px] flex-col gap-3 text-[16px] leading-[23px] font-medium text-[var(--text-secondary)] transition duration-700 ease-out xl:mt-[5em] xl:mb-[2em] xl:text-[1.63125rem] xl:leading-[2.35125rem] ${
-                            storyCopyVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
+                <div className="relative flex min-h-0 w-full flex-1 flex-col items-center justify-center">
+                    <article
+                        className={`relative z-10 flex w-full max-w-[720px] flex-col items-center transition-[translate] will-change-[translate] ${storyLayoutMotionClassName} ${
+                            storyLayoutShifted
+                                ? "lg:translate-x-[calc(var(--story-column-offset)-275px)]"
+                                : "lg:translate-x-0"
                         }`}
-                        style={{ ...openSansTextStyle, fontFeatureSettings: "'ss02' 1, 'liga' 0" }}
+                        style={storyIntroSettled ? storyResponsiveMotionStyle : storyLayoutMotionStyle}
                     >
-                        {content.hero.body.map((paragraph) => (
-                            <p key={paragraph}>{paragraph}</p>
-                        ))}
-                    </div>
+                        <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
+                            {storyStarted ? (
+                                <button
+                                    type="button"
+                                    aria-label={content.hero.replayLogoAnimationLabel}
+                                    className={`inline-flex touch-manipulation cursor-pointer appearance-none items-center justify-center rounded-[24px] border-0 bg-transparent p-0 text-inherit transition duration-300 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] ${
+                                        storyLogoVisible ? "opacity-100 blur-0" : "pointer-events-none opacity-0 blur-[1px]"
+                                    }`}
+                                    onClick={replayStoryLogo}
+                                >
+                                    <span
+                                        className={`block transition-[scale] will-change-[scale] ${storyLayoutMotionClassName} ${
+                                            storyLayoutShifted ? "lg:scale-[0.64]" : "lg:scale-100"
+                                        }`}
+                                        style={storyIntroSettled ? storyResponsiveMotionStyle : storyLayoutMotionStyle}
+                                    >
+                                        <GooeyBrandTitle
+                                            onAnimationComplete={handleBrandAnimationComplete}
+                                            onAnimationMidpoint={handleBrandAnimationMidpoint}
+                                            onAnimationStart={handleBrandAnimationStart}
+                                            replayToken={brandAnimationCycle}
+                                        />
+                                    </span>
+                                </button>
+                            ) : null}
+                        </h1>
 
-                    <div
-                        className={`flex flex-col items-center pt-[clamp(1rem,3dvh,2em)] transition duration-700 ease-out xl:pt-[2em] ${
-                            storyActionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
-                        }`}
-                    >
-                        <ScribbleAppStoreCta
-                            ariaLabel={content.hero.appStoreBadge.actionLabel}
-                            height={storyAppStoreScribble.height}
-                            href={siteConfig.launchUpdatesUrl}
-                            isActive={storyScribbleActive}
-                            markerStrokeWidth={storyAppStoreScribble.markerStrokeWidth}
-                            mobileScale={storyAppStoreScribble.mobileScale}
-                            strokeAxis={storyAppStoreScribble.strokeAxis}
-                            strokeCount={storyAppStoreScribble.strokeCount}
-                            width={storyAppStoreScribble.width}
-                            onDrawComplete={handleStoryScribbleDrawComplete}
-                        />
-                        <p
-                            className={`mt-[1em] max-w-[320px] text-[16px] leading-[21px] font-medium text-[var(--text-muted)] transition duration-700 ease-out xl:text-[1.29rem] xl:leading-[1.735rem] ${
-                                storyCaptionVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-2 opacity-0 blur-[1px]"
+                        <div
+                            className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[450px] flex-col gap-3 text-[13px] leading-[20px] font-light text-[var(--text-secondary)] transition-[margin,font-size,line-height,opacity,translate,filter] duration-300 ease-out lg:mt-[20px] lg:text-[16px] lg:leading-[24px] xl:mb-[2em] xl:text-[20px] xl:leading-[30px] ${
+                                storyContentVisible
+                                    ? "translate-y-0 opacity-100 blur-0"
+                                    : "translate-y-5 opacity-0 blur-[2px]"
                             }`}
-                            style={openSansTextStyle}
+                            style={{ ...openSansTextStyle, fontFeatureSettings: "'ss02' 1, 'liga' 0", fontWeight: 300 }}
                         >
-                            {content.hero.caption}
-                        </p>
+                            <p>{content.hero.body}</p>
+                        </div>
+
+                        <div
+                            className={`flex flex-col items-center pt-[clamp(1rem,3dvh,2em)] transition-[padding,opacity,translate,filter] duration-300 ease-out xl:pt-[2em] ${
+                                storyContentVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-5 opacity-0 blur-[2px]"
+                            }`}
+                        >
+                            <div className="relative overflow-visible" style={storyAppStoreScaledFrameStyle}>
+                                <div className="absolute top-0 left-0 w-max" style={storyAppStoreTransformStyle}>
+                                    <ScribbleAppStoreCta
+                                        ariaLabel={content.hero.appStoreBadge.actionLabel}
+                                        height={storyAppStoreScribble.height}
+                                        href={siteConfig.launchUpdatesUrl}
+                                        isActive={storyScribbleActive}
+                                        markerStrokeWidth={storyAppStoreScribble.markerStrokeWidth}
+                                        mobileScale={storyAppStoreScribble.mobileScale}
+                                        strokeAxis={storyAppStoreScribble.strokeAxis}
+                                        strokeCount={storyAppStoreScribble.strokeCount}
+                                        width={storyAppStoreScribble.width}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <div
+                        aria-hidden={!storyLayoutShifted}
+                        className={`pointer-events-none flex w-full shrink-0 items-center justify-center transition-[max-height,margin,opacity] ease-in-out will-change-[max-height,opacity] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[calc(50%+var(--story-column-offset))] lg:ml-5 lg:w-auto lg:justify-start lg:transition-opacity ${
+                            storyLayoutShifted
+                                ? "mt-5 max-h-[calc(min(32dvh,360px)+2rem)] opacity-100 sm:mt-6 sm:max-h-[calc(min(40dvh,480px)+2rem)] lg:mt-0 lg:max-h-full"
+                                : "mt-0 max-h-0 opacity-0 lg:max-h-full"
+                        }`}
+                        style={storyIntroSettled ? storyResponsiveMotionStyle : storyPhoneFadeStyle}
+                    >
+                        <PhoneVideoPreview
+                            className="h-[min(32dvh,360px)] shrink-0 transition-[height] duration-150 ease-out drop-shadow-[0_42px_70px_rgba(0,0,0,0.26)] sm:h-[min(40dvh,480px)] lg:h-[var(--story-phone-height)] lg:max-h-full"
+                            isPlaying={storyPhoneVideoPlaying}
+                        />
                     </div>
-                </article>
+                </div>
                 {storyScrollCueVisible ? (
                     <button
                         type="button"
                         aria-label="Scroll to final screen"
                         data-story-scroll-cue
-                        className="absolute right-5 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] touch-manipulation cursor-pointer rounded-[20px] border-0 bg-transparent p-0 text-[var(--gooey-title-color)] transition duration-500 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:right-8 sm:h-[106px] sm:w-[60px] lg:right-auto lg:left-[calc(50%+300px)] lg:-translate-x-1/2 xl:h-[126px] xl:w-[72px]"
+                        className="absolute right-[30px] bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-10 h-[88px] w-[50px] origin-bottom-right scale-[0.7] touch-manipulation cursor-pointer rounded-[20px] border-0 bg-transparent p-0 text-[var(--gooey-title-color)] transition duration-500 ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_0_3px_var(--selection-bg)] sm:h-[106px] sm:w-[60px] xl:h-[126px] xl:w-[72px]"
                         onClick={scrollToStatsSection}
                     >
                         <GooeyScrollArrow />

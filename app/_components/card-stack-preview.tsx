@@ -360,11 +360,11 @@ const flick = {
 const deckEntry = {
     headlineDelaySeconds: 0.5,
     headlineDurationSeconds: 1,
-    cardDelaySeconds: 1.5,
+    cardDelaySeconds: 0.95,
     cardStaggerSeconds: 0.055,
     unlockPaddingSeconds: 1.1,
-    stiffness: 215,
-    damping: 28,
+    stiffness: 127,
+    damping: 21.5,
     mass: 0.82,
 } as const
 
@@ -602,7 +602,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
                 style={{ backgroundColor: "var(--shadow-ground)" }}
             />
             <div
-                className={`${deckSizeClassName.frame} ${deckResizeClassName}`}
+                className={`${deckSizeClassName.frame} ${deckResizeClassName} ${headlineLabel ? "-translate-y-5 xl:-translate-y-7" : ""}`}
             >
                 <div
                     className={`${deckSizeClassName.deck} ${deckResizeClassName}`}
