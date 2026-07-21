@@ -28,7 +28,7 @@ test("snapping and the indicator read the same physical carousel position", () =
 
 test("the carousel uses every supplied recording", () => {
     for (const source of [
-        "/video/rec1-overview-web.mp4",
+        "/video/rec1-overview-web-v2.mp4",
         "/video/rec2-options-web.mp4",
         "/video/rec3-peak-web.mp4",
         "/video/rec4-game-web.mp4",

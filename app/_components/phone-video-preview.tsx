@@ -16,7 +16,7 @@ const phonePreviewAssets = {
     frame: "/iphone-17-pro-deep-blue.svg",
 } as const
 const phonePreviewSlides = [
-    { src: "/video/rec1-overview-web.mp4" },
+    { src: "/video/rec1-overview-web-v2.mp4" },
     { src: "/video/rec2-options-web.mp4" },
     { src: "/video/rec3-peak-web.mp4" },
     { src: "/video/rec4-game-web.mp4" },
