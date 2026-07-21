@@ -136,7 +136,7 @@ export type TextLogoFontFamily = "gloria" | "inter-og"
 
 const defaultCircleCount = 30
 const brandStartPoint = { x: 296, y: 96 } as const
-const brandViewBox = "18 18 540 150"
+const brandViewBox = "-4 8 564 224"
 const textLogoStartPoint = { x: 480, y: 180 } as const
 const textLogoViewBox = "0 0 960 360"
 const animationSpeedScale = 0.8
@@ -1101,7 +1101,7 @@ function GooeyGlyphDrawing(p: GooeyGlyphDrawingProps) {
 
 export const GooeyBrandTitle = (p: GooeyBrandTitleProps) => (
     <GooeyPathDrawing
-        className="block h-[89px] w-[min(81vw,379px)] text-[var(--gooey-title-color)] xl:h-[163px] xl:w-[min(36vw,510px)]"
+        className="block h-[133px] w-[min(84.6vw,400px)] text-[var(--gooey-title-color)] xl:h-[212px] xl:w-[min(37.6vw,533px)]"
         filterBounds={brandFilterBounds}
         filterIdPrefix="gooey-brand-title"
         pieces={brandGlyphs}

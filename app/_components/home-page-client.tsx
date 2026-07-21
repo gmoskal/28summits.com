@@ -5,6 +5,7 @@ import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
 import { GooeyBrandTitle, GooeyScrollArrow } from "./gooey-brand-title"
+import { storyPhoneParallaxFrame } from "./home-story-phone.motion"
 import { PhoneVideoPreview, phonePreviewAspectRatio } from "./phone-video-preview"
 import { ScribbleAppStoreCta } from "./scribble-app-store-cta"
 import { BrandMark } from "./site-shell"
@@ -169,8 +170,8 @@ const storyAppStoreTransformStyle = {
     transform: `translateX(-50%) scale(${storyAppStoreScale})`,
     transformOrigin: "top center",
 } satisfies CSSProperties
+const desktopViewportMediaQuery = "(min-width: 64rem)"
 const topBrandScrollMotion = {
-    desktopMediaQuery: "(min-width: 64rem)",
     distancePx: 200,
     initialScale: 1,
     minimumScale: 0.5,
@@ -179,6 +180,10 @@ const topBrandTransformStyle = {
     transform: "scale(var(--top-brand-scroll-scale, 1))",
     transformOrigin: "top left",
 } satisfies CSSProperties
+const storyPhoneParallaxStyle = {
+    "--story-phone-parallax-y": "0px",
+    transform: "translate3d(0, var(--story-phone-parallax-y), 0)",
+} satisfies CSSProperties & Record<"--story-phone-parallax-y", string>
 const defaultCardStackZoomed = true
 const homeScrollReset = {
     fallbackDelayMs: 1400,
@@ -385,6 +390,7 @@ export function HomePageClient() {
     const mainRef = useRef<HTMLElement | null>(null)
     const topBrandRef = useRef<HTMLDivElement | null>(null)
     const storySectionRef = useRef<HTMLElement | null>(null)
+    const storyPhoneParallaxRef = useRef<HTMLDivElement | null>(null)
     const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
     const [storyLogoVisible, setStoryLogoVisible] = useState(false)
@@ -516,7 +522,7 @@ export function HomePageClient() {
 
         const scrollRoot = mainElement
         const brandElement = topBrandElement
-        const desktopViewport = window.matchMedia(topBrandScrollMotion.desktopMediaQuery)
+        const desktopViewport = window.matchMedia(desktopViewportMediaQuery)
         let animationFrame = 0
 
         function showTopBrandScale() {
@@ -540,6 +546,56 @@ export function HomePageClient() {
         return () => {
             scrollRoot.removeEventListener("scroll", scheduleTopBrandScale)
             desktopViewport.removeEventListener("change", scheduleTopBrandScale)
+            if (animationFrame !== 0) {
+                window.cancelAnimationFrame(animationFrame)
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        const mainElement = mainRef.current
+        const phoneElement = storyPhoneParallaxRef.current
+        if (!mainElement || !phoneElement) {
+            return
+        }
+
+        const scrollRoot = mainElement
+        const parallaxElement = phoneElement
+        const desktopViewport = window.matchMedia(desktopViewportMediaQuery)
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+        let animationFrame = 0
+        let renderedScrollTop = scrollRoot.scrollTop
+
+        function showPhoneParallax() {
+            animationFrame = 0
+            const frame = storyPhoneParallaxFrame({
+                isEnabled: desktopViewport.matches && !reducedMotion.matches,
+                renderedScrollTop,
+                targetScrollTop: scrollRoot.scrollTop,
+            })
+            renderedScrollTop = frame.renderedScrollTop
+            parallaxElement.style.setProperty("--story-phone-parallax-y", `${frame.offsetY.toFixed(2)}px`)
+
+            if (!frame.isSettled) {
+                animationFrame = window.requestAnimationFrame(showPhoneParallax)
+            }
+        }
+
+        function schedulePhoneParallax() {
+            if (animationFrame === 0) {
+                animationFrame = window.requestAnimationFrame(showPhoneParallax)
+            }
+        }
+
+        scrollRoot.addEventListener("scroll", schedulePhoneParallax, { passive: true })
+        desktopViewport.addEventListener("change", schedulePhoneParallax)
+        reducedMotion.addEventListener("change", schedulePhoneParallax)
+        showPhoneParallax()
+
+        return () => {
+            scrollRoot.removeEventListener("scroll", schedulePhoneParallax)
+            desktopViewport.removeEventListener("change", schedulePhoneParallax)
+            reducedMotion.removeEventListener("change", schedulePhoneParallax)
             if (animationFrame !== 0) {
                 window.cancelAnimationFrame(animationFrame)
             }
@@ -750,10 +806,16 @@ export function HomePageClient() {
                         }`}
                         style={storyIntroSettled ? storyResponsiveMotionStyle : storyPhoneFadeStyle}
                     >
-                        <PhoneVideoPreview
-                            className="h-auto w-[var(--story-phone-mobile-width)] shrink-0 transition-[height,width] duration-150 ease-out drop-shadow-[0_42px_70px_rgba(0,0,0,0.26)] lg:h-[var(--story-phone-height)] lg:max-h-full lg:w-auto"
-                            isPlaying={storyPhoneVideoPlaying}
-                        />
+                        <div
+                            ref={storyPhoneParallaxRef}
+                            className="shrink-0 will-change-transform motion-reduce:transform-none"
+                            style={storyPhoneParallaxStyle}
+                        >
+                            <PhoneVideoPreview
+                                className="h-auto w-[var(--story-phone-mobile-width)] shrink-0 transition-[height,width] duration-150 ease-out drop-shadow-[0_42px_70px_rgba(0,0,0,0.26)] lg:h-[var(--story-phone-height)] lg:max-h-full lg:w-auto"
+                                isPlaying={storyPhoneVideoPlaying}
+                            />
+                        </div>
                     </div>
                 </div>
                 {storyScrollCueVisible ? (
