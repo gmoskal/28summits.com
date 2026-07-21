@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Barlow, Gloria_Hallelujah, Open_Sans } from "next/font/google"
+import { Barlow, Gloria_Hallelujah } from "next/font/google"
 import localFont from "next/font/local"
 import "./globals.css"
 import {
@@ -25,18 +25,11 @@ const gloriaHallelujah = Gloria_Hallelujah({
     weight: "400",
 })
 
-const openSans = Open_Sans({
-    subsets: ["latin", "latin-ext"],
-    variable: "--font-open-sans",
-    display: "swap",
-    weight: ["300", "500"],
-})
-
 const barlow = Barlow({
     subsets: ["latin", "latin-ext"],
     variable: "--font-barlow",
     display: "swap",
-    weight: "400",
+    weight: ["300", "400", "500", "600", "700"],
 })
 
 export const metadata: Metadata = {
@@ -89,7 +82,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="pl" className={`${inter.variable} ${gloriaHallelujah.variable} ${openSans.variable} ${barlow.variable}`}>
+        <html lang="pl" className={`${inter.variable} ${gloriaHallelujah.variable} ${barlow.variable}`}>
             <body>{children}</body>
         </html>
     )

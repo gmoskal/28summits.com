@@ -36,10 +36,6 @@ type SectionReentryOptions = {
 }
 
 const legalLinkStyle = { color: "var(--gooey-title-color)" }
-const openSansTextStyle = {
-    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-    fontWeight: 500,
-} satisfies CSSProperties
 const legalNavLinkClassName = "text-[16px] leading-[23px] font-medium transition-[color,filter] hover:brightness-95 xl:text-[1.6rem] xl:leading-[2.32rem]"
 const legalInlineLinkClassName = "underline decoration-transparent underline-offset-4 hover:decoration-current"
 const sectionStart = {
@@ -51,7 +47,7 @@ function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
     return (
         <nav
             className={`flex items-center gap-4 ${className}`}
-            style={{ ...legalLinkStyle, ...openSansTextStyle }}
+            style={legalLinkStyle}
             aria-label="Legal"
         >
             <SmoothLink className={legalNavLinkClassName} href="/privacy" style={legalLinkStyle}>
@@ -70,8 +66,7 @@ function LocalizedLegalNav({ labels, className = "" }: LocalizedLegalNavProps) {
 function ComplianceNotice({ content }: ComplianceNoticeProps) {
     return (
         <p
-            className="max-w-[760px] text-center text-[13px] leading-[20px] font-light text-[var(--text-secondary)] lg:text-[16px] lg:leading-[24px] xl:text-[20px] xl:leading-[30px]"
-            style={{ ...openSansTextStyle, fontWeight: 300 }}
+            className="max-w-[760px] text-center text-[13px] leading-[20px] font-normal text-[var(--text-secondary)] lg:text-[16px] lg:leading-[24px] xl:text-[20px] xl:leading-[30px]"
         >
             {content.summaryParts.map((part, index) => (
                 <span key={part}>
@@ -136,15 +131,17 @@ const storyPhoneHalfWidth = {
     viewportDvh: storyPhoneHeight.viewportDvh * phonePreviewAspectRatio / 2,
 } as const
 const storyColumnBalanceBasePx = 240
-const storyMobilePhoneGutterPx = 20
+const storyMobilePhoneBaseGutterPx = 20
+const storyMobilePhoneScale = 0.8
+const storyMobilePhoneWidth = `calc((100vw - ${storyMobilePhoneBaseGutterPx * 2}px) * ${storyMobilePhoneScale})`
 const storyColumnLayoutStyle: CSSProperties & Record<
     "--story-column-offset" | "--story-phone-height" | "--story-phone-mobile-height" | "--story-phone-mobile-width",
     string
 > = {
     "--story-column-offset": `calc(${storyColumnBalanceBasePx}px - min(${storyPhoneHalfWidth.viewportDvh}dvh, ${storyPhoneHalfWidth.maxPx}px))`,
     "--story-phone-height": `min(${storyPhoneHeight.viewportDvh}dvh, ${storyPhoneHeight.maxPx}px)`,
-    "--story-phone-mobile-height": `calc((100vw - ${storyMobilePhoneGutterPx * 2}px) / ${phonePreviewAspectRatio})`,
-    "--story-phone-mobile-width": `calc(100vw - ${storyMobilePhoneGutterPx * 2}px)`,
+    "--story-phone-mobile-height": `calc(${storyMobilePhoneWidth} / ${phonePreviewAspectRatio})`,
+    "--story-phone-mobile-width": storyMobilePhoneWidth,
 }
 
 const statsRevealTiming = {
@@ -161,13 +158,25 @@ const storyAppStoreScribble = {
     strokeCount: 6,
     width: 470,
 } as const
-const storyAppStoreScale = 0.6
+const storyAppStoreBaseScale = 0.6
+const storyAppStoreScaleMultiplier = 1.5
+const storyAppStoreScale = storyAppStoreBaseScale * storyAppStoreScaleMultiplier
 const storyAppStoreScaledFrameStyle = {
     height: storyAppStoreScribble.height * storyAppStoreScale,
-    width: storyAppStoreScribble.width * storyAppStoreScale,
+    width: "100%",
 } satisfies CSSProperties
 const storyAppStoreTransformStyle = {
-    transform: `scale(${storyAppStoreScale})`,
+    transform: `translateX(-50%) scale(${storyAppStoreScale})`,
+    transformOrigin: "top center",
+} satisfies CSSProperties
+const topBrandScrollMotion = {
+    desktopMediaQuery: "(min-width: 64rem)",
+    distancePx: 200,
+    initialScale: 1,
+    minimumScale: 0.5,
+} as const
+const topBrandTransformStyle = {
+    transform: "scale(var(--top-brand-scroll-scale, 1))",
     transformOrigin: "top left",
 } satisfies CSSProperties
 const defaultCardStackZoomed = true
@@ -176,6 +185,16 @@ const homeScrollReset = {
     targetTop: 0,
     tolerancePx: 2,
 } as const
+
+function topBrandScaleAtScrollTop(scrollTop: number, isDesktop: boolean) {
+    if (isDesktop) {
+        return topBrandScrollMotion.initialScale
+    }
+
+    const progress = Math.min(Math.max(scrollTop / topBrandScrollMotion.distancePx, 0), 1)
+    return topBrandScrollMotion.initialScale
+        - progress * (topBrandScrollMotion.initialScale - topBrandScrollMotion.minimumScale)
+}
 
 function scrollElementToTop(element: HTMLElement, onComplete: () => void) {
     let animationFrame = 0
@@ -364,6 +383,7 @@ export function HomePageClient() {
     const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
     const content = homeContent[locale]
     const mainRef = useRef<HTMLElement | null>(null)
+    const topBrandRef = useRef<HTMLDivElement | null>(null)
     const storySectionRef = useRef<HTMLElement | null>(null)
     const statsSectionRef = useRef<HTMLElement | null>(null)
     const [storyStarted, setStoryStarted] = useState(false)
@@ -488,6 +508,45 @@ export function HomePageClient() {
     const storyScribbleActive = storyContentVisible
 
     useEffect(() => {
+        const mainElement = mainRef.current
+        const topBrandElement = topBrandRef.current
+        if (!mainElement || !topBrandElement) {
+            return
+        }
+
+        const scrollRoot = mainElement
+        const brandElement = topBrandElement
+        const desktopViewport = window.matchMedia(topBrandScrollMotion.desktopMediaQuery)
+        let animationFrame = 0
+
+        function showTopBrandScale() {
+            animationFrame = 0
+            brandElement.style.setProperty(
+                "--top-brand-scroll-scale",
+                String(topBrandScaleAtScrollTop(scrollRoot.scrollTop, desktopViewport.matches)),
+            )
+        }
+
+        function scheduleTopBrandScale() {
+            if (animationFrame === 0) {
+                animationFrame = window.requestAnimationFrame(showTopBrandScale)
+            }
+        }
+
+        scrollRoot.addEventListener("scroll", scheduleTopBrandScale, { passive: true })
+        desktopViewport.addEventListener("change", scheduleTopBrandScale)
+        showTopBrandScale()
+
+        return () => {
+            scrollRoot.removeEventListener("scroll", scheduleTopBrandScale)
+            desktopViewport.removeEventListener("change", scheduleTopBrandScale)
+            if (animationFrame !== 0) {
+                window.cancelAnimationFrame(animationFrame)
+            }
+        }
+    }, [])
+
+    useEffect(() => {
         if (!storyContentRevealReady) {
             return
         }
@@ -576,9 +635,13 @@ export function HomePageClient() {
             ref={mainRef}
             className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]"
         >
-            <div className="sticky top-0 z-30 h-0 overflow-visible">
+            <div className="relative z-30 h-0 overflow-visible lg:sticky lg:top-0">
                 <div className={`pointer-events-none justify-start ${topChromeClassName}`}>
-                    <div className="pointer-events-auto">
+                    <div
+                        ref={topBrandRef}
+                        className="pointer-events-auto transition-transform duration-100 ease-out will-change-transform motion-reduce:transition-none"
+                        style={topBrandTransformStyle}
+                    >
                         <BrandMark compact showName={false} onClick={handleBrandMarkClick} />
                     </div>
                 </div>
@@ -662,7 +725,7 @@ export function HomePageClient() {
                             }`}
                         >
                             <div className="relative overflow-visible" style={storyAppStoreScaledFrameStyle}>
-                                <div className="absolute top-0 left-0 w-max" style={storyAppStoreTransformStyle}>
+                                <div className="absolute top-0 left-1/2 w-max" style={storyAppStoreTransformStyle}>
                                     <ScribbleAppStoreCta
                                         ariaLabel={content.hero.appStoreBadge.actionLabel}
                                         height={storyAppStoreScribble.height}
@@ -682,7 +745,7 @@ export function HomePageClient() {
                         aria-hidden={!storyLayoutShifted}
                         className={`pointer-events-none flex w-full shrink-0 items-center justify-center transition-[max-height,margin,opacity] ease-in-out will-change-[max-height,opacity] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[calc(50%+var(--story-column-offset))] lg:ml-5 lg:w-auto lg:justify-start lg:transition-opacity ${
                             storyLayoutShifted
-                                ? "mt-16 max-h-[calc(var(--story-phone-mobile-height)+2rem)] opacity-100 lg:mt-0 lg:max-h-full"
+                                ? "mt-16 max-h-[calc(var(--story-phone-mobile-height)+2rem)] snap-center snap-always opacity-100 lg:mt-0 lg:max-h-full lg:snap-none lg:snap-normal"
                                 : "mt-0 max-h-0 opacity-0 lg:max-h-full"
                         }`}
                         style={storyIntroSettled ? storyResponsiveMotionStyle : storyPhoneFadeStyle}
