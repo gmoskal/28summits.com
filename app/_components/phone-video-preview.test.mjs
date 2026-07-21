@@ -26,21 +26,26 @@ test("snapping and the indicator read the same physical carousel position", () =
     )
 })
 
-test("the carousel uses every supplied recording", () => {
+test("the carousel uses only overview, stamp, and game recordings", () => {
     for (const source of [
         "/video/rec1-overview-web-v2.mp4",
-        "/video/rec2-options-web.mp4",
         "/video/rec3-peak-web.mp4",
         "/video/rec4-game-web.mp4",
-        "/video/rec5-funcs-web.mp4",
-        "/video/rec6-con-web.mp4",
     ]) {
         assert.match(componentSource, new RegExp(source.replace(".", "\\.")))
+    }
+
+    for (const excludedRecording of ["rec0-onboarding", "rec2-options", "rec5-funcs", "rec6-con"]) {
+        assert.doesNotMatch(componentSource, new RegExp(excludedRecording))
     }
 })
 
 test("the carousel changes recordings only through direct interaction", () => {
-    assert.doesNotMatch(componentSource, /rec0-onboarding/)
     assert.doesNotMatch(componentSource, /slideDurationMs/)
     assert.doesNotMatch(componentSource, /showSlide\(\(activeSlideIndex \+ 1\)/)
+})
+
+test("the carousel shuffles its recordings once when the page starts", () => {
+    assert.match(componentSource, /Math\.random\(\)/)
+    assert.match(componentSource, /useEffect\(\(\) => setSlides\(phonePreviewSessionSlides\(\)\), \[\]\)/)
 })

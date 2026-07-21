@@ -136,9 +136,15 @@ const storyPhoneHalfWidth = {
     viewportDvh: storyPhoneHeight.viewportDvh * phonePreviewAspectRatio / 2,
 } as const
 const storyColumnBalanceBasePx = 240
-const storyColumnLayoutStyle: CSSProperties & Record<"--story-column-offset" | "--story-phone-height", string> = {
+const storyMobilePhoneGutterPx = 20
+const storyColumnLayoutStyle: CSSProperties & Record<
+    "--story-column-offset" | "--story-phone-height" | "--story-phone-mobile-height" | "--story-phone-mobile-width",
+    string
+> = {
     "--story-column-offset": `calc(${storyColumnBalanceBasePx}px - min(${storyPhoneHalfWidth.viewportDvh}dvh, ${storyPhoneHalfWidth.maxPx}px))`,
     "--story-phone-height": `min(${storyPhoneHeight.viewportDvh}dvh, ${storyPhoneHeight.maxPx}px)`,
+    "--story-phone-mobile-height": `calc((100vw - ${storyMobilePhoneGutterPx * 2}px) / ${phonePreviewAspectRatio})`,
+    "--story-phone-mobile-width": `calc(100vw - ${storyMobilePhoneGutterPx * 2}px)`,
 }
 
 const statsRevealTiming = {
@@ -601,10 +607,10 @@ export function HomePageClient() {
 
             <section
                 ref={storySectionRef}
-                className="relative flex h-[100dvh] snap-start snap-always flex-col items-center overflow-hidden px-5 pt-[84px] pb-[2em] text-center transition-[padding] duration-300 ease-out lg:px-[28px] lg:pt-[2em] xl:px-[32px]"
+                className="relative flex min-h-[100dvh] snap-start flex-col items-center overflow-visible px-5 pt-[84px] pb-16 text-center transition-[padding] duration-300 ease-out lg:h-[100dvh] lg:min-h-0 lg:snap-always lg:overflow-hidden lg:px-[28px] lg:pt-[2em] lg:pb-[2em] xl:px-[32px]"
                 style={storyColumnLayoutStyle}
             >
-                <div className="relative flex min-h-0 w-full flex-1 flex-col items-center justify-center">
+                <div className="relative flex w-full flex-none flex-col items-center justify-start lg:min-h-0 lg:flex-1 lg:justify-center">
                     <article
                         className={`relative z-10 flex w-full max-w-[720px] flex-col items-center transition-[translate] will-change-[translate] ${storyLayoutMotionClassName} ${
                             storyLayoutShifted
@@ -641,12 +647,11 @@ export function HomePageClient() {
                         </h1>
 
                         <div
-                            className={`mt-[clamp(2rem,6dvh,5em)] mb-[clamp(1rem,3dvh,2em)] flex max-w-[450px] flex-col gap-3 text-[13px] leading-[20px] font-light text-[var(--text-secondary)] transition-[margin,font-size,line-height,opacity,translate,filter] duration-300 ease-out lg:mt-[20px] lg:text-[16px] lg:leading-[24px] xl:mb-[2em] xl:text-[20px] xl:leading-[30px] ${
+                            className={`story-copy mt-12 mb-6 flex w-full max-w-[450px] flex-col gap-3 px-6 text-[16px] leading-[1.6rem] text-[var(--text-secondary)] transition-[margin,font-size,line-height,opacity,translate,filter] duration-300 ease-out lg:mt-[20px] lg:mb-[clamp(1rem,3dvh,2em)] lg:px-0 lg:leading-[24px] xl:mb-[2em] xl:text-[20px] xl:leading-[30px] ${
                                 storyContentVisible
                                     ? "translate-y-0 opacity-100 blur-0"
                                     : "translate-y-5 opacity-0 blur-[2px]"
                             }`}
-                            style={{ ...openSansTextStyle, fontFeatureSettings: "'ss02' 1, 'liga' 0", fontWeight: 300 }}
                         >
                             <p>{content.hero.body}</p>
                         </div>
@@ -677,13 +682,13 @@ export function HomePageClient() {
                         aria-hidden={!storyLayoutShifted}
                         className={`pointer-events-none flex w-full shrink-0 items-center justify-center transition-[max-height,margin,opacity] ease-in-out will-change-[max-height,opacity] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[calc(50%+var(--story-column-offset))] lg:ml-5 lg:w-auto lg:justify-start lg:transition-opacity ${
                             storyLayoutShifted
-                                ? "mt-5 max-h-[calc(min(32dvh,360px)+2rem)] opacity-100 sm:mt-6 sm:max-h-[calc(min(40dvh,480px)+2rem)] lg:mt-0 lg:max-h-full"
+                                ? "mt-16 max-h-[calc(var(--story-phone-mobile-height)+2rem)] opacity-100 lg:mt-0 lg:max-h-full"
                                 : "mt-0 max-h-0 opacity-0 lg:max-h-full"
                         }`}
                         style={storyIntroSettled ? storyResponsiveMotionStyle : storyPhoneFadeStyle}
                     >
                         <PhoneVideoPreview
-                            className="h-[min(32dvh,360px)] shrink-0 transition-[height] duration-150 ease-out drop-shadow-[0_42px_70px_rgba(0,0,0,0.26)] sm:h-[min(40dvh,480px)] lg:h-[var(--story-phone-height)] lg:max-h-full"
+                            className="h-auto w-[var(--story-phone-mobile-width)] shrink-0 transition-[height,width] duration-150 ease-out drop-shadow-[0_42px_70px_rgba(0,0,0,0.26)] lg:h-[var(--story-phone-height)] lg:max-h-full lg:w-auto"
                             isPlaying={storyPhoneVideoPlaying}
                         />
                     </div>

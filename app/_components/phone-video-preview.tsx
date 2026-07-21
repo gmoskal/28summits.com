@@ -17,12 +17,10 @@ const phonePreviewAssets = {
 } as const
 const phonePreviewSlides = [
     { src: "/video/rec1-overview-web-v2.mp4" },
-    { src: "/video/rec2-options-web.mp4" },
     { src: "/video/rec3-peak-web.mp4" },
     { src: "/video/rec4-game-web.mp4" },
-    { src: "/video/rec5-funcs-web.mp4" },
-    { src: "/video/rec6-con-web.mp4" },
 ] as const
+type PhonePreviewSlide = (typeof phonePreviewSlides)[number]
 const phoneCarouselTiming = {
     snapMs: 300,
 } as const
@@ -45,6 +43,19 @@ const phoneScreenStyle = {
     borderRadius: "12.5% / 5.75%",
 } satisfies CSSProperties
 
+function phonePreviewSessionSlides(): PhonePreviewSlide[] {
+    const slides = [...phonePreviewSlides]
+
+    for (let index = slides.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1))
+        const slide = slides[index]
+        slides[index] = slides[swapIndex]
+        slides[swapIndex] = slide
+    }
+
+    return slides
+}
+
 function carouselPageProgress(value: number) {
     return Math.min(Math.max(value, 0), phonePreviewSlides.length - 1)
 }
@@ -65,6 +76,7 @@ function carouselIndicatorWidth(activation: number) {
 export function PhoneVideoPreview(p: PhoneVideoPreviewProps) {
     const carouselViewportRef = useRef<HTMLDivElement | null>(null)
     const videoRefs = useRef<Array<HTMLVideoElement | null>>([])
+    const [slides, setSlides] = useState<readonly PhonePreviewSlide[]>(phonePreviewSlides)
     const [activeSlideIndex, setActiveSlideIndex] = useState(0)
     const activeSlideIndexRef = useRef(0)
     const [isDragging, setIsDragging] = useState(false)
@@ -174,6 +186,8 @@ export function PhoneVideoPreview(p: PhoneVideoPreviewProps) {
         showPageProgress(pageProgressForScrollPosition(event.currentTarget.scrollLeft, viewportWidth))
     }
 
+    useEffect(() => setSlides(phonePreviewSessionSlides()), [])
+
     useEffect(() => {
         const carouselViewport = carouselViewportRef.current
         if (!carouselViewport) {
@@ -228,7 +242,7 @@ export function PhoneVideoPreview(p: PhoneVideoPreviewProps) {
             activeVideo.removeEventListener("loadedmetadata", playActiveSlide)
             window.clearTimeout(previousVideoPauseTimer)
         }
-    }, [activeSlideIndex, p.isPlaying])
+    }, [activeSlideIndex, p.isPlaying, slides])
 
     return (
         <div
@@ -252,7 +266,7 @@ export function PhoneVideoPreview(p: PhoneVideoPreviewProps) {
                 onScroll={handleCarouselScroll}
             >
                 <div className="flex h-full">
-                    {phonePreviewSlides.map((slide, index) => (
+                    {slides.map((slide, index) => (
                         <video
                             key={slide.src}
                             ref={(videoElement) => registerVideo(index, videoElement)}
@@ -271,11 +285,11 @@ export function PhoneVideoPreview(p: PhoneVideoPreviewProps) {
                 className="pointer-events-auto absolute -bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center"
                 style={{ gap: phoneCarouselIndicator.gapPx }}
             >
-                {phonePreviewSlides.map((slide, index) => (
+                {slides.map((slide, index) => (
                     <button
                         key={slide.src}
                         type="button"
-                        aria-label={`${index + 1}/${phonePreviewSlides.length}`}
+                        aria-label={`${index + 1}/${slides.length}`}
                         aria-pressed={index === activeSlideIndex}
                         className="relative touch-manipulation cursor-pointer rounded-full border-0 bg-transparent p-0 transition-[width] ease-out focus-visible:outline-none focus-visible:drop-shadow-[0_0_3px_white]"
                         style={{

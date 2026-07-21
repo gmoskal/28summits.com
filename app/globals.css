@@ -166,6 +166,19 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+.story-copy {
+    font-family: var(--font-barlow), "Barlow", sans-serif;
+    font-weight: 400;
+}
+
+@media (min-width: 64rem) {
+    .story-copy {
+        font-family: var(--font-open-sans), "Open Sans", sans-serif;
+        font-feature-settings: "ss02" 1, "liga" 0;
+        font-weight: 300;
+    }
+}
+
 .page-transition-shell {
     position: relative;
     min-height: 100dvh;
