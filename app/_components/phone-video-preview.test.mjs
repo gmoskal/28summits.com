@@ -28,7 +28,6 @@ test("snapping and the indicator read the same physical carousel position", () =
 
 test("the carousel uses every supplied recording", () => {
     for (const source of [
-        "/video/rec0-onboarding-web.mp4",
         "/video/rec1-overview-web.mp4",
         "/video/rec2-options-web.mp4",
         "/video/rec3-peak-web.mp4",
@@ -38,4 +37,10 @@ test("the carousel uses every supplied recording", () => {
     ]) {
         assert.match(componentSource, new RegExp(source.replace(".", "\\.")))
     }
+})
+
+test("the carousel changes recordings only through direct interaction", () => {
+    assert.doesNotMatch(componentSource, /rec0-onboarding/)
+    assert.doesNotMatch(componentSource, /slideDurationMs/)
+    assert.doesNotMatch(componentSource, /showSlide\(\(activeSlideIndex \+ 1\)/)
 })
