@@ -10,8 +10,19 @@ const {
     siteLocales,
 } = await createJiti(import.meta.url).import("./site-content.ts")
 
-const polishUpdatedDate = "Ostatnia aktualizacja: 24 lipca 2026 r., 14:09 CEST (UTC+02:00, Europe/Warsaw)"
-const englishUpdatedDate = "Last updated: July 24, 2026, 14:09 CEST (UTC+02:00, Europe/Warsaw)"
+const versionIdentifier = "2026-07-24.2"
+const polishVersion = {
+    firstPublishedDate: "Pierwsza publikacja: 16 lipca 2026 r.",
+    identifier: `Wersja: ${versionIdentifier}`,
+    effectiveDate: "Obecna wersja obowiązuje od: 24 lipca 2026 r.",
+    updatedDate: "Ostatnia aktualizacja: 24 lipca 2026 r., 14:50 CEST (UTC+02:00, Europe/Warsaw)",
+}
+const englishVersion = {
+    firstPublishedDate: "First published: July 16, 2026",
+    identifier: `Version: ${versionIdentifier}`,
+    effectiveDate: "Current version effective: July 24, 2026",
+    updatedDate: "Last updated: July 24, 2026, 14:50 CEST (UTC+02:00, Europe/Warsaw)",
+}
 
 function documentText(document) {
     return [...document.intro, ...document.sections
@@ -47,15 +58,16 @@ test("public profile is explicitly covered by the English privacy policy", () =>
     assert.match(englishPrivacy, /ranking|leaderboard/i)
 })
 
-test("Polish and English legal documents use the release effective date and aligned sections", () => {
-    assert.equal(legalDocuments.privacy.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
-    assert.equal(legalDocuments.terms.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
-    assert.equal(legalDocuments.privacy.updatedDate, polishUpdatedDate)
-    assert.equal(legalDocuments.terms.updatedDate, polishUpdatedDate)
-    assert.equal(englishLegalDocuments.privacy.effectiveDate, "Effective date: July 16, 2026")
-    assert.equal(englishLegalDocuments.terms.effectiveDate, "Effective date: July 16, 2026")
-    assert.equal(englishLegalDocuments.privacy.updatedDate, englishUpdatedDate)
-    assert.equal(englishLegalDocuments.terms.updatedDate, englishUpdatedDate)
+test("Polish and English legal documents use explicit version histories and aligned sections", () => {
+    for (const [documents, version] of [
+        [legalDocuments, polishVersion],
+        [englishLegalDocuments, englishVersion],
+    ]) {
+        for (const slug of ["privacy", "terms", "support"]) {
+            assert.deepEqual(documents[slug].version, version)
+        }
+    }
+
     assert.equal(legalDocuments.privacy.sections.length, englishLegalDocuments.privacy.sections.length)
     assert.equal(legalDocuments.terms.sections.length, englishLegalDocuments.terms.sections.length)
 

@@ -576,11 +576,17 @@ export type LegalSection = {
     body: LegalTextBlock[]
 }
 
+export type LegalDocumentVersion = {
+    firstPublishedDate: string
+    identifier: string
+    effectiveDate: string
+    updatedDate: string
+}
+
 export type LegalDocument = {
     slug: "privacy" | "support" | "terms"
     title: string
-    effectiveDate: string
-    updatedDate?: string
+    version: LegalDocumentVersion
     intro: string[]
     sections: LegalSection[]
 }

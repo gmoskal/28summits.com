@@ -86,14 +86,12 @@ function LegalBody({
             >
                 {document.title}
             </h1>
-            <p className="mt-4 text-center text-[15px] leading-[22px] text-[var(--text-muted)] lg:text-left lg:text-[17px] lg:leading-[25px]">
-                {document.effectiveDate}
-            </p>
-            {document.updatedDate ? (
-                <p className="mt-1 text-center text-[15px] leading-[22px] text-[var(--text-muted)] lg:text-left lg:text-[17px] lg:leading-[25px]">
-                    {document.updatedDate}
-                </p>
-            ) : null}
+            <div className="mt-4 space-y-1 text-center text-[15px] leading-[22px] text-[var(--text-muted)] lg:text-left lg:text-[17px] lg:leading-[25px]">
+                <p>{document.version.firstPublishedDate}</p>
+                <p>{document.version.identifier}</p>
+                <p>{document.version.effectiveDate}</p>
+                <p>{document.version.updatedDate}</p>
+            </div>
 
             {languageNotice ? (
                 <aside className="mt-7 border-l-2 border-[#e67621] py-1 pl-5 text-left">

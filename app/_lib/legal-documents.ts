@@ -25,15 +25,25 @@ export function createLegalDocuments(config: LegalSiteConfig): {
     const polishOperatorIdentity = `${publicOperatorName}, NIP: ${config.operatorTaxId}, ${config.operatorAddress}`
     const englishOperatorAddress = config.operatorAddress.replace(/, Polska$/, ", Poland")
     const englishOperatorIdentity = `${publicOperatorName}, NIP: ${config.operatorTaxId}, ${englishOperatorAddress}`
-    const polishUpdatedDate = "Ostatnia aktualizacja: 24 lipca 2026 r., 14:09 CEST (UTC+02:00, Europe/Warsaw)"
-    const englishUpdatedDate = "Last updated: July 24, 2026, 14:09 CEST (UTC+02:00, Europe/Warsaw)"
+    const versionIdentifier = "2026-07-24.2"
+    const polishVersion: LegalDocument["version"] = {
+        firstPublishedDate: "Pierwsza publikacja: 16 lipca 2026 r.",
+        identifier: `Wersja: ${versionIdentifier}`,
+        effectiveDate: "Obecna wersja obowiązuje od: 24 lipca 2026 r.",
+        updatedDate: "Ostatnia aktualizacja: 24 lipca 2026 r., 14:50 CEST (UTC+02:00, Europe/Warsaw)",
+    }
+    const englishVersion: LegalDocument["version"] = {
+        firstPublishedDate: "First published: July 16, 2026",
+        identifier: `Version: ${versionIdentifier}`,
+        effectiveDate: "Current version effective: July 24, 2026",
+        updatedDate: "Last updated: July 24, 2026, 14:50 CEST (UTC+02:00, Europe/Warsaw)",
+    }
 
     const pl: LegalDocuments = {
         privacy: {
             slug: "privacy",
             title: "Polityka prywatności",
-            effectiveDate: "Obowiązuje od 16 lipca 2026 r.",
-            updatedDate: polishUpdatedDate,
+            version: polishVersion,
             intro: [
                 `Ta polityka opisuje, jak ${publicOperatorName}, operator 28 gór, przetwarza dane osobowe użytkowników aplikacji 28 gór i strony ${config.siteHost}.`,
                 "Obejmuje ona konta, postęp górski, treści użytkowników, publiczne profile i rankingi, analitykę korzystania z produktu, diagnostykę awarii, zakupy w sklepie z aplikacjami oraz zamówienia fizycznych pinów.",
@@ -178,15 +188,14 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 ),
                 section(
                     "Zmiany polityki",
-                    paragraph(`Polityka może być aktualizowana wraz ze zmianą usługi lub prawa. Aktualna wersja, data, godzina i strefa czasowa ostatniej aktualizacji są publikowane na ${config.siteHost}/privacy. O istotnych zmianach poinformujemy w aplikacji lub innym odpowiednim kanałem.`),
+                    paragraph(`Polityka może być aktualizowana wraz ze zmianą usługi lub prawa. Data pierwszej publikacji, identyfikator wersji, data rozpoczęcia obowiązywania obecnej wersji oraz data, godzina i strefa czasowa ostatniej aktualizacji są publikowane na ${config.siteHost}/privacy. O istotnych zmianach poinformujemy w aplikacji lub innym odpowiednim kanałem.`),
                 ),
             ],
         },
         terms: {
             slug: "terms",
             title: "Regulamin",
-            effectiveDate: "Obowiązuje od 16 lipca 2026 r.",
-            updatedDate: polishUpdatedDate,
+            version: polishVersion,
             intro: [
                 `Regulamin określa zasady korzystania z aplikacji 28 gór i strony ${config.siteHost}, zakupów cyfrowych w sklepie z aplikacjami oraz zamawiania fizycznych metalowych pinów.`,
                 "Regulamin wiąże użytkownika po jego wyraźnym zaakceptowaniu albo w odniesieniu do konkretnej usługi bez konta, gdy został udostępniony przed zamówieniem tej usługi. Samo przeglądanie publicznej strony lub pobranie aplikacji nie zastępuje akceptacji.",
@@ -416,7 +425,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
         support: {
             slug: "support",
             title: "Pomoc",
-            effectiveDate: "Aktualizacja: 16 lipca 2026 r.",
+            version: polishVersion,
             intro: ["Pomagamy w sprawach konta, danych, zakupów w sklepie z aplikacjami, zamówień fizycznych pinów i działania aplikacji."],
             sections: [
                 section(
@@ -431,8 +440,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
         privacy: {
             slug: "privacy",
             title: "Privacy Policy",
-            effectiveDate: "Effective date: July 16, 2026",
-            updatedDate: englishUpdatedDate,
+            version: englishVersion,
             intro: [
                 `This policy explains how ${publicOperatorName}, the operator of 28 gór, processes personal data of users of the 28 gór app and ${config.siteHost}.`,
                 "It covers accounts, mountain progress, user content, public profiles and leaderboards, product-use analytics, crash diagnostics, app-store purchases, and orders for physical pins.",
@@ -577,15 +585,14 @@ export function createLegalDocuments(config: LegalSiteConfig): {
                 ),
                 section(
                     "Policy changes",
-                    paragraph(`We may update this policy as the service or law changes. The current version and the date, time, and time zone of its last update are published at ${config.siteHost}/privacy. We will communicate material changes in the app or through another appropriate channel.`),
+                    paragraph(`We may update this policy as the service or law changes. The first publication date, version identifier, current-version effective date, and the date, time, and time zone of the last update are published at ${config.siteHost}/privacy. We will communicate material changes in the app or through another appropriate channel.`),
                 ),
             ],
         },
         terms: {
             slug: "terms",
             title: "Terms of Service",
-            effectiveDate: "Effective date: July 16, 2026",
-            updatedDate: englishUpdatedDate,
+            version: englishVersion,
             intro: [
                 `These terms govern the 28 gór app and ${config.siteHost}, digital app-store purchases, and orders for physical metal pins.`,
                 "These terms bind a user after express acceptance or, for a particular no-account service, when they were made available before that service was ordered. Merely browsing the public website or downloading the app does not replace acceptance.",
@@ -815,7 +822,7 @@ export function createLegalDocuments(config: LegalSiteConfig): {
         support: {
             slug: "support",
             title: "Support",
-            effectiveDate: "Updated: July 16, 2026",
+            version: englishVersion,
             intro: ["We help with accounts, data, app-store purchases, physical-pin orders, and app operation."],
             sections: [
                 section(
