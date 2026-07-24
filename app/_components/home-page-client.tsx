@@ -80,10 +80,6 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
             <a href={`mailto:${siteConfig.contactEmail}`} className={legalInlineLinkClassName} style={legalLinkStyle}>
                 {siteConfig.contactEmail}
             </a>
-            <span aria-hidden> · </span>
-            <SmoothLink href="/terms" className={legalInlineLinkClassName} style={legalLinkStyle}>
-                {content.legalPolicies}
-            </SmoothLink>
         </p>
     )
 }

@@ -221,7 +221,6 @@ export const homeContent: Record<
         compliance: {
             summaryParts: string[]
             contactLabel: string
-            legalPolicies: string
         }
     }
 > = {
@@ -260,7 +259,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} dla płatności w aplikacji`,
             ],
             contactLabel: "Kontakt",
-            legalPolicies: "Dokumenty i zasady",
         },
     },
     en: {
@@ -298,7 +296,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} for in-app payments`,
             ],
             contactLabel: "Contact",
-            legalPolicies: "Legal & Policies",
         },
     },
     es: {
@@ -336,7 +333,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} para pagos en la app`,
             ],
             contactLabel: "Contacto",
-            legalPolicies: "Legal y políticas",
         },
     },
     de: {
@@ -374,7 +370,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} für Zahlungen in der App`,
             ],
             contactLabel: "Kontakt",
-            legalPolicies: "Rechtliches",
         },
     },
     fr: {
@@ -412,7 +407,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} pour les paiements dans l'app`,
             ],
             contactLabel: "Contact",
-            legalPolicies: "Mentions légales",
         },
     },
     nb: {
@@ -450,7 +444,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} for betalinger i appen`,
             ],
             contactLabel: "Kontakt",
-            legalPolicies: "Juridisk",
         },
     },
     cs: {
@@ -488,7 +481,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} pro platby v aplikaci`,
             ],
             contactLabel: "Kontakt",
-            legalPolicies: "Právní dokumenty",
         },
     },
     sk: {
@@ -526,7 +518,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} pre platby v aplikácii`,
             ],
             contactLabel: "Kontakt",
-            legalPolicies: "Právne dokumenty",
         },
     },
     uk: {
@@ -564,7 +555,6 @@ export const homeContent: Record<
                 `${siteConfig.paymentProcessorName} для платежів у застосунку`,
             ],
             contactLabel: "Контакт",
-            legalPolicies: "Правові документи",
         },
     },
 } as const
