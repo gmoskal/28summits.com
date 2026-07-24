@@ -10,6 +10,9 @@ const {
     siteLocales,
 } = await createJiti(import.meta.url).import("./site-content.ts")
 
+const polishUpdatedDate = "Ostatnia aktualizacja: 24 lipca 2026 r., 14:09 CEST (UTC+02:00, Europe/Warsaw)"
+const englishUpdatedDate = "Last updated: July 24, 2026, 14:09 CEST (UTC+02:00, Europe/Warsaw)"
+
 function documentText(document) {
     return [...document.intro, ...document.sections
         .flatMap((section) => section.body)
@@ -47,12 +50,12 @@ test("public profile is explicitly covered by the English privacy policy", () =>
 test("Polish and English legal documents use the release effective date and aligned sections", () => {
     assert.equal(legalDocuments.privacy.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
     assert.equal(legalDocuments.terms.effectiveDate, "Obowiązuje od 16 lipca 2026 r.")
-    assert.equal(legalDocuments.privacy.updatedDate, "Ostatnia aktualizacja: 20 lipca 2026 r., 18:00 CEST (UTC+02:00, Europe/Warsaw)")
-    assert.equal(legalDocuments.terms.updatedDate, "Ostatnia aktualizacja: 20 lipca 2026 r., 18:00 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(legalDocuments.privacy.updatedDate, polishUpdatedDate)
+    assert.equal(legalDocuments.terms.updatedDate, polishUpdatedDate)
     assert.equal(englishLegalDocuments.privacy.effectiveDate, "Effective date: July 16, 2026")
     assert.equal(englishLegalDocuments.terms.effectiveDate, "Effective date: July 16, 2026")
-    assert.equal(englishLegalDocuments.privacy.updatedDate, "Last updated: July 20, 2026, 18:00 CEST (UTC+02:00, Europe/Warsaw)")
-    assert.equal(englishLegalDocuments.terms.updatedDate, "Last updated: July 20, 2026, 18:00 CEST (UTC+02:00, Europe/Warsaw)")
+    assert.equal(englishLegalDocuments.privacy.updatedDate, englishUpdatedDate)
+    assert.equal(englishLegalDocuments.terms.updatedDate, englishUpdatedDate)
     assert.equal(legalDocuments.privacy.sections.length, englishLegalDocuments.privacy.sections.length)
     assert.equal(legalDocuments.terms.sections.length, englishLegalDocuments.terms.sections.length)
 
@@ -111,17 +114,17 @@ test("terms keep the three payment models separate in both languages", () => {
     const englishPins = sectionText(englishLegalDocuments.terms, "Physical metal pins")
 
     for (const unlock of [polishUnlock, englishUnlock]) {
-        assert.match(unlock, /Apple In-App Purchase/)
+        assert.match(unlock, /in-app purchase through the store|w aplikacji za pośrednictwem sklepu/i)
         assert.match(unlock, /non-consumable|niekonsumpcyjn/i)
         assert.match(unlock, /restore|przywróć|odtworzyć/i)
-        assert.match(unlock, /same Apple ID|tego samego Apple ID/i)
+        assert.match(unlock, /same store account|tego samego konta sklepu/i)
         assert.match(unlock, /authenticated 28 gór account|uwierzytelnionego konta 28 gór/i)
         assert.match(unlock, /new account|nowego konta/i)
         assert.match(unlock, /not a subscription|nie jest to subskrypcja/i)
     }
 
     for (const support of [polishSupport, englishSupport]) {
-        assert.match(support, /Apple In-App Purchase/)
+        assert.match(support, /in-app purchase through the store|w aplikacji za pośrednictwem sklepu/i)
         assert.match(support, /consumable|konsumpcyjn/i)
         assert.match(support, /more than once|więcej niż raz/i)
         assert.match(support, /does not unlock|nie odblokowuje/i)
@@ -137,7 +140,7 @@ test("terms keep the three payment models separate in both languages", () => {
         assert.match(pins, /price|cen/i)
         assert.match(pins, /delivery|shipping|dostaw/i)
         assert.match(pins, /total|łączn/i)
-        assert.match(pins, /not Apple In-App Purchases|Nie są Apple In-App Purchase/i)
+        assert.match(pins, /not in-app purchases? through the store|Nie są .*w aplikacji za pośrednictwem sklepu/i)
     }
 
     assert.match(polishPins, /Przed złożeniem zamówienia użytkownik otrzymuje informacje o produkcie, cenie, kosztach dostawy, łącznej kwocie oraz dostęp do danych sprzedawcy i warunków sprzedaży/)
@@ -278,7 +281,7 @@ test("privacy policies match the audited location, photo, deletion, and provider
         assert.match(privacy, /EXIF/)
         assert.match(privacy, /original metadata|oryginalnymi metadanymi/i)
         assert.match(privacy, /avatar.*JPEG.*without metadata|Avatar.*JPEG bez metadanych/i)
-        assert.match(privacy, /StoreKit transaction ledger|rejestr transakcji StoreKit/i)
+        assert.match(privacy, /app store's transaction ledger|rejestr transakcji sklepu/i)
         assert.match(privacy, /random technical identifier.*does not contain the former account identifier|losowy identyfikator techniczny bez dawnego identyfikatora konta/i)
         assert.match(privacy, /pseudonymized|pseudonimizowane/i)
         assert.match(privacy, /within one month|w ciągu miesiąca/i)
