@@ -35,6 +35,7 @@ type CardStackPreviewProps = {
     locale: SiteLocale
     resetSignal?: number
     variant?: "adventure" | "stats"
+    onDeckEntryComplete?: () => void
     onDeckComplete?: () => void
 }
 
@@ -466,6 +467,7 @@ export function CardStackPreview(p: CardStackPreviewProps) {
     const [deckEntryTiming, setDeckEntryTiming] = useState<DeckEntryTiming>("delayed")
     const [isDeckEntryActive, setDeckEntryActive] = useState(shouldPlayDeckEntryAnimation)
     const hasActiveDragRef = useRef(false)
+    const hasReportedDeckEntryRef = useRef(false)
     const activeCardIndex = useMemo(
         () => topVisibleCardIndex(stackConfig.cards.length, dismissedCards, departingCard?.index ?? null),
         [departingCard, dismissedCards, stackConfig.cards.length],
@@ -524,6 +526,15 @@ export function CardStackPreview(p: CardStackPreviewProps) {
 
         return () => window.clearTimeout(unlockTimer)
     }, [cardDelaySeconds, isDeckEntryActive, shouldPlayDeckEntryAnimation, stackConfig.cards.length])
+
+    useEffect(() => {
+        if (isDeckEntryActive || hasReportedDeckEntryRef.current) {
+            return
+        }
+
+        hasReportedDeckEntryRef.current = true
+        p.onDeckEntryComplete?.()
+    }, [isDeckEntryActive, p.onDeckEntryComplete])
 
     function handleDragEnd(index: number, offset: { x: number; y: number }, velocity: { x: number; y: number }) {
         window.setTimeout(() => {

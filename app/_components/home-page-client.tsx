@@ -158,6 +158,15 @@ const storyAppStoreScribble = {
 const storyAppStoreBaseScale = 0.6
 const storyAppStoreScaleMultiplier = 1.5
 const storyAppStoreScale = storyAppStoreBaseScale * storyAppStoreScaleMultiplier
+const heroHeaderAppStoreScale = 0.58
+const heroHeaderAppStoreScaledFrameStyle = {
+    height: storyAppStoreScribble.height * heroHeaderAppStoreScale,
+    width: storyAppStoreScribble.width * heroHeaderAppStoreScale,
+} satisfies CSSProperties
+const heroHeaderAppStoreTransformStyle = {
+    transform: `translateX(-50%) scale(${heroHeaderAppStoreScale})`,
+    transformOrigin: "top center",
+} satisfies CSSProperties
 const storyAppStoreScaledFrameStyle = {
     height: storyAppStoreScribble.height * storyAppStoreScale,
     width: "100%",
@@ -388,6 +397,7 @@ export function HomePageClient() {
     const storySectionRef = useRef<HTMLElement | null>(null)
     const storyPhoneParallaxRef = useRef<HTMLDivElement | null>(null)
     const statsSectionRef = useRef<HTMLElement | null>(null)
+    const [heroDeckEntered, setHeroDeckEntered] = useState(false)
     const [storyStarted, setStoryStarted] = useState(false)
     const [storyLogoVisible, setStoryLogoVisible] = useState(false)
     const [storyLayoutShifted, setStoryLayoutShifted] = useState(false)
@@ -455,6 +465,7 @@ export function HomePageClient() {
     const handleHeroDeckComplete = useCallback(() => {
         scrollToStorySection()
     }, [scrollToStorySection])
+    const handleHeroDeckEntryComplete = useCallback(() => setHeroDeckEntered(true), [])
     const scrollToStatsSection = useCallback(() => {
         const statsSectionElement = statsSectionRef.current
         if (!statsSectionElement) {
@@ -701,6 +712,30 @@ export function HomePageClient() {
 
             <section className="relative flex h-[100dvh] snap-start snap-always items-center justify-center overflow-hidden px-0 pt-[84px] pb-8 lg:pt-[120px]">
                 <div className={`pointer-events-none absolute inset-x-0 top-0 z-20 justify-end ${topChromeClassName}`}>
+                    <div
+                        aria-hidden={!heroDeckEntered}
+                        className={`absolute top-[52px] right-5 transition-[opacity,translate,filter] duration-500 ease-out motion-reduce:transition-none lg:top-[38px] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 ${
+                            heroDeckEntered
+                                ? "pointer-events-auto translate-y-0 opacity-100 blur-0"
+                                : "pointer-events-none -translate-y-2 opacity-0 blur-[2px]"
+                        }`}
+                        style={heroHeaderAppStoreScaledFrameStyle}
+                    >
+                        {heroDeckEntered ? (
+                            <div className="absolute top-0 left-1/2 w-max" style={heroHeaderAppStoreTransformStyle}>
+                                <ScribbleAppStoreCta
+                                    ariaLabel={content.hero.appStoreBadge.actionLabel}
+                                    height={storyAppStoreScribble.height}
+                                    href={siteConfig.appStoreUrl}
+                                    markerStrokeWidth={storyAppStoreScribble.markerStrokeWidth}
+                                    mobileScale={storyAppStoreScribble.mobileScale}
+                                    strokeAxis={storyAppStoreScribble.strokeAxis}
+                                    strokeCount={storyAppStoreScribble.strokeCount}
+                                    width={storyAppStoreScribble.width}
+                                />
+                            </div>
+                        ) : null}
+                    </div>
                     <div className="pointer-events-auto">
                         <SiteControls
                             content={content.controls}
@@ -716,6 +751,7 @@ export function HomePageClient() {
                         isZoomed={isCardStackZoomed}
                         locale={locale}
                         onDeckComplete={handleHeroDeckComplete}
+                        onDeckEntryComplete={handleHeroDeckEntryComplete}
                     />
                 </div>
             </section>
@@ -781,7 +817,7 @@ export function HomePageClient() {
                                     <ScribbleAppStoreCta
                                         ariaLabel={content.hero.appStoreBadge.actionLabel}
                                         height={storyAppStoreScribble.height}
-                                        href={siteConfig.launchUpdatesUrl}
+                                        href={siteConfig.appStoreUrl}
                                         isActive={storyScribbleActive}
                                         markerStrokeWidth={storyAppStoreScribble.markerStrokeWidth}
                                         mobileScale={storyAppStoreScribble.mobileScale}

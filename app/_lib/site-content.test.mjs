@@ -40,6 +40,11 @@ function sectionText(document, heading) {
         .join(" ")
 }
 
+test("App Store CTA targets the released public listing", () => {
+    assert.equal(siteConfig.appStoreUrl, "https://apps.apple.com/pl/app/id6761915028")
+    assert.equal("launchUpdatesUrl" in siteConfig, false)
+})
+
 test("public profile is explicitly covered by the Polish privacy policy", () => {
     const polishPrivacy = documentText(legalDocuments.privacy)
 

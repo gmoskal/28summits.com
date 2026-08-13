@@ -18,10 +18,9 @@ export const siteConfig = {
     siteHost: "28gor.app",
     currencyCode: "PLN",
     paymentProcessorName: "Stripe",
-    appStoreUrl: "https://apps.apple.com/app/28-summits/id0000000000",
+    appStoreUrl: "https://apps.apple.com/pl/app/id6761915028",
     appStoreBadgeImage: "/download-on-the-app-store-badge.svg",
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.28summits.app",
-    launchUpdatesUrl: "mailto:rysek@28gor.app?subject=28%20g%C3%B3r%20launch%20updates",
     siteUrl: "https://28gor.app",
     appIcon: `/app-icon.png?v=${siteIconVersion}`,
     appIconHeader: "/app-icon.png",
@@ -245,7 +244,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Odtwórz animację logo 28 gór",
             body: "28 gór to nowa aplikacja w App Store, która zbiera wejścia, zdjęcia i ślady z trasy w jednym pięknym miejscu. Każdy szczyt dostaje własną, ręcznie rysowaną pieczątkę.",
             appStoreBadge: {
-                actionLabel: "Daj znać, gdy 28 gór pojawi się w App Store",
+                actionLabel: "Pobierz 28 gór z App Store",
             },
             featureLabels: ["Rysowane pieczątki", "Pamiątki na zamówienie", "Centrum edukacyjne", "Informacje o górach"],
             mascotBadge: "Czerwiec 2026",
@@ -282,7 +281,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Replay the 28 gór logo animation",
             body: "28 gór is a new App Store app that keeps climbs, photos, and trail traces in one beautifully made place. Every peak gets its own hand-drawn stamp.",
             appStoreBadge: {
-                actionLabel: "Tell me when 28 gór is available on the App Store",
+                actionLabel: "Download 28 gór on the App Store",
             },
             featureLabels: ["Hand-drawn stamps", "Custom keepsakes", "Education center", "Mountain info"],
             mascotBadge: "June 2026",
@@ -319,7 +318,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Reproducir la animación del logotipo de 28 gór",
             body: "28 gór es una nueva app para App Store que reúne ascensos, fotos y huellas de ruta en un lugar bonito y cuidado. Cada cima tiene su propio sello dibujado a mano.",
             appStoreBadge: {
-                actionLabel: "Avísame cuando 28 gór esté disponible en App Store",
+                actionLabel: "Descargar 28 gór en App Store",
             },
             featureLabels: ["Sellos dibujados a mano", "Recuerdos a medida", "Centro educativo", "Información de montaña"],
             mascotBadge: "Junio de 2026",
@@ -356,7 +355,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Animation des 28 gór Logos erneut abspielen",
             body: "28 gór ist eine neue App für den App Store, die Aufstiege, Fotos und Spuren deiner Touren an einem schön gestalteten Ort sammelt. Jeder Gipfel bekommt seinen eigenen handgezeichneten Stempel.",
             appStoreBadge: {
-                actionLabel: "Benachrichtige mich, wenn 28 gór im App Store verfügbar ist",
+                actionLabel: "28 gór im App Store laden",
             },
             featureLabels: ["Handgezeichnete Stempel", "Andenken nach Maß", "Lernbereich", "Berginformationen"],
             mascotBadge: "Juni 2026",
@@ -393,7 +392,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Rejouer l'animation du logo 28 gór",
             body: "28 gór est une nouvelle app pour l'App Store qui rassemble ascensions, photos et traces de parcours dans un espace soigné. Chaque sommet reçoit son propre tampon dessiné à la main.",
             appStoreBadge: {
-                actionLabel: "Prévenez-moi quand 28 gór sera disponible sur l'App Store",
+                actionLabel: "Télécharger 28 gór sur l’App Store",
             },
             featureLabels: ["Tampons dessinés à la main", "Souvenirs sur mesure", "Centre éducatif", "Infos montagne"],
             mascotBadge: "Juin 2026",
@@ -430,7 +429,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Spill av 28 gór-logoanimasjonen på nytt",
             body: "28 gór er en ny app for App Store som samler turer, bilder og spor fra ruta på ett vakkert sted. Hver topp får sitt eget håndtegnede stempel.",
             appStoreBadge: {
-                actionLabel: "Gi meg beskjed når 28 gór er tilgjengelig i App Store",
+                actionLabel: "Last ned 28 gór fra App Store",
             },
             featureLabels: ["Håndtegnede stempler", "Skreddersydde minner", "Læringssenter", "Fjellinformasjon"],
             mascotBadge: "Juni 2026",
@@ -467,7 +466,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Přehrát animaci loga 28 gór",
             body: "28 gór je nová aplikace v App Storu, která ukládá výstupy, fotky a stopy z trasy na jednom krásně vytvořeném místě. Každý vrchol dostane vlastní ručně kreslené razítko.",
             appStoreBadge: {
-                actionLabel: "Dejte mi vědět, až bude 28 gór v App Storu",
+                actionLabel: "Stáhnout 28 gór z App Storu",
             },
             featureLabels: ["Kreslená razítka", "Památky na objednávku", "Vzdělávací centrum", "Informace o horách"],
             mascotBadge: "Červen 2026",
@@ -504,7 +503,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Prehrať animáciu loga 28 gór",
             body: "28 gór je nová aplikácia v App Store, ktorá ukladá výstupy, fotky a stopy z trasy na jednom krásne vytvorenom mieste. Každý vrchol dostane vlastnú ručne kreslenú pečiatku.",
             appStoreBadge: {
-                actionLabel: "Dajte mi vedieť, keď bude 28 gór v App Store",
+                actionLabel: "Stiahnuť 28 gór z App Store",
             },
             featureLabels: ["Kreslené pečiatky", "Pamiatky na objednávku", "Vzdelávacie centrum", "Informácie o horách"],
             mascotBadge: "Jún 2026",
@@ -541,7 +540,7 @@ export const homeContent: Record<
             replayLogoAnimationLabel: "Повторити анімацію логотипа 28 gór",
             body: "28 gór - це новий застосунок в App Store, що збирає сходження, фото й сліди маршруту в одному красиво зробленому місці. Кожна вершина має власний намальований вручну штамп.",
             appStoreBadge: {
-                actionLabel: "Повідомте мене, коли 28 gór буде в App Store",
+                actionLabel: "Завантажити 28 gór з App Store",
             },
             featureLabels: ["Мальовані штампи", "Пам’ятки на замовлення", "Освітній центр", "Інформація про гори"],
             mascotBadge: "Червень 2026",
