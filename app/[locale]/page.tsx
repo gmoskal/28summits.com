@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HomePageClient } from "../_components/home-page-client"
+import { HomeStructuredData } from "../_components/home-structured-data"
 import { homeMetadataForLocale } from "../_lib/site-metadata"
-import { defaultSiteLocale, siteConfig, siteHomeUrl, siteLocaleFromInput, siteLocales } from "../_lib/site-content"
+import { localizedSiteLocales, siteLocaleFromInput } from "../_lib/site-content"
 
 type LocalizedHomePageProps = {
     params: Promise<{
@@ -13,15 +14,7 @@ type LocalizedHomePageProps = {
 export const dynamicParams = false
 
 export function generateStaticParams() {
-    return siteLocales.map((locale) => ({ locale }))
-}
-
-function localePageUrl(locale: string) {
-    if (locale === defaultSiteLocale) {
-        return siteHomeUrl
-    }
-
-    return `${siteConfig.siteUrl}/${locale}`
+    return localizedSiteLocales.map((locale) => ({ locale }))
 }
 
 export async function generateMetadata(p: LocalizedHomePageProps): Promise<Metadata> {
@@ -32,14 +25,20 @@ export async function generateMetadata(p: LocalizedHomePageProps): Promise<Metad
         notFound()
     }
 
-    return homeMetadataForLocale(locale, localePageUrl(locale))
+    return homeMetadataForLocale(locale)
 }
 
 export default async function LocalizedHomePage(p: LocalizedHomePageProps) {
     const params = await p.params
-    if (!siteLocaleFromInput(params.locale)) {
+    const locale = siteLocaleFromInput(params.locale)
+    if (!locale) {
         notFound()
     }
 
-    return <HomePageClient />
+    return (
+        <>
+            <HomeStructuredData locale={locale} />
+            <HomePageClient initialLocale={locale} />
+        </>
+    )
 }

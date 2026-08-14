@@ -50,12 +50,14 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
-    return redirectedHosts.map((host) => ({
-      source: "/:path*",
-      has: [{ type: "host" as const, value: host }],
-      destination: `https://${canonicalHost}/:path*`,
-      permanent: true,
-    }));
+    return [
+      ...redirectedHosts.map((host) => ({
+        source: "/:path*",
+        has: [{ type: "host" as const, value: host }],
+        destination: `https://${canonicalHost}/:path*`,
+        permanent: true,
+      })),
+    ];
   },
 };
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Test2PageClient } from "./test2-page-client"
+import { Test2PageClient } from "../../test2/test2-page-client"
 
 export const metadata: Metadata = {
     title: "Test scribble",

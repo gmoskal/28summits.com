@@ -1,7 +1,8 @@
 "use client"
 
 import { type CSSProperties, type MouseEvent, type RefObject, useCallback, useEffect, useRef, useState } from "react"
-import { SiteLocale, homeContent, siteConfig } from "../_lib/site-content"
+import { type HomeMarketingContent, homeMarketingContent } from "../_lib/home-marketing-content"
+import { SiteLocale, homeContent, siteConfig, siteLanguageByLocale } from "../_lib/site-content"
 import { useSitePreferences } from "../_lib/site-preferences"
 import { CardStackPreview } from "./card-stack-preview"
 import { GooeyBrandTitle, GooeyScrollArrow } from "./gooey-brand-title"
@@ -19,6 +20,14 @@ type LocalizedLegalNavProps = {
 
 type ComplianceNoticeProps = {
     content: (typeof homeContent)[SiteLocale]["compliance"]
+}
+
+type HomePageClientProps = {
+    initialLocale: SiteLocale
+}
+
+type HomeGuideProps = {
+    content: HomeMarketingContent
 }
 
 type SectionStartOptions = {
@@ -83,6 +92,80 @@ function ComplianceNotice({ content }: ComplianceNoticeProps) {
         </p>
     )
 }
+
+const HomeGuide = (p: HomeGuideProps) => (
+    <section
+        id="about"
+        className="relative min-h-[100dvh] snap-start px-5 py-20 text-left lg:px-[28px] lg:py-28 xl:px-[32px]"
+    >
+        <div className="mx-auto flex w-full max-w-[1080px] flex-col gap-12">
+            <header className="grid items-end gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+                <div>
+                    <p
+                        className="mb-5 text-[18px] leading-[26px] text-[var(--text-muted)] lg:text-[21px]"
+                        style={{ fontFamily: "var(--font-gloria), 'Gloria Hallelujah', cursive" }}
+                    >
+                        {p.content.eyebrow}
+                    </p>
+                    <h2 className="max-w-[680px] text-[clamp(2.5rem,6vw,4.75rem)] leading-[1.02] font-semibold tracking-[-0.045em] text-[var(--text-primary)]">
+                        {p.content.heading}
+                    </h2>
+                </div>
+                <p className="max-w-[540px] text-[18px] leading-[29px] text-[var(--text-secondary)] lg:pb-1 lg:text-[20px] lg:leading-[31px]">
+                    {p.content.introduction}
+                </p>
+            </header>
+
+            <div className="grid divide-y divide-[color-mix(in_srgb,var(--text-primary)_14%,transparent)] border-y border-[color-mix(in_srgb,var(--text-primary)_14%,transparent)] md:grid-cols-3 md:divide-x md:divide-y-0">
+                {p.content.features.map((feature, index) => (
+                    <article
+                        key={feature.title}
+                        className="py-8 md:px-8 md:first:pl-0 md:last:pr-0"
+                    >
+                        <p className="mb-8 text-[13px] font-semibold tracking-[0.08em] text-[var(--text-muted)] tabular-nums">
+                            {String(index + 1).padStart(2, "0")}
+                        </p>
+                        <h3 className="text-[24px] leading-[29px] font-semibold tracking-[-0.025em] text-[var(--text-primary)]">
+                            {feature.title}
+                        </h3>
+                        <p className="mt-3 text-[16px] leading-[25px] text-[var(--text-secondary)]">
+                            {feature.description}
+                        </p>
+                    </article>
+                ))}
+            </div>
+
+            <div id="faq" className="grid scroll-mt-8 gap-8 pt-4 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
+                <h2 className="max-w-[420px] text-[32px] leading-[37px] font-semibold tracking-[-0.035em] text-[var(--text-primary)] lg:text-[42px] lg:leading-[47px]">
+                    {p.content.faqHeading}
+                </h2>
+                <dl className="divide-y divide-[color-mix(in_srgb,var(--text-primary)_12%,transparent)]">
+                    {p.content.faqs.map((faq) => (
+                        <div key={faq.question} className="py-6 first:pt-0">
+                            <dt className="text-[18px] leading-[25px] font-semibold text-[var(--text-primary)]">
+                                {faq.question}
+                            </dt>
+                            <dd className="mt-2 text-[16px] leading-[25px] text-[var(--text-secondary)]">
+                                {faq.answer}
+                            </dd>
+                        </div>
+                    ))}
+                </dl>
+            </div>
+
+            <ScribbleAppStoreCta
+                ariaLabel={p.content.downloadLabel}
+                height={storyAppStoreScribble.height}
+                href={siteConfig.appStoreUrl}
+                markerStrokeWidth={storyAppStoreScribble.markerStrokeWidth}
+                mobileScale={storyAppStoreScribble.mobileScale}
+                strokeAxis={storyAppStoreScribble.strokeAxis}
+                strokeCount={storyAppStoreScribble.strokeCount}
+                width={storyAppStoreScribble.width}
+            />
+        </div>
+    </section>
+)
 
 const storyRevealTiming = {
     contentDelayMs: 1000,
@@ -389,9 +472,10 @@ function useSectionReentry(p: SectionReentryOptions) {
     }, [p.isEnabled, p.mainRef, p.onExit, p.onReentry, p.sectionRef])
 }
 
-export function HomePageClient() {
-    const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences()
+export function HomePageClient(p: HomePageClientProps) {
+    const { locale, themeMode, setLocale, setThemeMode } = useSitePreferences(p.initialLocale)
     const content = homeContent[locale]
+    const marketingContent = homeMarketingContent[locale]
     const mainRef = useRef<HTMLElement | null>(null)
     const topBrandRef = useRef<HTMLDivElement | null>(null)
     const storySectionRef = useRef<HTMLElement | null>(null)
@@ -696,6 +780,7 @@ export function HomePageClient() {
     return (
         <main
             ref={mainRef}
+            lang={siteLanguageByLocale[locale].htmlLang}
             className="page-transition-shell h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-y-contain bg-[var(--page-bg)] text-[var(--text-primary)]"
         >
             <div className="relative z-30 h-0 overflow-visible lg:sticky lg:top-0">
@@ -771,6 +856,7 @@ export function HomePageClient() {
                         style={storyIntroSettled ? storyResponsiveMotionStyle : storyLayoutMotionStyle}
                     >
                         <h1 aria-label={content.hero.headline} className="flex min-h-[105px] items-center justify-center leading-none tracking-normal xl:min-h-[163px]">
+                            <span className="sr-only">{marketingContent.metadata.title}</span>
                             {storyStarted ? (
                                 <button
                                     type="button"
@@ -888,6 +974,8 @@ export function HomePageClient() {
                     </footer>
                 </div>
             </section>
+
+            <HomeGuide content={marketingContent} />
         </main>
     )
 }

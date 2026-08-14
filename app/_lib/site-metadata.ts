@@ -1,7 +1,10 @@
 import type { Metadata } from "next"
+import { homeMarketingContent } from "./home-marketing-content"
 import {
     SiteLocale,
     siteConfig,
+    siteHomeLanguageAlternates,
+    siteHomeUrlForLocale,
     siteLanguageByLocale,
     siteLanguages,
     siteSocialImageForLocale,
@@ -9,16 +12,21 @@ import {
     socialContentForLocale,
 } from "./site-content"
 
-export function homeMetadataForLocale(locale: SiteLocale, pageUrl: string): Metadata {
+export function homeMetadataForLocale(locale: SiteLocale): Metadata {
+    const marketingContent = homeMarketingContent[locale]
     const socialContent = socialContentForLocale(locale)
     const socialImage = siteSocialImageForLocale(socialContent.locale)
     const socialTwitterImage = siteSocialTwitterImageForLocale(socialContent.locale)
+    const pageUrl = siteHomeUrlForLocale(locale)
 
     return {
-        title: siteConfig.name,
-        description: socialContent.description,
+        title: {
+            absolute: marketingContent.metadata.title,
+        },
+        description: marketingContent.metadata.description,
         alternates: {
             canonical: pageUrl,
+            languages: siteHomeLanguageAlternates,
         },
         icons: {
             other: [{ rel: "image_src", url: socialImage.secureUrl }],

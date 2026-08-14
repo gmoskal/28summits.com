@@ -114,9 +114,9 @@ function updateDocumentTheme(theme: SiteThemeMode) {
         ?.setAttribute("content", theme === "dark" ? "#000000" : "#ffffff")
 }
 
-export function useSitePreferences() {
+export function useSitePreferences(initialLocale: SiteLocale = defaultSiteLocale) {
     const [localePreference, setLocalePreference] = useState<LocalePreference>({
-        locale: defaultSiteLocale,
+        locale: initialLocale,
         source: "browser",
     })
     const [themeMode, setThemeModeState] = useState<SiteThemeMode>("light")

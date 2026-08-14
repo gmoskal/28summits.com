@@ -58,6 +58,16 @@ export const siteLanguageByLocale = Object.fromEntries(
 ) as Record<SiteLocale, SiteLanguage>
 
 export const defaultSiteLocale: SiteLocale = "pl"
+export const localizedSiteLocales = siteLocales.filter((locale) => locale !== defaultSiteLocale)
+
+export function siteHomeUrlForLocale(locale: SiteLocale) {
+    return locale === defaultSiteLocale ? siteHomeUrl : absoluteSiteUrl(`/${locale}`)
+}
+
+export const siteHomeLanguageAlternates = Object.fromEntries([
+    ...siteLocales.map((locale) => [locale, siteHomeUrlForLocale(locale)]),
+    ["x-default", siteHomeUrl],
+]) as Record<SiteLocale | "x-default", string>
 
 const siteLocaleAliases: Partial<Record<string, SiteLocale>> = {
     no: "nb",

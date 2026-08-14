@@ -1,7 +1,4 @@
 import type { Metadata, Viewport } from "next"
-import { Barlow, Gloria_Hallelujah } from "next/font/google"
-import localFont from "next/font/local"
-import "./globals.css"
 import {
     siteConfig,
     siteHomeUrl,
@@ -9,30 +6,9 @@ import {
     siteSocialContent,
     siteSocialImage,
     siteSocialTwitterImage,
-} from "./_lib/site-content"
+} from "./site-content"
 
-const inter = localFont({
-    src: "./fonts/InterVariable.woff2",
-    variable: "--font-inter",
-    display: "swap",
-    weight: "100 900",
-})
-
-const gloriaHallelujah = Gloria_Hallelujah({
-    subsets: ["latin", "latin-ext"],
-    variable: "--font-gloria",
-    display: "swap",
-    weight: "400",
-})
-
-const barlow = Barlow({
-    subsets: ["latin", "latin-ext"],
-    variable: "--font-barlow",
-    display: "swap",
-    weight: ["300", "400", "500", "600", "700"],
-})
-
-export const metadata: Metadata = {
+export const rootMetadata: Metadata = {
     metadataBase: new URL(siteConfig.siteUrl),
     title: {
         default: siteConfig.name,
@@ -73,17 +49,9 @@ export const metadata: Metadata = {
     },
 }
 
-export const viewport: Viewport = {
+export const rootViewport: Viewport = {
     width: "device-width",
     initialScale: 1,
     colorScheme: "light dark",
     themeColor: "#ffffff",
-}
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-    return (
-        <html lang="pl" className={`${inter.variable} ${gloriaHallelujah.variable} ${barlow.variable}`}>
-            <body>{children}</body>
-        </html>
-    )
 }
